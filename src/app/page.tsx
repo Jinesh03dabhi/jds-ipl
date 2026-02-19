@@ -4,7 +4,7 @@ import { PLAYERS, TEAMS } from '@/lib/data';
 import { TrendingUp, Users, Gavel, Award, ArrowUpRight, ArrowRight } from 'lucide-react';
 import Link from 'next/link';
 import PlayerAvatar from '@/components/PlayerAvatar';
-import LiveScorePage from '@/app/live-score/page'
+import LiveScoreClient from '@/app/live-score/LiveScoreClient'
 export default function Home() {
 
   const featuredPlayers = PLAYERS.slice(0, 6);
@@ -80,7 +80,8 @@ export default function Home() {
       </section>
       <div>
         
-        <LiveScorePage></LiveScorePage>
+        <LiveScoreClient />
+
       </div>
       {/* QUICK STATS */}
       <section
