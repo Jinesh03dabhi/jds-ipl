@@ -10,7 +10,7 @@ type Props = {
 };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const { id } = await params;
+  const { id } = params;
   const player = PLAYERS.find(p => p.id === id);
 
   if (!player) {
@@ -36,7 +36,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function PlayerProfile({ params }: Props) {
 
-  const { id } = await params;
+  const { id } = params;
   const player = PLAYERS.find(p => p.id === id);
 
   if (!player) return notFound();
