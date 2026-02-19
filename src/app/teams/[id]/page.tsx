@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { PLAYERS, TEAMS } from '@/lib/data';
 import { notFound } from 'next/navigation';
 import PlayerAvatar from '@/components/PlayerAvatar';
@@ -11,14 +12,36 @@ import {
   ArrowLeft
 } from 'lucide-react';
 
-export default async function TeamDetail({
-  params,
-}: {
+type Props = {
   params: Promise<{ id: string }>;
-}) {
+};
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { id } = await params;
+  const team = TEAMS.find(t => t.id === id);
+
+  if (!team) {
+    return { title: "Team Not Found" };
+  }
+
+  return {
+    title: `${team.name} Squad, Players & Auction Details`,
+    description: `Explore ${team.name} full IPL squad, player list, auction spending, performance history and championship titles. Complete team analysis on JD’s IPL.`,
+    openGraph: {
+      title: `${team.name} IPL Squad & Stats`,
+      description: `Full team roster, auction stats and ranking history of ${team.name}.`,
+      url: `https://jds-ipl.vercel.app/teams/${team.id}`,
+      type: "website",
+    },
+    alternates: {
+      canonical: `https://jds-ipl.vercel.app/teams/${team.id}`,
+    },
+  };
+}
+
+export default async function TeamDetail({ params }: Props) {
 
   const { id } = await params;
-
   const team = TEAMS.find(t => t.id === id);
   if (!team) return notFound();
 
@@ -34,8 +57,26 @@ export default async function TeamDetail({
     0
   );
 
+  const structuredData = {
+    "@context": "https://schema.org",
+    "@type": "SportsTeam",
+    name: team.name,
+    sport: "Cricket",
+    member: teamPlayers.map(player => ({
+      "@type": "Person",
+      name: player.name
+    })),
+  };
+
   return (
     <div className="container team-detail-container">
+
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(structuredData),
+        }}
+      />
 
       <Link
         href="/teams"
@@ -44,7 +85,6 @@ export default async function TeamDetail({
         <ArrowLeft size={16} /> Back to Teams
       </Link>
 
-      {/* HEADER */}
       <div
         className="glass-card team-header-card"
         style={{ borderLeft: `8px solid ${team.color}` }}
@@ -82,7 +122,6 @@ export default async function TeamDetail({
 
         </div>
 
-        {/* TITLES */}
         <div className="team-titles">
           {team.titles.length > 0 ? (
             team.titles.map(year => (
@@ -99,10 +138,8 @@ export default async function TeamDetail({
         </div>
       </div>
 
-      {/* MAIN GRID */}
       <div className="team-detail-layout">
 
-        {/* ROSTER */}
         <section>
           <h2 className="section-title">
             Team Roster ({teamPlayers.length})
@@ -143,7 +180,6 @@ export default async function TeamDetail({
           </div>
         </section>
 
-        {/* STATS */}
         <div>
           <h2 className="section-title">
             Performance History

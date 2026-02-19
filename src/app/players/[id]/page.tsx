@@ -10,7 +10,8 @@ type Props = {
 };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const player = PLAYERS.find(p => p.id === params.id);
+  const { id } = await params;
+  const player = PLAYERS.find(p => p.id === id);
 
   if (!player) {
     return {
@@ -20,28 +21,40 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   return {
     title: `${player.name} IPL Stats, Sold Price & Career Record`,
-    description: `Check ${player.name}'s IPL career stats, total runs, wickets, strike rate, economy and latest auction sold price. Full performance breakdown on JD’s IPL.`,
+    description: `Check ${player.name}'s IPL career stats including total runs, wickets, strike rate, economy and latest auction sold price. Full performance breakdown on JD’s IPL.`,
     openGraph: {
       title: `${player.name} IPL Stats & Auction Price`,
       description: `Complete IPL performance analytics of ${player.name} including sold price and career statistics.`,
-      url: `/players/${player.id}`,
-      type: "profile",
+      url: `https://jds-ipl.vercel.app/players/${player.id}`,
+      type: "article",
     },
     alternates: {
-      canonical: `/players/${player.id}`,
+      canonical: `https://jds-ipl.vercel.app/players/${player.id}`,
     },
   };
 }
 
-export default function PlayerProfile({ params }: Props) {
+export default async function PlayerProfile({ params }: Props) {
 
-  const player = PLAYERS.find(p => p.id === params.id);
+  const { id } = await params;
+  const player = PLAYERS.find(p => p.id === id);
 
   if (!player) return notFound();
 
   const getTeamLogo = (teamName: string) => {
     return TEAMS.find(t => t.name === teamName)?.logoUrl || '/team-placeholder.png';
   };
+  const structuredData = {
+  "@context": "https://schema.org",
+  "@type": "Person",
+  name: player.name,
+  nationality: player.nationality,
+  jobTitle: "IPL Cricketer",
+  memberOf: {
+    "@type": "SportsTeam",
+    name: player.currentTeam,
+  },
+};
 
   return (
     <div className="container" style={{ paddingBottom: '80px' }}>
@@ -147,6 +160,11 @@ export default function PlayerProfile({ params }: Props) {
         </div>
 
       </div>
+      <script
+  type="application/ld+json"
+  dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+/>
+
     </div>
   );
 }
