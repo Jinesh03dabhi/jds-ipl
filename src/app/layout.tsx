@@ -16,43 +16,50 @@ const outfit = Outfit({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://yourdomain.com"), // change after buying domain
+  metadataBase: new URL("https://jds-ipl.vercel.app"),
 
   title: {
-    default: "JD’s IPL Analytics Hub – Live Scores, Auction History & Player Stats",
-    template: "%s | JD’s IPL Analytics Hub",
+    default: "JD’s IPL – Live Scores, Auction History & Player Stats",
+    template: "%s | JD’s IPL",
   },
 
   description:
-    "JD’s IPL Analytics Hub provides live IPL scores, detailed player sold prices, full auction history, team squads, match predictions, and advanced performance analytics for serious cricket fans.",
+    "JD’s IPL provides live IPL scores, detailed player sold prices, full auction history, team squads, match predictions, and advanced cricket performance analytics.",
 
   keywords: [
     "IPL live score",
-    "IPL auction history",
+    "IPL auction price",
     "IPL player sold price",
-    "IPL team squad",
+    "IPL team squad 2026",
+    "IPL match predictions",
     "IPL statistics",
-    "IPL predictions",
     "Cricket analytics platform"
   ],
 
   robots: {
     index: true,
     follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
   },
 
   openGraph: {
     type: "website",
-    url: "https://yourdomain.com",
-    title: "JD’s IPL Analytics Hub – Live Scores & Auction Stats",
+    url: "https://jds-ipl.vercel.app",
+    title: "JD’s IPL – Live Score & Auction Analytics",
     description:
-      "Track IPL live scores, explore player auction prices, analyze team performance and get data-driven match insights.",
-    siteName: "JD’s IPL Analytics Hub",
+      "Track IPL live scores, explore player auction prices, analyze team performance and access deep cricket insights.",
+    siteName: "JD’s IPL",
   },
 
   twitter: {
     card: "summary_large_image",
-    title: "JD’s IPL Analytics Hub – Live IPL Data & Insights",
+    title: "JD’s IPL – Live IPL Data & Insights",
     description:
       "Live IPL score updates, auction prices, player stats and advanced cricket analytics.",
   },

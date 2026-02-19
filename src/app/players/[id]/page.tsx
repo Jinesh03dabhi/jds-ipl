@@ -1,20 +1,41 @@
-'use client';
-
-import { use } from 'react';
+import type { Metadata } from "next";
 import { PLAYERS, TEAMS } from '@/lib/data';
 import { ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
 import PlayerAvatar from '@/components/PlayerAvatar';
 import { notFound } from 'next/navigation';
 
-export default function PlayerProfile({
-  params,
-}: {
-  params: Promise<{ id: string }>;
-}) {
+type Props = {
+  params: { id: string };
+};
 
-  const { id } = use(params);
-  const player = PLAYERS.find(p => p.id === id);
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const player = PLAYERS.find(p => p.id === params.id);
+
+  if (!player) {
+    return {
+      title: "Player Not Found",
+    };
+  }
+
+  return {
+    title: `${player.name} IPL Stats, Sold Price & Career Record`,
+    description: `Check ${player.name}'s IPL career stats, total runs, wickets, strike rate, economy and latest auction sold price. Full performance breakdown on JD’s IPL.`,
+    openGraph: {
+      title: `${player.name} IPL Stats & Auction Price`,
+      description: `Complete IPL performance analytics of ${player.name} including sold price and career statistics.`,
+      url: `/players/${player.id}`,
+      type: "profile",
+    },
+    alternates: {
+      canonical: `/players/${player.id}`,
+    },
+  };
+}
+
+export default function PlayerProfile({ params }: Props) {
+
+  const player = PLAYERS.find(p => p.id === params.id);
 
   if (!player) return notFound();
 
@@ -24,23 +45,14 @@ export default function PlayerProfile({
 
   return (
     <div className="container" style={{ paddingBottom: '80px' }}>
-
-      {/* BACK BUTTON */}
-      <Link
-        href="/players"
-        className="btn-primary profile-back-btn"
-      >
+      <Link href="/players" className="btn-primary profile-back-btn">
         <ArrowLeft size={24} />
         <span>Back</span>
       </Link>
 
-      {/* MAIN GRID */}
       <div className="profile-layout">
-
-        {/* LEFT COLUMN */}
         <div>
 
-          {/* HEADER */}
           <div className="profile-header">
             <PlayerAvatar
               name={player.name}
@@ -63,10 +75,7 @@ export default function PlayerProfile({
               <div className="profile-team">
                 <Link
                   href={`/teams`}
-                  style={{
-                    textDecoration: 'none',
-                    color: 'inherit'
-                  }}
+                  style={{ textDecoration: 'none', color: 'inherit' }}
                 >
                   <img
                     src={getTeamLogo(player.currentTeam)}
@@ -79,7 +88,6 @@ export default function PlayerProfile({
             </div>
           </div>
 
-          {/* STATS */}
           <h2 style={{ marginBottom: '20px' }}>Career Stats</h2>
 
           <div className="stats-grid">
@@ -129,10 +137,9 @@ export default function PlayerProfile({
           </div>
         </div>
 
-        {/* RIGHT COLUMN */}
         <div>
           <div className="glass-card market-card">
-            <h3>Market Value</h3>
+            <h3>IPL Auction Sold Price</h3>
             <div className="market-value">
               ₹ {player.soldPrice}
             </div>
