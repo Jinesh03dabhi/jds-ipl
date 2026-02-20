@@ -1,7 +1,7 @@
 'use client'
 
 import Link from 'next/link'
-import { useState } from 'react'
+import { useState,useEffect,useRef  } from 'react'
 import { useRouter } from 'next/navigation'
 import {
   LayoutDashboard,
@@ -20,7 +20,7 @@ import { PLAYERS, TEAMS } from '@/lib/data'
 export default function Navbar() {
 
   const router = useRouter()
-
+  const navRef = useRef<HTMLDivElement | null>(null);
   const [query, setQuery] = useState('')
   const [playerResults, setPlayerResults] = useState<typeof PLAYERS>([])
   const [teamResults, setTeamResults] = useState<typeof TEAMS>([])
@@ -67,8 +67,23 @@ export default function Navbar() {
     router.push(`/teams/${id}`)
   }
 
+   useEffect(() => {
+    const handleScroll = () => {
+      if (!navRef.current) return;
+
+      if (window.scrollY > 10) {
+        navRef.current.classList.add("scrolled");
+      } else {
+        navRef.current.classList.remove("scrolled");
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
   return (
-    <nav className="navbar-root">
+    <nav className="navbar-root" ref={navRef}>
       <div className="container navbar-container">
 
         {/* LOGO */}

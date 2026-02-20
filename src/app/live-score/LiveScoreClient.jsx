@@ -157,7 +157,7 @@ const inningsList = rawInnings.map((inning, index) => ({
 
 
   return (
-    <div className="container" style={{ marginTop: 120 }}>
+    <div className="container" style={{ marginTop: 30 }}>
 
       <MatchHeader match={data.match} />
       {data?.lastUpdated && (  <div className="glass-card" style={{  marginTop: 8,  marginBottom: 12,  padding: "6px 12px",  textAlign: "center",  fontSize: 12,  color: "#94a3b8"}}>

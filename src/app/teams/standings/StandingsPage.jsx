@@ -19,7 +19,7 @@ export default function Standings() {
           IPL League Standings
         </h1>
         <p className="standings-subtitle">
-          Explore the 2024 season final rankings and historical performance of all franchises.
+          Explore the 2025 season final rankings and historical performance of all franchises.
         </p>
       </header>
 

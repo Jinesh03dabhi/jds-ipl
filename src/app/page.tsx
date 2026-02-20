@@ -63,8 +63,12 @@ export default function Home() {
           </h1>
 
           <p style={{ color: '#94a3b8', fontSize: 'clamp(16px, 2vw, 20px)', maxWidth: '700px', margin: '0 auto 40px' }}>
-            Explore historical auction data, real-time player analysis, and community-driven price predictions.
-          </p></div>
+           ⭐ JD’s IPL provides structured datasets covering historical auctions,
+            team roster evolution and high-value player movements. Our statistical
+            approach allows users to evaluate performance consistency across seasons.
+          </p>
+          
+          </div>
 
           <div style={{ display: 'flex', gap: '16px', justifyContent: 'center', flexWrap: 'wrap' }}>
             <Link href="/players" className="btn-primary" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
@@ -78,18 +82,14 @@ export default function Home() {
 
         </div>
       </section>
-      <div>
-        
-        <LiveScoreClient />
-
-      </div>
+      
       {/* QUICK STATS */}
       <section
         className="grid"
         style={{
           gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
           marginTop: "30px",
-          marginBottom: '80px',
+          marginBottom: '30px',
           gap: '20px'
         }}
       >
@@ -117,9 +117,13 @@ export default function Home() {
           </div>
         </div>
       </section>
+        <div>
+        
+        <LiveScoreClient />
 
+      </div>
       {/* FEATURED PLAYERS */}
-      <section>
+      <section style={{marginTop: '30px',}}>
         <h2 style={{ fontSize: 'clamp(24px, 4vw, 32px)', marginBottom: '32px' }}>Featured Analytics</h2>
 
         <div className="grid" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '20px' }}>
@@ -169,6 +173,86 @@ export default function Home() {
           <ArrowRight size={22} />
         </Link>
       </div>
+      <section style={{ marginTop: "60px", maxWidth: "900px" }}>
+  <h2>⭐About IPL Analytics</h2>
+
+  <p>
+    JD’s IPL is an independent cricket analytics platform focused on delivering
+    structured insights into the Indian Premier League. Our platform goes beyond
+    basic score updates by analyzing auction trends, player valuations,
+    performance metrics and team strategies.
+  </p>
+
+  <p>
+    We study how franchises allocate budgets, how auction records are broken,
+    and how player performance impacts long-term team success. By combining
+    historical data with modern statistical interpretation, JD’s IPL provides
+    fans with a deeper understanding of the league’s financial and competitive ecosystem.
+  </p>
+
+  <p>
+    Whether you are a fantasy cricket enthusiast, a casual viewer or a data-driven
+    analyst, our goal is to present IPL information in a structured,
+    research-oriented format.
+  </p>
+</section>
+
+<section style={{ marginTop: "50px", maxWidth: "900px" }}>
+  <h2>⭐Why JD’s IPL Stands Out</h2>
+
+  <p>
+    The IPL is no longer just a cricket tournament — it is a multi-billion
+    dollar sports enterprise. Understanding auction strategy, player price
+    inflation and squad composition requires more than surface-level coverage.
+  </p>
+
+  <ul style={{ marginTop: "20px", lineHeight: "1.9" ,listStyle:"none"}}>
+    <li>✔ Detailed breakdown of record-breaking auction transfers</li>
+    <li>✔ Analysis of top wicket-takers and Orange Cap contenders</li>
+    <li>✔ Structured comparison of team spending patterns</li>
+    <li>✔ Player-by-player performance evaluation</li>
+    <li>✔ Long-term IPL financial trend observations</li>
+  </ul>
+
+  <p style={{ marginTop: "20px" }}>
+    Our platform is designed to help fans understand not only what happens
+    during a match, but why it happens from a strategic and financial perspective.
+  </p>
+</section>
+
+  <section style={{ marginTop: "50px", maxWidth: "900px" }}>
+  <h2>⭐Featured IPL Insights</h2>
+
+  <p>
+    Explore our in-depth research articles covering major IPL milestones
+    and historical data trends:
+  </p>
+
+  <div style={{ marginTop: "20px", lineHeight: "1.9" }}>
+    <p>
+      <Link href="/top-10-expensive-ipl-players">
+        ⭐Top 10 Most Expensive IPL Players in History
+      </Link>
+      {" "}– A detailed analysis of record-breaking auction prices and
+      franchise investment patterns.
+    </p>
+
+    <p>
+      <Link href="/best-ipl-bowlers">
+        ⭐Best IPL Bowlers of All Time
+      </Link>
+      {" "}– Evaluating wicket tallies, economy rates and match-winning spells.
+    </p>
+
+    <p>
+      <Link href="/ipl-auction-strategy">
+        ⭐How IPL Auction Strategy Works
+      </Link>
+      {" "}– Understanding salary caps, player retention rules and bidding wars.
+    </p>
+  </div>
+</section>
+
 
     </div>
   );
