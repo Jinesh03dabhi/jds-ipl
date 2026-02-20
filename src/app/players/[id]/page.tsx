@@ -6,11 +6,11 @@ import PlayerAvatar from '@/components/PlayerAvatar';
 import { notFound } from 'next/navigation';
 
 type Props = {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const { id } = params;
+  const { id } = await params;
   const player = PLAYERS.find(p => p.id === id);
 
   if (!player) {
@@ -36,7 +36,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function PlayerProfile({ params }: Props) {
 
-  const { id } = params;
+  const { id } = await params;
   const player = PLAYERS.find(p => p.id === id);
 
   if (!player) return notFound();
