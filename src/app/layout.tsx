@@ -3,6 +3,7 @@ import { Inter, Outfit } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import Script from "next/script";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -85,6 +86,18 @@ export default function RootLayout({
       <head>
         {/* Mobile responsiveness */}
         <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <Script
+          src="https://www.googletagmanager.com/gtag/js?id=G-PXSNXGLE6N"
+          strategy="afterInteractive"
+        />
+        <Script id="google-analytics" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-PXSNXGLE6N');
+          `}
+        </Script>
       </head>
 
       <body
