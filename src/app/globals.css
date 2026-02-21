@@ -2191,3 +2191,25 @@ body {
   }
 
 }
+.hero-bg {
+  position: relative;
+  background-image: url('/ipl-background1.png'); /* desktop */
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+}
+
+/* Desktop parallax only */
+@media (min-width: 769px) {
+  .hero-bg {
+    background-attachment: fixed;
+  }
+}
+
+/* Mobile image */
+@media (max-width: 768px) {
+  .hero-bg {
+    background-image: url('/ipl-background.png') !important;
+    background-attachment: scroll;
+  }
+}

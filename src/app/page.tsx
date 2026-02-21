@@ -17,16 +17,14 @@ export default function Home() {
     <div className="container hero-gradient" style={{ minHeight: '100vh', paddingBottom: '80px' }}>
 
       {/* HERO */}
-      <section
+      <section className="hero-bg"
         style={{
-          textAlign: 'center',
-          padding: '80px 16px 60px',
-          position: 'relative',
-          backgroundImage: "url('/ipl-background1.png')",
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          backgroundRepeat: 'no-repeat',
-          overflow: 'hidden'
+         
+  textAlign: 'center',
+  padding: '80px 16px 60px',
+  position: 'relative',
+  overflow: 'hidden'
+
         }}
       >
 
