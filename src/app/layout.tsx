@@ -19,6 +19,10 @@ const outfit = Outfit({
 export const metadata: Metadata = {
   metadataBase: new URL("https://jds-ipl.vercel.app"),
 
+  verification: {
+    google: "vd3lLg6ke6o77ht1oLzaygwO8Ng9C1tYZIPLXgmxeUk",
+  },
+
   title: {
     default: "JD’s IPL – Live Scores, Auction History & Player Stats",
     template: "%s | JD’s IPL",
