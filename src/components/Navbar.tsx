@@ -109,23 +109,48 @@ export default function Navbar() {
           <input
             value={query}
             onChange={(e) => handleSearch(e.target.value)}
-            placeholder="Search..."
+            placeholder="Search Players & Teams..."
           />
 
           {(playerResults.length > 0 || teamResults.length > 0) && (
-            <div className="search-dropdown">
-              {playerResults.map(p => (
-                <div key={p.id} onClick={() => goToPlayer(p.id)}>
-                  {p.name}
-                </div>
-              ))}
-              {teamResults.map(t => (
-                <div key={t.id} onClick={() => goToTeam(t.id)}>
-                  {t.name}
-                </div>
-              ))}
-            </div>
-          )}
+  <div className="search-dropdown">
+
+    {/* Players Section */}
+    {playerResults.length > 0 && (
+      <>
+        <div className="search-section-title">Players</div>
+
+        {playerResults.map(p => (
+          <div
+            key={p.id}
+            className="search-item"
+            onClick={() => goToPlayer(p.id)}
+          >
+            {p.name}
+          </div>
+        ))}
+      </>
+    )}
+
+    {/* Teams Section */}
+    {teamResults.length > 0 && (
+      <>
+        <div className="search-section-title">Teams</div>
+
+        {teamResults.map(t => (
+          <div
+            key={t.id}
+            className="search-item"
+            onClick={() => goToTeam(t.id)}
+          >
+            {t.name}
+          </div>
+        ))}
+      </>
+    )}
+
+  </div>
+)}
         </div>
 
         {/* MOBILE TOGGLE */}

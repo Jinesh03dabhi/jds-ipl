@@ -2004,7 +2004,7 @@ body {
   top: 0;
   left: 0;
   right: 0;
-  overflow-x: hidden;
+  overflow: visible;
   background: rgba(2, 6, 23, 0.75);
   backdrop-filter: blur(24px);
   border-bottom: 1px solid rgba(255,255,255,0.05);
@@ -2103,7 +2103,19 @@ body {
   width: 240px;
   flex-shrink: 0;
 }
-
+.search-suggestions {
+  position: absolute;
+  top: 110%;
+  left: 0;
+  right: 0;
+  background: rgba(15,23,42,0.95);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 12px;
+  padding: 8px;
+  z-index: 9999; /* ⭐ important */
+  box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+}
 .navbar-search input {
   width: 100%;
   padding: 9px 14px 9px 34px;
@@ -2114,6 +2126,27 @@ body {
   outline: none;
   font-size: 14px;
   transition: all 0.25s ease;
+}
+.search-section-title {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: #64748b;
+  padding: 6px 10px 4px;
+}
+.search-section-title:not(:first-child) {
+  margin-top: 6px;
+}
+.search-item {
+  padding: 10px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  color: #e2e8f0;
+  transition: background 0.2s ease;
+}
+
+.search-item:hover {
+  background: rgba(59,130,246,0.15);
 }
 
 /* Focus glow */
