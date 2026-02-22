@@ -2213,3 +2213,93 @@ body {
     background-attachment: scroll;
   }
 }
+
+.score-details {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 14px;
+  padding-top: 12px;
+  border-top: 1px solid rgba(255,255,255,0.08);
+}
+
+.score-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.score-box .label {
+  font-size: 11px;
+  opacity: 0.6;
+  margin-bottom: 2px;
+}
+
+.score-box .value {
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.pulse {
+  animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+  0% { opacity: 1 }
+  50% { opacity: 0.4 }
+  100% { opacity: 1 }
+}
+
+.ball-dot.run {
+  background: rgba(255,255,255,0.08);
+}
+
+.ball-dot.four {
+  background: #1d4ed8;
+}
+
+.ball-dot.six {
+  background: #16a34a;
+}
+
+.ball-dot.wicket {
+  background: #dc2626;
+}
+
+.ball-dot.dot {
+  background: rgba(255,255,255,0.1);
+}
+
+.pop {
+  animation: pop 0.25s ease;
+}
+
+@keyframes pop {
+  from { transform: scale(0.6); opacity: 0 }
+  to { transform: scale(1); opacity: 1 }
+}
+.dismissal-text {
+  font-size: 11px;
+  opacity: 0.6;
+  margin-top: 2px;
+}
+
+.current-batsman-row {
+  background: rgba(16,185,129,0.08);
+}
+
+.live-dot {
+  color: #ef4444;
+  margin-right: 6px;
+  animation: pulse 1.2s infinite;
+}
+.current-bowler-row {
+  background: rgba(59,130,246,0.08);
+}
+
+.bowler-dot {
+  color: #3b82f6;
+  margin-right: 6px;
+}
+.glass-card > div:hover {
+  background: rgba(255,255,255,0.05);
+}

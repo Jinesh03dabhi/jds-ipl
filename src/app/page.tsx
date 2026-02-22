@@ -4,7 +4,6 @@ import { PLAYERS, TEAMS } from '@/lib/data';
 import { TrendingUp, Users, Gavel, Award, ArrowUpRight, ArrowRight } from 'lucide-react';
 import Link from 'next/link';
 import PlayerAvatar from '@/components/PlayerAvatar';
-import LiveScoreClient from '@/app/live-score/LiveScoreClient'
 export default function Home() {
 
   const featuredPlayers = PLAYERS.slice(0, 6);
@@ -15,7 +14,7 @@ export default function Home() {
 
   return (
     <div className="container hero-gradient" style={{ minHeight: '100vh', paddingBottom: '80px' }}>
-
+      
       {/* HERO */}
       <section className="hero-bg"
         style={{
@@ -117,7 +116,7 @@ export default function Home() {
       </section>
         <div>
         
-        <LiveScoreClient />
+        
 
       </div>
       {/* FEATURED PLAYERS */}

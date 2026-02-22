@@ -12,56 +12,72 @@ export default function LiveEventsPanel({ inningsList = [] }) {
     batters.forEach(b => {
 
       const name = b?.batsman?.name || b?.batsmanName || "Player";
+      const runs = Number(b?.r ?? 0);
+      const fours = Number(b?.["4s"] ?? 0);
+      const sixes = Number(b?.["6s"] ?? 0);
+      const dismissal = (b?.["dismissal-text"] || "").toLowerCase();
 
-      // Boundary detection
-      if (b["6s"] > 0) {
-        events.push({
-          type: "6",
-          player: name,
-          text: `${b["6s"]} sixes smashed`
-        });
-      }
-
-      if (b["4s"] > 0) {
-        events.push({
-          type: "4",
-          player: name,
-          text: `${b["4s"]} fours played`
-        });
-      }
-
-      // Wicket
-      if ((b.dismissal || "").toLowerCase().includes("catch") ||
-          (b.dismissal || "").toLowerCase().includes("bowled")) {
+      // Wicket event (highest priority)
+      if (dismissal && !dismissal.includes("not out")) {
         events.push({
           type: "wicket",
           player: name,
-          text: "WICKET!"
+          text: dismissal
         });
+        return;
       }
 
-      // Milestone
-      if (b.r >= 50) {
+      // Century
+      if (runs >= 100) {
+        events.push({
+          type: "info",
+          player: name,
+          text: "Scored a century"
+        });
+        return;
+      }
+
+      // Fifty
+      if (runs >= 50) {
         events.push({
           type: "info",
           player: name,
           text: "Reached fifty"
         });
+        return;
+      }
+
+      // Big hitting
+      if (sixes >= 3) {
+        events.push({
+          type: "6",
+          player: name,
+          text: `${sixes} sixes so far`
+        });
+        return;
+      }
+
+      if (fours >= 4) {
+        events.push({
+          type: "4",
+          player: name,
+          text: `${fours} fours played`
+        });
       }
 
     });
 
-    return events.slice(0, 6);
+    return events.slice(0, 5);
   };
 
   const events = generateEvents();
 
   const fallbackEvents = [
-    { type: "info", player: "", text: "Waiting for live events..." },
-    { type: "info", player: "", text: "Events will appear automatically" }
+    { type: "info", player: "", text: "Waiting for live match highlights…" },
+    { type: "info", player: "", text: "Events will update automatically" }
   ];
 
-  const displayEvents = events.length > 0 ? events : fallbackEvents;
+  const displayEvents = events.length ? events : fallbackEvents;
 
   const getColor = (type) => {
     if (type === "4") return "#22c55e";
@@ -78,26 +94,33 @@ export default function LiveEventsPanel({ inningsList = [] }) {
       <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
 
         {displayEvents.map((e, i) => (
-          <div key={i} style={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-            padding: "10px 12px",
-            borderRadius: 8,
-            background: "rgba(255,255,255,0.03)"
-          }}>
+          <div
+            key={`${e.player}-${e.text}-${i}`}
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              padding: "10px 12px",
+              borderRadius: 8,
+              background: "rgba(255,255,255,0.03)"
+            }}
+          >
 
             <div>
-              <strong>{e.player}</strong> — {e.text}
+              {e.player && <strong>{e.player}</strong>}
+              {e.player && " — "}
+              {e.text}
             </div>
 
-            <div style={{
-              background: getColor(e.type),
-              padding: "4px 10px",
-              borderRadius: 6,
-              fontWeight: 700,
-              color: "#fff"
-            }}>
+            <div
+              style={{
+                background: getColor(e.type),
+                padding: "4px 10px",
+                borderRadius: 6,
+                fontWeight: 700,
+                color: "#fff"
+              }}
+            >
               {e.type?.toUpperCase?.() || ""}
             </div>
 

@@ -7,6 +7,10 @@ import MatchProgressBar from "@/components/MatchProgressBar";
 import CommentaryPanel from "@/components/CommentaryPanel";
 import LiveEventsPanel from "@/components/LiveEventsPanel";
 import BallHistory from "@/components/BallHistory"
+import WinProbability from "@/components/WinProbability";
+import MatchTimeline from "@/components/MatchTimeline";
+
+
 
 
 
@@ -56,14 +60,14 @@ function extractScore(status) {
   if (!status) return null;
 
   const match = status.match(/(\d+)\/(\d+)/);
+
   if (!match) return null;
 
   return {
-    runs: parseInt(match[1]),
-    wickets: parseInt(match[2])
+    runs: Number(match[1]),
+    wickets: Number(match[2])
   };
 }
-
 
 export default function LiveScorePage() {
   const [data, setData] = useState(null);
@@ -92,28 +96,36 @@ export default function LiveScorePage() {
 
 }, []);
 
-  useEffect(() => {
+ useEffect(() => {
   if (!data?.match?.status) return;
 
   const currentScore = data.match.status;
+
+  const isLive = currentScore.match(/\d+\/\d+/);
+
+  if (!isLive) {
+    setPrevScore(currentScore);
+    return;
+  }
 
   if (prevScore && prevScore !== currentScore) {
 
     const newEvent = generateEvent(prevScore, currentScore);
     const newBall = generateBall(prevScore, currentScore);
 
-    setEvents(prev => [newEvent, ...prev].slice(0, 10));
+    if (newEvent) {
+      setEvents(prev => [newEvent, ...prev].slice(0, 10));
+    }
 
-    setBalls(prev => {
-      const updated = [...prev, newBall];
-      return updated.slice(-6);
-    });
-
+    if (newBall) {
+      setBalls(prev => [...prev, newBall].slice(-6));
+    }
   }
 
   setPrevScore(currentScore);
 
 }, [data]);
+
 
 
   if (!data) {
@@ -157,20 +169,25 @@ const inningsList = rawInnings.map((inning, index) => ({
 
 
   return (
-    <div className="container" style={{ marginTop: 30 }}>
+    <div className="container" style={{ marginTop: 150 }}>
 
       <MatchHeader match={data.match} />
-      {data?.lastUpdated && (  <div className="glass-card" style={{  marginTop: 8,  marginBottom: 12,  padding: "6px 12px",  textAlign: "center",  fontSize: 12,  color: "#94a3b8"}}>
-        Last updated {Math.floor((Date.now() - data.lastUpdated) / 1000)}s ago
-      </div>
-      )}
       {data?.lastUpdated && (
-  <div style={{ color: "#94a3b8", fontSize: 12 }}>
-    Updated {Math.floor((Date.now() - data.lastUpdated) / 1000)}s ago
+  <div className="glass-card" style={{
+    marginTop: 8,
+    marginBottom: 12,
+    padding: "6px 12px",
+    textAlign: "center",
+    fontSize: 12,
+    color: "#94a3b8"
+  }}>
+    Last updated {Math.floor((Date.now() - data.lastUpdated) / 1000)}s ago
   </div>
 )}
 
       <MatchProgressBar />
+      <MatchTimeline status={data.match.status} />
+      <WinProbability status={data.match.status} />
       <BallHistory balls={balls} />
 
       <div className="tables-section">

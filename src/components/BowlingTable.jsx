@@ -2,6 +2,8 @@ export default function BowlingTable({ innings }) {
 
   if (!innings) return null;
 
+  const bowling = innings?.bowling || [];
+
   return (
     <div className="glass-card fade-in table-card">
 
@@ -10,43 +12,53 @@ export default function BowlingTable({ innings }) {
       </h3>
 
       <div className="table-wrapper">
-        <table className="responsive-table">
 
-          <thead>
-            <tr>
-              <th>Bowler</th>
-              <th>Overs</th>
-              <th>Runs</th>
-              <th>Wickets</th>
-            </tr>
-          </thead>
+        {!bowling.length && (
+          <div style={{ opacity: 0.6, padding: 12 }}>
+            No bowling data yet
+          </div>
+        )}
 
-         <tbody>
-            {innings.bowling?.map((p, i) => {
+        {!!bowling.length && (
+          <table className="responsive-table">
 
-              // Current bowler usually first entry
-              const isCurrentBowler = i === 0;
+            <thead>
+              <tr>
+                <th>Bowler</th>
+                <th>Overs</th>
+                <th>Runs</th>
+                <th>Wickets</th>
+                <th>Econ</th>
+              </tr>
+            </thead>
 
-              return (
-                <tr
-                  key={i}
-                  className={isCurrentBowler ? "current-bowler-row" : ""}
-                >
-                  <td>
-                    {isCurrentBowler && <span className="bowler-dot">●</span>}{" "}
-                    {p?.bowler?.name}
-                  </td>
-                  <td>{p?.o}</td>
-                  <td>{p?.r}</td>
-                  <td>{p?.w}</td>
-                </tr>
-              );
-            })}
-          </tbody>
+            <tbody>
+              {bowling.map((p, i) => {
 
+                const econ = p?.o
+                  ? (p?.r / p?.o).toFixed(2)
+                  : "-";
 
+                return (
+                  <tr key={p?.bowler?.id || i}>
 
-        </table>
+                    <td>
+                      {p?.bowler?.name || "Unknown"}
+                    </td>
+
+                    <td>{p?.o ?? "-"}</td>
+                    <td>{p?.r ?? "-"}</td>
+                    <td>{p?.w ?? "-"}</td>
+                    <td>{econ}</td>
+
+                  </tr>
+                );
+              })}
+            </tbody>
+
+          </table>
+        )}
+
       </div>
 
     </div>

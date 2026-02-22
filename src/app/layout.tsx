@@ -4,6 +4,8 @@ import "./globals.css";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import Script from "next/script";
+import LiveScorePage from "./live-score/page";
+
 
 const inter = Inter({
   variable: "--font-inter",
@@ -109,7 +111,7 @@ export default function RootLayout({
         }}
       >
         <Navbar />
-
+        <LiveScorePage />
         <main
           style={{
             paddingTop: "calc(var(--nav-height) + 24px)",

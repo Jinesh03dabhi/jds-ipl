@@ -1,6 +1,6 @@
 export default function BallHistory({ balls = [] }) {
 
-  if (!balls.length) return null;
+  const hasBalls = balls && balls.length > 0;
 
   return (
     <div className="glass-card fade-in" style={{ marginTop: 20 }}>
@@ -9,23 +9,34 @@ export default function BallHistory({ balls = [] }) {
         Last Over
       </div>
 
-      <div className="ball-history-row">
-        {balls.map((ball, i) => {
+      {!hasBalls && (
+        <div style={{ opacity: 0.6, fontSize: 13 }}>
+          Waiting for live balls…
+        </div>
+      )}
 
-          let className = "ball-dot";
+      {hasBalls && (
+        <div className="ball-history-row">
 
-          if (ball === "4") className += " four";
-          if (ball === "6") className += " six";
-          if (ball === "W") className += " wicket";
-          if (ball === ".") className += " dot";
+          {balls.map((ball, i) => {
 
-          return (
-            <div key={i} className={className}>
-              {ball}
-            </div>
-          );
-        })}
-      </div>
+            let className = "ball-dot";
+
+            if (ball === "4") className += " four";
+            else if (ball === "6") className += " six";
+            else if (ball === "W") className += " wicket";
+            else if (ball === ".") className += " dot";
+            else className += " run";
+
+            return (
+              <div key={`${ball}-${i}`} className={`${className} pop`}>
+                {ball}
+              </div>
+            );
+          })}
+
+        </div>
+      )}
 
     </div>
   );
