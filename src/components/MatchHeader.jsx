@@ -1,4 +1,5 @@
 import { findTeamsFromMatch } from "@/utils/findTeamsFromMatch";
+import LiveBadge from "./LiveBadge";
 
 export default function MatchHeader({ match }) {
 
@@ -28,7 +29,7 @@ export default function MatchHeader({ match }) {
 
         {/* CENTER */}
         <div className="premium-center">
-          {isLive && <span className="live-badge pulse">LIVE</span>}
+          {isLive && <span className="live-badge pulse"><LiveBadge /></span>}
           <div className="premium-score">{match?.status}</div>
         </div>
 

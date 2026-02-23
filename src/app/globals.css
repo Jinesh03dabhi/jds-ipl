@@ -68,11 +68,11 @@ h6 {
 /* Hero Gradient */
 .hero-gradient {
   background: radial-gradient(circle at top right, rgba(37, 99, 235, 0.15), transparent 40%),
-    radial-gradient(circle at bottom left, rgba(234, 179, 8, 0.05), transparent 40%);
+    radial-gradient(circle at bottom left, rgba(255, 191, 0, 0.05), transparent 40%);
 }
 
 /* Custom Utilities */
-.container {
+.container {  
   max-width: var(--container-width);
   margin: 0 auto;
   padding: 0 24px;

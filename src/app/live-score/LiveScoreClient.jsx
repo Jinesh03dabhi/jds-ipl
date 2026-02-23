@@ -1,4 +1,5 @@
 "use client";
+
 import { useEffect, useState } from "react";
 import MatchHeader from "@/components/MatchHeader";
 import BattingTable from "@/components/BattingTable";
@@ -6,184 +7,256 @@ import BowlingTable from "@/components/BowlingTable";
 import MatchProgressBar from "@/components/MatchProgressBar";
 import CommentaryPanel from "@/components/CommentaryPanel";
 import LiveEventsPanel from "@/components/LiveEventsPanel";
-import BallHistory from "@/components/BallHistory"
+import BallHistory from "@/components/BallHistory";
 import WinProbability from "@/components/WinProbability";
 import MatchTimeline from "@/components/MatchTimeline";
 
-
-
-
-
-function generateEvent(oldStatus, newStatus) {
-
-  const oldScore = extractScore(oldStatus);
-  const newScore = extractScore(newStatus);
-
-  if (!oldScore || !newScore) return null;
-
-  if (newScore.wickets > oldScore.wickets) {
-    return { type: "wicket", player: "", text: "WICKET!" };
-  }
-
-  const diff = newScore.runs - oldScore.runs;
-
-  if (diff === 6) return { type: "6", player: "", text: "SIX!" };
-  if (diff === 4) return { type: "4", player: "", text: "FOUR!" };
-  if (diff === 1) return { type: "dot", player: "", text: "Single run" };
-  if (diff === 0) return { type: "dot", player: "", text: "Dot ball" };
-
-  return { type: "dot", player: "", text: "Runs scored" };
-}
-
-
-function generateBall(oldStatus, newStatus) {
-
-  const oldScore = extractScore(oldStatus);
-  const newScore = extractScore(newStatus);
-
-  if (!oldScore || !newScore) return ".";
-
-  if (newScore.wickets > oldScore.wickets) return "W";
-
-  const diff = newScore.runs - oldScore.runs;
-
-  if (diff === 6) return "6";
-  if (diff === 4) return "4";
-  if (diff === 1) return "1";
-  if (diff === 2) return "2";
-  if (diff === 3) return "3";
-
-  return ".";
-}
-
-function extractScore(status) {
-  if (!status) return null;
-
-  const match = status.match(/(\d+)\/(\d+)/);
-
-  if (!match) return null;
-
-  return {
-    runs: Number(match[1]),
-    wickets: Number(match[2])
-  };
-}
-
-export default function LiveScorePage() {
-  const [data, setData] = useState(null);
-  const [prevScore, setPrevScore] = useState(null);
-  const [events, setEvents] = useState([]);
-  const [balls, setBalls] = useState([]);
-
-
-  const fetchScore = async () => {
-    const res = await fetch("/api/live-score");
-    const json = await res.json();
-    setData(json);
-  };
-
- useEffect(() => {
-
-  fetchScore();
-
-  const interval = setInterval(() => {
-    if (document.visibilityState === "visible") {
-      fetchScore();
-    }
-  }, 120000); // 2 minutes
-
-  return () => clearInterval(interval);
-
-}, []);
-
- useEffect(() => {
-  if (!data?.match?.status) return;
-
-  const currentScore = data.match.status;
-
-  const isLive = currentScore.match(/\d+\/\d+/);
-
-  if (!isLive) {
-    setPrevScore(currentScore);
-    return;
-  }
-
-  if (prevScore && prevScore !== currentScore) {
-
-    const newEvent = generateEvent(prevScore, currentScore);
-    const newBall = generateBall(prevScore, currentScore);
-
-    if (newEvent) {
-      setEvents(prev => [newEvent, ...prev].slice(0, 10));
-    }
-
-    if (newBall) {
-      setBalls(prev => [...prev, newBall].slice(-6));
-    }
-  }
-
-  setPrevScore(currentScore);
-
-}, [data]);
-
-
-
-  if (!data) {
+function Skeleton() {
   return (
-    <div className="container" style={{ marginTop: 120,marginBottom: 120  }}>
-      <div className="glass-card" style={{backgroundColor:"#b60c0c"}}>Loading score…</div>
-    </div>
-  );
-}
-
-if (data.type === "error") {
-  return (
-    <div className="container" style={{ marginTop: 120,marginBottom: 120  }}>
-      <div className="glass-card" style={{backgroundColor:"#b60c0c"}}>API error or rate limit</div>
-    </div>
-  );
-}
-
-if (!data?.match) {
-  return (
-    <div className="container" style={{ marginTop: 120,marginBottom: 120 }}>
-      <div className="glass-card" style={{backgroundColor:"#b60c0c"}}>
-        <h3>No live feed detected</h3>
-        <p style={{ color: "#94a3b8" }}>
-          Showing last known data or waiting for match to start…
-        </p>
+    <div className="container" style={{ marginTop: 80, marginBottom: 30 }}>
+      <div className="glass-card">
+        <div style={{ height: 20, background: "#1e293b", marginBottom: 10 }} />
+        <div style={{ height: 20, background: "#1e293b", marginBottom: 10 }} />
+        <div style={{ height: 20, background: "#1e293b" }} />
       </div>
     </div>
   );
 }
 
+function Countdown({ date }) {
+  const [timeLeft, setTimeLeft] = useState("");
 
-  // ===== BUILD INNINGS OBJECT =====
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const diff = new Date(date) - new Date();
+
+      if (diff <= 0) {
+        setTimeLeft("Starting soon");
+        return;
+      }
+
+      const h = Math.floor(diff / 3600000);
+      const m = Math.floor((diff % 3600000) / 60000);
+      const s = Math.floor((diff % 60000) / 1000);
+
+      setTimeLeft(`${h}h ${m}m ${s}s`);
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, [date]);
+
+  return <p style={{ fontSize: 18, marginTop: 10 }}>⏳ {timeLeft}</p>;
+}
+
+export default function LiveScorePage() {
+  const [data, setData] = useState(null);
+  const [retryCount, setRetryCount] = useState(0);
+  const [prevScore, setPrevScore] = useState(null);
+  const [events, setEvents] = useState([]);
+  const [balls, setBalls] = useState([]);
+
+  const fetchScore = async () => {
+    try {
+      const res = await fetch("/api/live-score");
+      const json = await res.json();
+      setData(json);
+    } catch {
+      setData({ type: "error" });
+    }
+  };
+
+  // ⭐ Smart polling
+ useEffect(() => {
+
+  fetchScore();
+
+  let intervalTime = 1800000;
+
+  if (data?.type === "live") intervalTime = 60000;
+  else if (data?.type === "upcoming") intervalTime = 300000;
+
+  const interval = setInterval(() => {
+    if (document.visibilityState === "visible") {
+      fetchScore();
+    }
+  }, intervalTime);
+
+  return () => clearInterval(interval);
+
+}, [data?.type, retryCount]);
+
+
+  // ⭐ Score diff logic
+useEffect(() => {
+  // 🚨 Only run for LIVE match
+  if (!data || data.type !== "live" || !data.match?.status) return;
+
+  const extractScore = status => {
+    if (!status) return null;
+    const match = status.match(/(\d+)\/(\d+)/);
+    if (!match) return null;
+    return {
+      runs: Number(match[1]),
+      wickets: Number(match[2])
+    };
+  };
+
+  const oldScore = extractScore(prevScore);
+  const newScore = extractScore(data.match.status);
+
+  if (oldScore && newScore && prevScore !== data.match.status) {
+
+    if (newScore.wickets > oldScore.wickets) {
+      setEvents(prev => [{ text: "WICKET!" }, ...prev].slice(0, 10));
+      setBalls(prev => [...prev, "W"].slice(-6));
+    } else {
+      const diff = newScore.runs - oldScore.runs;
+
+      if (diff > 0) {
+        setEvents(prev => [{ text: `${diff} runs` }, ...prev].slice(0, 10));
+        setBalls(prev => [...prev, diff.toString()].slice(-6));
+      }
+    }
+  }
+
+  setPrevScore(data.match.status);
+
+}, [data]);
+
+  // ⭐ Loading
+  if (!data) return <Skeleton />;
+
+  // ⭐ Error
+  if (data.type === "error") {
+    return (
+      <div className="container" style={{ marginTop: 80,marginBottom: 30 }}>
+        <div className="glass-card" style={{ textAlign: "center" }}>
+          <h3>Service unavailable</h3>
+          <button
+            className="btn"
+            onClick={() => setRetryCount(prev => prev + 1)}
+          >
+            Retry
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  // ⭐ Waiting
+  if (data.type === "waiting") {
+    return (
+      <div className="container" style={{ marginTop: 80 ,marginBottom: 30}}>
+        <div className="glass-card" style={{ textAlign: "center" }}>
+          <h2>🏏 Waiting for IPL Season</h2>
+          <p>Live scores will appear here once IPL begins</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (data.type === "last") {
+  return (
+    <div className="container" style={{ marginTop: 80,marginBottom: 30 }}>
+      <div className="glass-card" style={{ textAlign: "center" }}>
+        <h2>Last IPL Match</h2>
+        <h3>{data.match?.name}</h3>
+        <p>{data.match?.status}</p>
+      </div>
+    </div>
+  );
+}
+
+  // ⭐ Upcoming
+  if (data.type === "upcoming") {
+    return (
+      <div className="container" style={{ marginTop: 80,marginBottom: 30 }}>
+        <div className="glass-card" style={{ textAlign: "center" }}>
+          <h2>Next IPL Match</h2>
+          <h3>{data.match?.name}</h3>
+          <Countdown date={data.match?.dateTimeGMT} />
+          <p style={{ marginTop: 10 }}>
+            {new Date(data.match?.dateTimeGMT).toLocaleString()}
+          </p>
+        </div>
+      </div>
+    );
+  }
+
+
+  // ⭐ LIVE UI
   const rawInnings = data?.scorecard?.scorecard || [];
 
-const inningsList = rawInnings.map((inning, index) => ({
-  title: `${index + 1}${index === 0 ? "st" : index === 1 ? "nd" : "th"} Innings`,
-  batting: inning?.batting || [],
-  bowling: inning?.bowling || []
-}));
-
+  const inningsList = rawInnings.map((inning, index) => ({
+    title: `${index + 1}${index === 0 ? "st" : index === 1 ? "nd" : "th"} Innings`,
+    batting: inning?.batting || [],
+    bowling: inning?.bowling || []
+  }));
 
   return (
-    <div className="container" style={{ marginTop: 150 }}>
+  <>
+    {/* ✅ SEO META */}
+    <head>
+      <title>
+        {data.match?.name} Live Score | IPL Live
+      </title>
 
+      <meta
+        name="description"
+        content={`${data.match?.name} live score, commentary, scorecard and match updates.`}
+      />
+
+      <link rel="canonical" href="https://yourdomain.com/live-score" />
+
+      {/* OpenGraph */}
+      <meta property="og:title" content={`${data.match?.name} Live Score`} />
+      <meta property="og:description" content="Live IPL match score and updates" />
+      <meta property="og:type" content="website" />
+    </head>
+
+    {/* ✅ STRUCTURED DATA */}
+    {data?.match && (
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "SportsEvent",
+            name: data.match.name,
+            description: `${data.match.name} live cricket score`,
+            startDate: data.match.dateTimeGMT,
+            eventStatus:
+              data.type === "live"
+                ? "https://schema.org/EventInProgress"
+                : "https://schema.org/EventScheduled",
+            sport: "Cricket",
+            eventAttendanceMode:
+              "https://schema.org/OfflineEventAttendanceMode",
+            location: {
+              "@type": "Place",
+              name: data.match.venue || "IPL Stadium"
+            },
+            organizer: {
+              "@type": "SportsOrganization",
+              name: "Indian Premier League"
+            },
+            competitor: data.match.teams?.map(team => ({
+              "@type": "SportsTeam",
+              name: team
+            }))
+          })
+        }}
+      />
+    )}
+
+    <div className="container" style={{ marginTop: 80,marginBottom: 30}}>
       <MatchHeader match={data.match} />
+
       {data?.lastUpdated && (
-  <div className="glass-card" style={{
-    marginTop: 8,
-    marginBottom: 12,
-    padding: "6px 12px",
-    textAlign: "center",
-    fontSize: 12,
-    color: "#94a3b8"
-  }}>
-    Last updated {Math.floor((Date.now() - data.lastUpdated) / 1000)}s ago
-  </div>
-)}
+        <div className="glass-card" style={{ textAlign: "center", fontSize: 12 }}>
+          Last updated {Math.floor((Date.now() - data.lastUpdated) / 1000)}s ago
+        </div>
+      )}
 
       <MatchProgressBar />
       <MatchTimeline status={data.match.status} />
@@ -191,25 +264,17 @@ const inningsList = rawInnings.map((inning, index) => ({
       <BallHistory balls={balls} />
 
       <div className="tables-section">
-
         {inningsList.map((innings, index) => (
           <div key={index} className="innings-block">
-
             <BattingTable innings={innings} />
-
             <BowlingTable innings={innings} />
-
-            
-
           </div>
         ))}
-
       </div>
+
       <LiveEventsPanel inningsList={inningsList} />
-
       <CommentaryPanel inningsList={inningsList} />
-
-
     </div>
-  );
+  </>
+);
 }

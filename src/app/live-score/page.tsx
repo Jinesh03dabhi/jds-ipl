@@ -18,5 +18,8 @@ export const metadata: Metadata = {
 };
 
 export default function LiveScorePage() {
-  return <LiveScoreClient />;
+  return (
+    
+  <LiveScoreClient />
+);
 }
