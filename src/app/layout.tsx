@@ -33,6 +33,13 @@ export const metadata: Metadata = {
   description:
     "JD’s IPL provides live IPL scores, detailed player sold prices, full auction history, team squads, match predictions, and advanced cricket performance analytics.",
 
+  icons: {
+    icon: [
+      { url: "/jds-ipl-logo-1.png", sizes: "32x32", type: "image/png" },
+      { url: "/jds-ipl-logo-1.png", sizes: "16x16", type: "image/png" },
+    ],
+  },
+
   keywords: [
     "IPL live score",
     "IPL auction price",

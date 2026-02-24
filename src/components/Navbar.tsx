@@ -88,10 +88,11 @@ export default function Navbar() {
 
         {/* LOGO */}
         <Link href="/" className="navbar-logo">
+          <img style={{height:"30px",width:"30px"}} src='/jds-ipl-logo-1.png'></img>
           <span style={{ color: 'var(--primary)' }}>JD's</span>
           <span style={{ color: '#fff' }}>IPL</span>
         </Link>
-
+        
         {/* DESKTOP MENU */}
         <div className="navbar-menu">
           <Link href="/" className="navbar-link"><LayoutDashboard size={18} /> Dashboard</Link>
