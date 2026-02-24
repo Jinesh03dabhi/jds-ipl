@@ -57,7 +57,7 @@ export default async function PlayerProfile({ params }: Props) {
 };
 
   return (
-    <div className="container" style={{ paddingBottom: '80px' }}>
+    <div className="container" style={{ marginTop:"80px",paddingBottom: '80px' }}>
       <Link href="/players" className="btn-primary profile-back-btn">
         <ArrowLeft size={24} />
         <span>Back</span>

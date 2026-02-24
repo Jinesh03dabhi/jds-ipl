@@ -12,7 +12,7 @@ export default function Standings() {
   );
 
   return (
-    <div className="container standings-container">
+    <div style={{marginTop:"80px",}} className="container standings-container">
 
       <header className="standings-header">
         <h1 className="standings-title">

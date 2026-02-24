@@ -11,7 +11,7 @@ export const metadata: Metadata = {
 
 export default function AboutPage() {
   return (
-    <div className="container" style={{ paddingBottom: "80px" }}>
+    <div className="container" style={{marginTop:"80px", paddingBottom: "80px" }}>
       <h1 style={{ marginBottom: "20px" }}>About JD’s IPL</h1>
 
       <p>

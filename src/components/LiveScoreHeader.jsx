@@ -1,27 +1,37 @@
 "use client";
 
 import LiveBadge from "./LiveBadge";
+import { getMatchState } from "@/utils/getMatchState";
+
 export default function LiveScoreHeader({ data }) {
 
   if (!data) return null;
 
-  const { type, match, message } = data;
+  const { type, match, scorecard, message } = data;
 
-  // 🟢 Safe check
-  const innings =
-    match?.score && match.score.length
-      ? match.score[match.score.length - 1]
-      : null;
+  const matchState = getMatchState(data);
 
   const team1 = match?.teamInfo?.[0];
   const team2 = match?.teamInfo?.[1];
 
-  const isLive = type === "live";
+  const isLive = matchState === "live";
 
-  // 🧠 Calculate Run Rate safely
+  // ⭐ Get latest innings from scorecard safely
+  const inningsList = scorecard?.scorecard || [];
+  const latestInnings = inningsList.length
+    ? inningsList[inningsList.length - 1]
+    : null;
+
+  const totals = latestInnings?.totals || {};
+
+  const runs = totals?.r ?? "-";
+  const wickets = totals?.w ?? "-";
+  const overs = totals?.o ?? "-";
+
+  // ⭐ Safe run rate
   const runRate =
-    innings?.o && innings.o > 0
-      ? (innings.r / innings.o).toFixed(2)
+    overs && overs !== "-"
+      ? (runs / overs).toFixed(2)
       : "-";
 
   return (
@@ -33,12 +43,7 @@ export default function LiveScoreHeader({ data }) {
         {/* TEAM 1 */}
         <div className="premium-team">
           {team1?.img && (
-            <img
-              src={team1.img}
-              alt={team1.name}
-              width={40}
-              height={40}
-            />
+            <img src={team1.img} alt={team1.name} width={40} height={40} />
           )}
           <div>
             <div className="team-name">{team1?.name}</div>
@@ -61,31 +66,24 @@ export default function LiveScoreHeader({ data }) {
             <div className="team-abbr">{team2?.shortname}</div>
           </div>
           {team2?.img && (
-            <img
-              src={team2.img}
-              alt={team2.name}
-              width={40}
-              height={40}
-            />
+            <img src={team2.img} alt={team2.name} width={40} height={40} />
           )}
         </div>
 
       </div>
 
-      {/* SCORE SECTION */}
-      {innings && (
+      {/* ⭐ SCORE SECTION ONLY WHEN VALID */}
+      {(matchState === "live" || matchState === "completed") && latestInnings && (
         <div className="score-details">
 
           <div className="score-box">
             <span className="label">Score</span>
-            <span className="value">
-              {innings.r} / {innings.w}
-            </span>
+            <span className="value">{runs} / {wickets}</span>
           </div>
 
           <div className="score-box">
             <span className="label">Overs</span>
-            <span className="value">{innings.o}</span>
+            <span className="value">{overs}</span>
           </div>
 
           <div className="score-box">
@@ -95,9 +93,7 @@ export default function LiveScoreHeader({ data }) {
 
           <div className="score-box">
             <span className="label">Venue</span>
-            <span className="value">
-              {match?.venue || "-"}
-            </span>
+            <span className="value">{match?.venue || "-"}</span>
           </div>
 
         </div>

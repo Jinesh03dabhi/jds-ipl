@@ -1,22 +1,35 @@
 "use client";
 
+import { getMatchState } from "@/utils/getMatchState";
+import WinnerCard from "@/components/WinnerCard";
+
 export default function MatchSituation({ data }) {
 
-  if (!data || data.type !== "live") return null;
+  const matchState = getMatchState(data);
 
-  const match = data?.match;
-  const scores = match?.score || [];
+  if (matchState !== "live") return null;
 
-  if (!scores.length) return null;
+  const inningsList = data?.scorecard?.scorecard || [];
 
-  // 🟢 First innings
-  const firstInnings = scores[0];
+  if (!inningsList.length) {
+    return (
+      <div className="glass-card">
+        Match has not started yet
+      </div>
+    );
+  }
 
-  // 🟢 Current innings
-  const currentInnings = scores[scores.length - 1];
+  // ⭐ First innings totals
+  const firstTotals = inningsList[0]?.totals || {};
 
-  // 🎯 Only show target logic in 2nd innings
-  if (scores.length < 2) {
+  // ⭐ Current innings totals
+  const currentTotals =
+    inningsList[inningsList.length - 1]?.totals || {};
+
+  const target = firstTotals?.r ? firstTotals.r + 1 : null;
+
+  // ⭐ If still first innings
+  if (inningsList.length < 2 || !target) {
     return (
       <div className="glass-card">
         <h3>Match Situation</h3>
@@ -27,24 +40,36 @@ export default function MatchSituation({ data }) {
     );
   }
 
-  const target = firstInnings.r + 1;
+  const runsScored = currentTotals?.r ?? 0;
+  const oversValue = currentTotals?.o ?? 0;
 
-  const runsScored = currentInnings.r;
-  const overs = Number(currentInnings.o || 0);
-
-  // 🧠 Convert overs to balls
-  const convertOversToBalls = (oversValue) => {
-    const parts = oversValue.toString().split(".");
-    const fullOvers = Number(parts[0]);
-    const balls = parts[1] ? Number(parts[1]) : 0;
-    return fullOvers * 6 + balls;
+  // 🧠 Convert overs to balls safely
+  const convertOversToBalls = (overs) => {
+    const [full, balls] = overs.toString().split(".");
+    return Number(full) * 6 + Number(balls || 0);
   };
 
-  const ballsBowled = convertOversToBalls(overs);
-  const totalBalls = 20 * 6; // T20
-  const ballsRemaining = totalBalls - ballsBowled;
+  const ballsBowled = convertOversToBalls(oversValue);
 
-  const runsNeeded = target - runsScored;
+  // ⭐ Detect match format
+  const format = data?.match?.matchType?.toLowerCase();
+
+  let totalBalls;
+
+  if (format === "t20") totalBalls = 20 * 6;
+  else if (format === "odi") totalBalls = 50 * 6;
+  else totalBalls = 90 * 6; // fallback for tests
+
+  const ballsRemaining = Math.max(totalBalls - ballsBowled, 0);
+
+  const runsNeeded = Math.max(target - runsScored, 0);
+
+  const status = data?.match?.status?.toLowerCase();
+
+if (status.includes("won")) {
+  const winner = status.split("won")[0];
+  return <WinnerCard teamName={winner} />;
+}
 
   const requiredRR =
     ballsRemaining > 0
@@ -59,26 +84,22 @@ export default function MatchSituation({ data }) {
       <div className="situation-grid">
 
         <div className="situation-box">
-          <span className="label" style={{marginRight:"10px"}}>Target</span>
+          <span className="label">Target</span>
           <span className="value">{target}</span>
         </div>
 
         <div className="situation-box">
-          <span className="label" style={{marginRight:"10px"}}>Runs Needed</span>
-          <span className="value">
-            {runsNeeded > 0 ? runsNeeded : 0}
-          </span>
+          <span className="label">Runs Needed</span>
+          <span className="value">{runsNeeded}</span>
         </div>
 
         <div className="situation-box">
-          <span className="label" style={{marginRight:"10px"}}>Balls Left</span>
-          <span className="value">
-            {ballsRemaining > 0 ? ballsRemaining : 0}
-          </span>
+          <span className="label">Balls Left</span>
+          <span className="value">{ballsRemaining}</span>
         </div>
 
         <div className="situation-box">
-          <span className="label" style={{marginRight:"10px"}}>Req. Run Rate</span>
+          <span className="label">Req. Run Rate</span>
           <span className="value">{requiredRR}</span>
         </div>
 

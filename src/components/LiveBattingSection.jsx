@@ -1,29 +1,38 @@
 "use client";
 
+import { getMatchState } from "@/utils/getMatchState";
+
 export default function LiveBattingSection({ data }) {
 
-  if (!data || data.type !== "live") return null;
+  const matchState = getMatchState(data);
+
+  // ⭐ Show only when match has score
+  if (matchState === "upcoming" || matchState === "waiting") {
+    return null;
+  }
 
   const inningsList = data?.scorecard?.scorecard || [];
 
-  if (!inningsList.length) return null;
+  // ⭐ Filter valid innings
+  const validInnings = inningsList.filter(
+    inn => inn?.batting && inn.batting.length
+  );
 
-  // 🟢 Get latest innings (your API format)
-  const latestInnings = inningsList[inningsList.length - 1];
-
-  const batting = latestInnings?.batting || [];
-
-  if (!batting.length) {
+  if (!validInnings.length) {
     return (
       <div className="glass-card">
         <h3>Batting</h3>
-        <div style={{ opacity: 0.6 }}>No batting data yet</div>
+        <div style={{ opacity: 0.6 }}>No batting data available</div>
       </div>
     );
   }
 
-  // 🧠 Sort: current batsmen on top
+  const latestInnings = validInnings[validInnings.length - 1];
+  const batting = latestInnings?.batting || [];
+
+  // ⭐ Sort current batsmen first
   const sortedBatting = [...batting].sort((a, b) => {
+
     const aNotOut = (a?.["dismissal-text"] || "")
       .toLowerCase()
       .includes("not out");
@@ -32,16 +41,18 @@ export default function LiveBattingSection({ data }) {
       .toLowerCase()
       .includes("not out");
 
-    return bNotOut - aNotOut;
+    return Number(bNotOut) - Number(aNotOut);
   });
 
   return (
     <div className="glass-card table-card">
 
-      <h3 style={{ marginBottom: 16 }}>Live Batting</h3>
+      <h3 style={{ marginBottom: 16 }}>
+        {matchState === "live" ? "Live Batting" : "Batting Scorecard"}
+      </h3>
 
       <div className="table-wrapper">
-       
+
         <table className="responsive-table batting-table">
 
           <thead>
@@ -62,6 +73,11 @@ export default function LiveBattingSection({ data }) {
                 (player?.["dismissal-text"] || "").toLowerCase();
 
               const isNotOut = dismissal.includes("not out");
+
+              const strikeRate =
+                player?.sr !== undefined && player?.sr !== null
+                  ? player.sr
+                  : "-";
 
               return (
                 <tr
@@ -87,15 +103,15 @@ export default function LiveBattingSection({ data }) {
 
                     {!isNotOut && player?.["dismissal-text"] && (
                       <div
-                         style={{
-    fontSize: 12,
-    opacity: 0.6,
-    marginTop: 4,
-    maxWidth: 220,
-    overflow: "hidden",
-    textOverflow: "ellipsis",
-    whiteSpace: "nowrap"
-  }}
+                        style={{
+                          fontSize: 12,
+                          opacity: 0.6,
+                          marginTop: 4,
+                          maxWidth: 220,
+                          overflow: "hidden",
+                          textOverflow: "ellipsis",
+                          whiteSpace: "nowrap"
+                        }}
                       >
                         {player["dismissal-text"]}
                       </div>
@@ -107,7 +123,7 @@ export default function LiveBattingSection({ data }) {
                   <td>{player?.b ?? "-"}</td>
                   <td>{player?.["4s"] ?? 0}</td>
                   <td>{player?.["6s"] ?? 0}</td>
-                  <td>{player?.sr ?? "-"}</td>
+                  <td>{strikeRate}</td>
 
                 </tr>
               );
@@ -115,8 +131,8 @@ export default function LiveBattingSection({ data }) {
           </tbody>
 
         </table>
-        </div>
-      
+
+      </div>
 
     </div>
   );

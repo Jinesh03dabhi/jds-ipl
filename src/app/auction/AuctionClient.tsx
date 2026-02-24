@@ -58,7 +58,7 @@ export default function AuctionClient() {
     '/team-placeholder.png';
 
   return (
-    <div className="container" style={{ paddingBottom: '80px' }}>
+    <div className="container" style={{marginTop:"80px", paddingBottom: '80px' }}>
 
       {/* HEADER */}
       <header style={{ marginBottom: '40px' }}>

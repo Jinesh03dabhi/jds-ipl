@@ -8,7 +8,7 @@ export const metadata: Metadata = {
 
 export default function AuctionStrategyPage() {
   return (
-    <div className="container" style={{ paddingBottom: "80px" }}>
+    <div className="container" style={{ marginTop:"80px",paddingBottom: "80px" }}>
       <h1>⭐How IPL Auction Strategy Works</h1>
 
       <p>

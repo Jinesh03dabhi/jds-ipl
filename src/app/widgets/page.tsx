@@ -54,7 +54,7 @@ export default function WidgetsDemo() {
   };
 
   return (
-    <div className="container widgets-container">
+    <div style={{marginTop:"80px",}} className="container widgets-container">
 
       <header className="widgets-header">
         <h1 className="widgets-title">

@@ -6,7 +6,7 @@ import { Award, Target, Users } from 'lucide-react';
 
 export default function TeamsList() {
   return (
-    <div className="container" style={{ paddingBottom: '80px' }}>
+    <div className="container" style={{ marginTop:"80px",paddingBottom: '80px' }}>
 
       <header className="teams-header">
         <h1 className="teams-title">

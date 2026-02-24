@@ -165,7 +165,7 @@ export default function Navbar() {
 
       {/* MOBILE MENU */}
       {mobileOpen && (
-        <div className="mobile-menu">
+        <div className="navbar-menu">
           <Link href="/" onClick={() => setMobileOpen(false)}>Dashboard</Link>
           <Link href="/players" onClick={() => setMobileOpen(false)}>Players</Link>
           <Link href="/teams" onClick={() => setMobileOpen(false)}>Teams</Link>

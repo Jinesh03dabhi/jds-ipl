@@ -1,41 +1,49 @@
 "use client";
 
+import { getMatchState } from "@/utils/getMatchState";
+
 export default function LiveBowlingSection({ data }) {
 
-  if (!data || data.type !== "live") return null;
+  const matchState = getMatchState(data);
+
+  // ⭐ Hide when no score available
+  if (matchState === "upcoming" || matchState === "waiting") {
+    return null;
+  }
 
   const inningsList = data?.scorecard?.scorecard || [];
 
-  if (!inningsList.length) return null;
+  // ⭐ Filter valid innings
+  const validInnings = inningsList.filter(
+    inn => inn?.bowling && inn.bowling.length
+  );
 
-  const latestInnings = inningsList[inningsList.length - 1];
-
-  const bowling = latestInnings?.bowling || [];
-
-  if (!bowling.length) {
+  if (!validInnings.length) {
     return (
       <div className="glass-card">
         <h3>Bowling</h3>
-        <div style={{ opacity: 0.6 }}>No bowling data yet</div>
+        <div style={{ opacity: 0.6 }}>No bowling data available</div>
       </div>
     );
   }
 
-  // 🧠 Convert overs like 1.3 → 1 over + 3 balls
+  const latestInnings = validInnings[validInnings.length - 1];
+  const bowling = latestInnings?.bowling || [];
+
+  // 🧠 Convert overs safely
   const convertOversToBalls = (overs) => {
     if (!overs && overs !== 0) return 0;
 
-    const parts = overs.toString().split(".");
-    const fullOvers = Number(parts[0]);
-    const balls = parts[1] ? Number(parts[1]) : 0;
-
-    return fullOvers * 6 + balls;
+    const [full, balls] = overs.toString().split(".");
+    return Number(full) * 6 + Number(balls || 0);
   };
 
   return (
     <div className="glass-card table-card">
 
-      <h3 style={{ marginBottom: 16 }}>Live Bowling</h3>
+      <h3 style={{ marginBottom: 16 }}>
+        {matchState === "live" ? "Live Bowling" : "Bowling Scorecard"}
+      </h3>
 
       <div className="table-wrapper">
 
@@ -55,10 +63,13 @@ export default function LiveBowlingSection({ data }) {
           <tbody>
             {bowling.map((player, index) => {
 
-              const ballsBowled = convertOversToBalls(player?.o);
+              const runs = Number(player?.r ?? 0);
+              const overs = player?.o ?? 0;
+              const ballsBowled = convertOversToBalls(overs);
+
               const economy =
                 ballsBowled > 0
-                  ? ((player?.r / ballsBowled) * 6).toFixed(2)
+                  ? ((runs / ballsBowled) * 6).toFixed(2)
                   : "-";
 
               return (
@@ -68,9 +79,9 @@ export default function LiveBowlingSection({ data }) {
                     {player?.bowler?.name || "Unknown"}
                   </td>
 
-                  <td>{player?.o ?? "-"}</td>
+                  <td>{overs}</td>
                   <td>{player?.m ?? 0}</td>
-                  <td>{player?.r ?? 0}</td>
+                  <td>{runs}</td>
                   <td>{player?.w ?? 0}</td>
                   <td>{economy}</td>
 

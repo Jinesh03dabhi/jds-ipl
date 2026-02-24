@@ -30,7 +30,7 @@ export default function PlayerDirectory() {
   };
 
   return (
-    <div className="container" style={{ paddingBottom: '80px' }}>
+    <div className="container" style={{ marginTop:"80px",paddingBottom: '80px' }}>
       <header style={{ marginBottom: '40px' }}>
         <h1 className="directory-title">
           Player Directory

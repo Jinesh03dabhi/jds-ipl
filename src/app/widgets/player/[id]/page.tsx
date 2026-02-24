@@ -24,6 +24,7 @@ export default async function PlayerWidget({
   return (
     <div
       style={{
+        marginTop:"80px",
         fontFamily: 'Inter, sans-serif',
         padding: '20px',
         background: '#0b1220',

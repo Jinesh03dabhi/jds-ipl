@@ -8,7 +8,7 @@ export const metadata: Metadata = {
 
 export default function BestIPLBowlers() {
   return (
-    <div className="container" style={{ paddingBottom: "80px" }}>
+    <div className="container" style={{marginTop:"80px", paddingBottom: "80px" }}>
       <h1>🌟 Best IPL Bowlers of All Time</h1>
 
       <p>
