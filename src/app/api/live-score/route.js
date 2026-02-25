@@ -14,7 +14,8 @@ process.env.CRIC_API_KEY_1,
 process.env.CRIC_API_KEY_2,
 process.env.CRIC_API_KEY_3,
 process.env.CRIC_API_KEY_4,
-process.env.CRIC_API_KEY_5
+process.env.CRIC_API_KEY_5,
+process.env.CRIC_API_KEY_6
 ].filter(Boolean);
 
 async function fetchFromAPI(key) {

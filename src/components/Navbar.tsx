@@ -100,7 +100,7 @@ export default function Navbar() {
           <Link href="/teams" className="navbar-link"><ShieldAlert size={18} /> Teams</Link>
           <Link href="/teams/standings" className="navbar-link"><Trophy size={18} /> Ranking</Link>
           <Link href="/auction" className="navbar-link"><Gavel size={18} /> Auction</Link>
-          <Link href="/ipl-winners" onClick={() => setMobileOpen(false)}>Winners</Link>
+          <Link href="/ipl-winners" className="navbar-link"><Trophy size={18} /> Winners</Link>
           <Link href="/predictions" className="navbar-link"><TrendingUp size={18} /> Predictions</Link>
           <Link href="/widgets" className="navbar-link"><Layout size={18} /> Widgets</Link>
         </div>

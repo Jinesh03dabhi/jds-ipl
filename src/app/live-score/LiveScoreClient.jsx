@@ -24,7 +24,7 @@ setData({ type: "error" });
 useEffect(() => {
 fetchScore();
 }, []);
-
+console.log(data);
 const matchState = getMatchState(data);
 
 // 🧠 Dynamic polling based on state
@@ -58,7 +58,7 @@ return <div className="glass-card">Service unavailable — retry later</div>;
 return (
 <div style={{ marginTop: "50px" }} className="container page-content">
 
-```
+
   {/* Header only if match exists */}
   {data?.match && (
     <div style={{ marginBottom: "10px" }}>
