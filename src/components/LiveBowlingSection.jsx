@@ -4,96 +4,115 @@ import { getMatchState } from "@/utils/getMatchState";
 
 export default function LiveBowlingSection({ data }) {
 
-  const matchState = getMatchState(data);
+const matchState = getMatchState(data);
 
-  // ⭐ Hide when no score available
-  if (matchState === "upcoming" || matchState === "waiting") {
-    return null;
-  }
+if (matchState === "upcoming" || matchState === "waiting") return null;
 
-  const inningsList = data?.scorecard?.scorecard || [];
+const inningsList = data?.scorecard?.scorecard || [];
 
-  // ⭐ Filter valid innings
-  const validInnings = inningsList.filter(
-    inn => inn?.bowling && inn.bowling.length
-  );
+if (!inningsList.length) {
+return ( <div className="glass-card">
+Waiting for bowling to begin… </div>
+);
+}
 
-  if (!validInnings.length) {
-    return (
-      <div className="glass-card">
-        <h3>Bowling</h3>
-        <div style={{ opacity: 0.6 }}>No bowling data available</div>
-      </div>
-    );
-  }
+const validInnings = inningsList.filter(
+inn => inn?.bowling && inn.bowling.length
+);
 
-  const latestInnings = validInnings[validInnings.length - 1];
-  const bowling = latestInnings?.bowling || [];
+if (!validInnings.length) {
+return ( <div className="glass-card">
+Scorecard not available yet </div>
+);
+}
 
-  // 🧠 Convert overs safely
-  const convertOversToBalls = (overs) => {
-    if (!overs && overs !== 0) return 0;
+const latestInnings = validInnings[validInnings.length - 1];
+const bowling = latestInnings?.bowling || [];
 
-    const [full, balls] = overs.toString().split(".");
-    return Number(full) * 6 + Number(balls || 0);
-  };
+const convertOversToBalls = (overs) => {
+if (!overs && overs !== 0) return 0;
+const [full, balls] = overs.toString().split(".");
+return Number(full) * 6 + Number(balls || 0);
+};
 
-  return (
-    <div className="glass-card table-card">
+// ⭐ Sort by wickets then economy
+const sortedBowling = [...bowling].sort((a, b) => {
 
-      <h3 style={{ marginBottom: 16 }}>
-        {matchState === "live" ? "Live Bowling" : "Bowling Scorecard"}
-      </h3>
 
-      <div className="table-wrapper">
+const wicketsDiff = (b?.w ?? 0) - (a?.w ?? 0);
+if (wicketsDiff !== 0) return wicketsDiff;
 
-        <table className="responsive-table">
+const econA = convertOversToBalls(a?.o) > 0
+  ? (a?.r ?? 0) / convertOversToBalls(a?.o)
+  : Infinity;
 
-          <thead>
-            <tr>
-              <th style={{ textAlign: "left" }}>Bowler</th>
-              <th>O</th>
-              <th>M</th>
-              <th>R</th>
-              <th>W</th>
-              <th>Econ</th>
+const econB = convertOversToBalls(b?.o) > 0
+  ? (b?.r ?? 0) / convertOversToBalls(b?.o)
+  : Infinity;
+
+return econA - econB;
+
+
+});
+
+return ( <div className="glass-card table-card">
+
+
+  <h3 style={{ marginBottom: 16 }}>
+    {matchState === "live" ? "Live Bowling" : "Bowling Scorecard"}
+  </h3>
+
+  <div className="table-wrapper">
+
+    <table className="responsive-table">
+
+      <thead>
+        <tr>
+          <th style={{ textAlign: "left" }}>Bowler</th>
+          <th>O</th>
+          <th>M</th>
+          <th>R</th>
+          <th>W</th>
+          <th>Econ</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        {sortedBowling.map((player, index) => {
+
+          const runs = Number(player?.r ?? 0);
+          const overs = player?.o ?? 0;
+          const ballsBowled = convertOversToBalls(overs);
+
+          const economy =
+            ballsBowled > 0
+              ? ((runs / ballsBowled) * 6).toFixed(2)
+              : 0;
+
+          return (
+            <tr key={player?.bowler?.id || index}>
+
+              <td style={{ textAlign: "left" }}>
+                {player?.bowler?.name || "Unknown"}
+              </td>
+
+              <td>{overs}</td>
+              <td>{player?.m ?? 0}</td>
+              <td>{runs}</td>
+              <td>{player?.w ?? 0}</td>
+              <td>{economy}</td>
+
             </tr>
-          </thead>
+          );
+        })}
+      </tbody>
 
-          <tbody>
-            {bowling.map((player, index) => {
+    </table>
 
-              const runs = Number(player?.r ?? 0);
-              const overs = player?.o ?? 0;
-              const ballsBowled = convertOversToBalls(overs);
+  </div>
 
-              const economy =
-                ballsBowled > 0
-                  ? ((runs / ballsBowled) * 6).toFixed(2)
-                  : "-";
+</div>
 
-              return (
-                <tr key={player?.bowler?.id || index}>
 
-                  <td style={{ textAlign: "left" }}>
-                    {player?.bowler?.name || "Unknown"}
-                  </td>
-
-                  <td>{overs}</td>
-                  <td>{player?.m ?? 0}</td>
-                  <td>{runs}</td>
-                  <td>{player?.w ?? 0}</td>
-                  <td>{economy}</td>
-
-                </tr>
-              );
-            })}
-          </tbody>
-
-        </table>
-
-      </div>
-
-    </div>
-  );
+);
 }

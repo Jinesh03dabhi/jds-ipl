@@ -2527,3 +2527,145 @@ body {
   font-weight: 700;
   color: #22c55e;
 }
+table tbody tr:hover {
+  background-color: rgba(255, 215, 0, 0.1);
+}
+
+.card {
+  border-radius: 12px;
+}
+
+h1 {
+  color: #ffd700;
+}
+.ipl-page {
+  background: #020617;
+  color: white;
+  min-height: 100vh;
+}
+
+/* MAIN WRAPPER */
+.page-container {
+  max-width: 1100px;
+  margin: auto;
+  padding: 0 20px;
+}
+
+/* SECTION SPACING */
+.section {
+  margin-top: 80px;
+}
+
+/* HERO */
+.hero {
+  padding-top: 60px;
+  text-align: center;
+}
+
+.hero h1 {
+  color: #ffd700;
+  font-weight: 800;
+  margin-bottom: 10px;
+}
+
+.hero p {
+  color: #94a3b8;
+  max-width: 600px;
+  margin: auto;
+}
+
+/* STATS GRID */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+}
+
+.stat-card {
+  background: #0f172a;
+  padding: 30px;
+  border-radius: 16px;
+  text-align: center;
+}
+
+.stat-card h6 {
+  color: #94a3b8;
+}
+
+.stat-card h4 {
+  color: #ffd700;
+  margin-top: 6px;
+}
+
+/* TABLE */
+.table-card {
+  background: #0f172a;
+  padding: 25px;
+  border-radius: 16px;
+}
+
+/* FAQ */
+.faq h2 {
+  color: #ffd700;
+  margin-bottom: 20px;
+}
+
+.faq p {
+  margin-bottom: 10px;
+}
+
+/* MOBILE */
+@media (max-width: 768px) {
+  .stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+.table-card {
+  background: #0f172a;
+  padding: 20px;
+  border-radius: 16px;
+}
+
+/* SCROLL WRAPPER */
+.table-scroll {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* TABLE */
+.ipl-table {
+  width: 100%;
+  min-width: 750px;
+  border-collapse: collapse;
+}
+
+/* HEADER */
+.ipl-table th {
+  text-align: left;
+  padding: 14px 18px;
+  color: #ffd700;
+  font-weight: 600;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+  position: sticky;
+  top: 0;
+  background: #0f172a;
+}
+
+/* CELLS */
+.ipl-table td {
+  padding: 14px 18px;
+  white-space: nowrap;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+
+/* ROW HOVER */
+.ipl-table tbody tr:hover {
+  background: rgba(255, 215, 0, 0.08);
+}
+
+/* MOBILE */
+@media (max-width: 768px) {
+  .ipl-table {
+    min-width: 900px;
+  }
+}

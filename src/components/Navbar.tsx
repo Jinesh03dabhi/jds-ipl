@@ -98,8 +98,9 @@ export default function Navbar() {
           <Link href="/" className="navbar-link"><LayoutDashboard size={18} /> Dashboard</Link>
           <Link href="/players" className="navbar-link"><Users size={18} /> Players</Link>
           <Link href="/teams" className="navbar-link"><ShieldAlert size={18} /> Teams</Link>
-          <Link href="/teams/standings" className="navbar-link"><Trophy size={18} /> Standings</Link>
+          <Link href="/teams/standings" className="navbar-link"><Trophy size={18} /> Ranking</Link>
           <Link href="/auction" className="navbar-link"><Gavel size={18} /> Auction</Link>
+          <Link href="/ipl-winners" onClick={() => setMobileOpen(false)}>Winners</Link>
           <Link href="/predictions" className="navbar-link"><TrendingUp size={18} /> Predictions</Link>
           <Link href="/widgets" className="navbar-link"><Layout size={18} /> Widgets</Link>
         </div>
@@ -170,8 +171,9 @@ export default function Navbar() {
           <Link href="/" onClick={() => setMobileOpen(false)}>Dashboard</Link>
           <Link href="/players" onClick={() => setMobileOpen(false)}>Players</Link>
           <Link href="/teams" onClick={() => setMobileOpen(false)}>Teams</Link>
-          <Link href="/teams/standings" onClick={() => setMobileOpen(false)}>Standings</Link>
+          <Link href="/teams/standings" onClick={() => setMobileOpen(false)}>Ranking</Link>
           <Link href="/auction" onClick={() => setMobileOpen(false)}>Auction</Link>
+          <Link href="/ipl-winners" onClick={() => setMobileOpen(false)}>Winners</Link>
           <Link href="/predictions" onClick={() => setMobileOpen(false)}>Predictions</Link>
           <Link href="/widgets" onClick={() => setMobileOpen(false)}>Widgets</Link>
         </div>

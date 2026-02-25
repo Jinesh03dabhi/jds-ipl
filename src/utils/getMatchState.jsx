@@ -1,11 +1,16 @@
 export function getMatchState(data) {
-  if (!data) return "loading";
 
-  if (data.type === "live") return "live";
+if (!data) return "loading";
 
-  if (data.type === "upcoming") return "upcoming";
+if (data.type === "loading") return "loading";
 
-  if (data.type === "last") return "completed";
+if (data.type === "error") return "error";
 
-  return "waiting";
+if (data.type === "live" && data.match) return "live";
+
+if (data.type === "upcoming" && data.match) return "upcoming";
+
+if (data.type === "last" && data.match) return "completed";
+
+return "waiting";
 }
