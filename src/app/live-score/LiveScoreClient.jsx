@@ -9,84 +9,118 @@ import { getMatchState } from "@/utils/getMatchState";
 
 export default function LiveScorePage() {
 
-const [data, setData] = useState(null);
+  const [data, setData] = useState(null);
 
-async function fetchScore() {
-try {
-const res = await fetch("/api/live-score");
-const json = await res.json();
-setData(json);
-} catch (err) {
-setData({ type: "error" });
-}
-}
+  async function fetchScore() {
+    try {
+      const res = await fetch("/api/live-score");
+      const json = await res.json();
+      setData(json);
+    } catch (err) {
+      setData({ type: "error" });
+    }
+  }
 
-useEffect(() => {
-fetchScore();
-}, []);
-console.log(data);
-const matchState = getMatchState(data);
+  // ✅ Initial fetch
+  useEffect(() => {
+    fetchScore();
+  }, []);
 
-// 🧠 Dynamic polling based on state
-useEffect(() => {
+  const matchState = getMatchState(data);
 
-if (!data) return;
+  // ✅ SMART POLLING
+  useEffect(() => {
 
-let intervalTime = 60000;
+    if (!data) return;
 
-if (matchState === "live") intervalTime = 30000;
-if (matchState === "upcoming") intervalTime = 120000;
-if (matchState === "waiting") intervalTime = 600000;
+    let intervalTime = 1800000; // default 30 min
 
-const interval = setInterval(fetchScore, intervalTime);
+    // 🔴 LIVE
+    if (matchState === "live") {
+      intervalTime = 60000; // 1 min
+    }
 
-return () => clearInterval(interval);
+    // 🔜 UPCOMING (time-based logic)
+    if (matchState === "upcoming" && data.match?.dateTimeGMT) {
 
+      const matchStart = new Date(data.match.dateTimeGMT).getTime();
+      const now = Date.now();
 
-}, [matchState]);
+      const twoHoursBefore = matchStart - (2 * 60 * 60 * 1000);
+      const thirtyMinutesBefore = matchStart - (30 * 60 * 1000);
 
-// ⭐ LOADING
-if (matchState === "loading") {
-return <div className="glass-card">Loading live match…</div>;
-}
+      if (now >= thirtyMinutesBefore) {
+        intervalTime = 60000; // 1 min
+      }
+      else if (now >= twoHoursBefore) {
+        intervalTime = 300000; // 5 min
+      }
+      else {
+        intervalTime = 1800000; // 30 min
+      }
+    }
 
-// ⭐ ERROR
-if (matchState === "error") {
-return <div className="glass-card">Service unavailable — retry later</div>;
-}
+    // ✅ COMPLETED
+    if (matchState === "completed") {
+      intervalTime = 900000; // 15 min
+    }
 
-return (
-<div style={{ marginTop: "50px" }} className="container page-content">
+    // ❌ ERROR → slow retry
+    if (matchState === "error") {
+      intervalTime = 900000; // 15 min
+    }
 
+    console.log("Polling every:", intervalTime / 1000, "seconds");
 
-  {/* Header only if match exists */}
-  {data?.match && (
-    <div style={{ marginBottom: "10px" }}>
-      <LiveScoreHeader data={data} />
+    const interval = setInterval(fetchScore, intervalTime);
+
+    return () => clearInterval(interval);
+
+  }, [matchState, data]);
+
+  // ⭐ LOADING
+  if (!data || matchState === "loading") {
+    return <div className="glass-card">Loading match data…</div>;
+  }
+
+  // ⭐ ERROR
+  if (matchState === "error") {
+    return (
+      <div className="glass-card">
+        Live updates temporarily unavailable.
+      </div>
+    );
+  }
+
+  return (
+    <div style={{ marginTop: "50px" }} className="container page-content">
+
+      {data?.match && (
+        <div style={{ marginBottom: "10px" }}>
+          <LiveScoreHeader data={data} />
+        </div>
+      )}
+
+      {matchState === "upcoming" && (
+        <div className="glass-card">
+          Next match starts at {new Date(data.match?.dateTimeGMT).toLocaleString()}
+        </div>
+      )}
+
+      {matchState === "waiting" && (
+        <div className="glass-card">
+          Waiting for T20 World Cup matches 🏏
+        </div>
+      )}
+
+      {(matchState === "live" || matchState === "completed") && (
+        <>
+          <MatchSituation data={data} />
+          <LiveBattingSection data={data} />
+          <LiveBowlingSection data={data} />
+        </>
+      )}
+
     </div>
-  )}
-
-  {/* UPCOMING */}
-  {matchState === "upcoming" && (
-    <div className="glass-card">Match starts soon</div>
-  )}
-
-  {/* WAITING */}
-  {matchState === "waiting" && (
-    <div className="glass-card">Waiting for season 🏏</div>
-  )}
-
-  {/* LIVE + COMPLETED */}
-  {(matchState === "live" || matchState === "completed") && (
-    <>
-      <MatchSituation data={data} />
-      <LiveBattingSection data={data} />
-      <LiveBowlingSection data={data} />
-    </>
-  )}
-
-</div>
-
-
-);
+  );
 }
