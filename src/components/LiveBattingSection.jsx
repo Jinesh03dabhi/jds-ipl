@@ -29,22 +29,19 @@ Scorecard not available yet </div>
 const latestInnings = validInnings[validInnings.length - 1];
 const batting = latestInnings?.batting || [];
 
-const isActive = (text = "") => {
-  if (!text) return true; // empty means still batting
+const isActive = (player) => {
+  const text = player?.["dismissal-text"];
+
+  if (!text) return false;
 
   const t = text.toLowerCase();
 
-  return (
-    t.includes("not out") ||
-    t.includes("retired not out")
-  );
+  return t.includes("batting");
 };
 const sortedBatting = [...batting].sort((a, b) => {
 
-
-const aActive = isActive(a?.["dismissal-text"]);
-const bActive = isActive(b?.["dismissal-text"]);
-
+const aActive = isActive(a);
+const bActive = isActive(b);
 if (aActive !== bActive) return Number(bActive) - Number(aActive);
 
 return (b?.r ?? 0) - (a?.r ?? 0);
@@ -78,7 +75,7 @@ return ( <div className="glass-card table-card">
         {sortedBatting.map((player, index) => {
 
           const dismissal = (player?.["dismissal-text"] || "").toLowerCase();
-          const isNotOut = isActive(dismissal);
+          const isNotOut = isActive(player);
 
           const balls = player?.b ?? 0;
           const runs = player?.r ?? 0;

@@ -94,22 +94,22 @@ export default function LiveScorePage() {
   }
 
   return (
-    <div style={{ marginTop: "80px" }} className="container page-content">
+    <div style={{ marginTop: "60px" }} className="container page-content">
 
       {data?.match && (
-        <div style={{ marginBottom: "10px" }}>
+        <div  style={{ marginBottom: "10px" }}>
           <LiveScoreHeader data={data} />
         </div>
       )}
 
       {matchState === "upcoming" && (
-        <div className="glass-card">
+        <div style={{ marginTop: "20px" }} className="glass-card">
           Next match starts at {new Date(data.match?.dateTimeGMT).toLocaleString()}
         </div>
       )}
 
       {matchState === "waiting" && (
-        <div className="glass-card">
+        <div style={{ marginTop: "20px" }} className="glass-card">
           Waiting for T20 World Cup matches 🏏
         </div>
       )}

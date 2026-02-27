@@ -5,10 +5,10 @@ let lastFetch = 0;
 let dynamicCacheTime = 1800000; // default 30 min
 let isFetching = false;
 
-const CACHE_LIVE = 60000;        // 1 min during live
-const CACHE_NEAR_MATCH = 300000; // 5 min (within 2 hrs)
-const CACHE_UPCOMING_FAR = 1800000; // 30 min
-const CACHE_COMPLETED = 900000;  // 15 min
+const CACHE_LIVE = 60000;          // 1 min
+const CACHE_NEAR_MATCH = 300000;   // 5 min
+const CACHE_UPCOMING_FAR = 1800000;// 30 min
+const CACHE_COMPLETED = 900000;    // 15 min
 
 const API_KEYS = [
   process.env.CRIC_API_KEY_1,
@@ -19,16 +19,10 @@ const API_KEYS = [
   process.env.CRIC_API_KEY_6
 ].filter(Boolean);
 
-// 🎯 ONLY T20 WORLD CUP
-const allowedKeywords = [
-  "t20 world cup",
-  "icc men's t20 world cup",
-  "icc t20 world cup"
-];
-
+// 🎯 Only T20 World Cup
 const isTargetSeries = (name = "") => {
   const n = name.toLowerCase();
-  return allowedKeywords.some(keyword => n.includes(keyword));
+  return n.includes("t20") && n.includes("world");
 };
 
 async function fetchFromAPI(key) {
@@ -54,7 +48,6 @@ async function fetchFromAPI(key) {
 
       let scorecard = null;
 
-      // Only fetch scorecard during live
       try {
         const scoreRes = await axios.get(
           `https://api.cricapi.com/v1/match_scorecard?apikey=${key}&id=${liveMatch.id}`
@@ -76,7 +69,8 @@ async function fetchFromAPI(key) {
 
     // 🔜 UPCOMING MATCH
     const upcomingMatch = matches.find(m =>
-      isTargetSeries(m.series) && m.matchStarted === false
+      isTargetSeries(m.name) &&
+      m.matchStarted === false
     );
 
     if (upcomingMatch) {
@@ -85,12 +79,10 @@ async function fetchFromAPI(key) {
       const now = Date.now();
       const twoHoursBefore = matchStart - (2 * 60 * 60 * 1000);
 
-      // Smart cache timing
-      if (now >= twoHoursBefore) {
-        dynamicCacheTime = CACHE_NEAR_MATCH; // 5 min
-      } else {
-        dynamicCacheTime = CACHE_UPCOMING_FAR; // 30 min
-      }
+      dynamicCacheTime =
+        now >= twoHoursBefore
+          ? CACHE_NEAR_MATCH
+          : CACHE_UPCOMING_FAR;
 
       return {
         type: "upcoming",
@@ -101,7 +93,8 @@ async function fetchFromAPI(key) {
 
     // ✅ COMPLETED
     const lastMatch = matches.find(m =>
-      isTargetSeries(m.series) && m.matchEnded === true
+      isTargetSeries(m.name) &&
+      m.matchEnded === true
     );
 
     if (lastMatch) {
@@ -134,6 +127,7 @@ async function fetchFromAPI(key) {
 
 export async function GET() {
 
+  // ✅ Serve valid cache
   if (cachedData && Date.now() - lastFetch < dynamicCacheTime) {
     return Response.json(cachedData);
   }
@@ -148,31 +142,42 @@ export async function GET() {
   isFetching = true;
 
   let result = null;
+  let blockedKeys = 0;
 
   for (const key of API_KEYS) {
 
-    result = await fetchFromAPI(key);
+    const res = await fetchFromAPI(key);
 
-    if (result?.blocked) {
-      isFetching = false;
-      return Response.json({
-        type: "error",
-        message: "Daily API limit reached. Updates resume tomorrow."
-      });
+    if (res?.blocked) {
+      blockedKeys++;
+      continue; // Try next key
     }
 
-    if (result) break;
+    if (res) {
+      result = res;
+      break;
+    }
   }
 
   isFetching = false;
 
+  // ❌ If all keys blocked
   if (!result) {
+
+    if (blockedKeys === API_KEYS.length) {
+      return Response.json({
+        type: "error",
+        message: "All API keys exhausted for today."
+      });
+    }
+
     return Response.json({
       type: "error",
       message: "Live data temporarily unavailable"
     });
   }
 
+  // ✅ Cache only successful result
   result.lastUpdated = Date.now();
   cachedData = result;
   lastFetch = Date.now();
