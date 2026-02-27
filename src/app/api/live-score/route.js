@@ -26,9 +26,9 @@ const allowedKeywords = [
   "icc t20 world cup"
 ];
 
-const isTargetSeries = (series = "") => {
-  const s = series.toLowerCase();
-  return allowedKeywords.some(keyword => s.includes(keyword));
+const isTargetSeries = (name = "") => {
+  const n = name.toLowerCase();
+  return allowedKeywords.some(keyword => n.includes(keyword));
 };
 
 async function fetchFromAPI(key) {
@@ -45,7 +45,7 @@ async function fetchFromAPI(key) {
 
     // 🔥 LIVE MATCH
     const liveMatch = matches.find(m =>
-      isTargetSeries(m.series) &&
+      isTargetSeries(m.name) &&
       m.matchStarted === true &&
       m.matchEnded !== true
     );

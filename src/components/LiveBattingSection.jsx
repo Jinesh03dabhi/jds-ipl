@@ -30,10 +30,15 @@ const latestInnings = validInnings[validInnings.length - 1];
 const batting = latestInnings?.batting || [];
 
 const isActive = (text = "") => {
-const t = text.toLowerCase();
-return t.includes("not out") || t.includes("retired not out");
-};
+  if (!text) return true; // empty means still batting
 
+  const t = text.toLowerCase();
+
+  return (
+    t.includes("not out") ||
+    t.includes("retired not out")
+  );
+};
 const sortedBatting = [...batting].sort((a, b) => {
 
 

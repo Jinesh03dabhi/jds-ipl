@@ -6,6 +6,7 @@ import LiveBattingSection from "@/components/LiveBattingSection";
 import LiveBowlingSection from "@/components/LiveBowlingSection";
 import MatchSituation from "@/components/MatchSituation";
 import { getMatchState } from "@/utils/getMatchState";
+import CurrentPlayers from "@/components/CurrentPlayers"
 
 export default function LiveScorePage() {
 
@@ -116,6 +117,7 @@ export default function LiveScorePage() {
       {(matchState === "live" || matchState === "completed") && (
         <>
           <MatchSituation data={data} />
+          <CurrentPlayers data={data} /> 
           <LiveBattingSection data={data} />
           <LiveBowlingSection data={data} />
         </>
