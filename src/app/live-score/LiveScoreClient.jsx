@@ -87,14 +87,14 @@ export default function LiveScorePage() {
   // ⭐ ERROR
   if (matchState === "error") {
     return (
-      <div className="glass-card">
+      <div style={{ marginTop: "80px" }} className="glass-card">
         Live updates temporarily unavailable.
       </div>
     );
   }
 
   return (
-    <div style={{ marginTop: "50px" }} className="container page-content">
+    <div style={{ marginTop: "80px" }} className="container page-content">
 
       {data?.match && (
         <div style={{ marginBottom: "10px" }}>
