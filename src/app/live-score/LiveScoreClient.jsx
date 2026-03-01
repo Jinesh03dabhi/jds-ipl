@@ -97,14 +97,19 @@ export default function LiveScorePage() {
     <div style={{ marginTop: "60px" }} className="container page-content">
 
       {data?.match && (
-        <div  style={{ marginBottom: "10px" }}>
+        <div style={{ marginBottom: "10px" }}>
           <LiveScoreHeader data={data} />
         </div>
       )}
 
       {matchState === "upcoming" && (
         <div style={{ marginTop: "20px" }} className="glass-card">
-          Next match starts at {new Date(data.match?.dateTimeGMT).toLocaleString()}
+          Next match starts at{" "}
+          {new Date(data.match?.dateTimeGMT).toLocaleString("en-IN", {
+            timeZone: "Asia/Kolkata",
+            dateStyle: "medium",
+            timeStyle: "short",
+          })}
         </div>
       )}
 
@@ -117,7 +122,7 @@ export default function LiveScorePage() {
       {(matchState === "live" || matchState === "completed") && (
         <>
           <MatchSituation data={data} />
-          <CurrentPlayers data={data} /> 
+          <CurrentPlayers data={data} />
           <LiveBattingSection data={data} />
           <LiveBowlingSection data={data} />
         </>
