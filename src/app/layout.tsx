@@ -100,6 +100,14 @@ export default function RootLayout({
       <head>
         {/* Mobile responsiveness */}
         <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+        {/* Google AdSense */}
+        <script
+          async
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3689941361378688"
+          crossOrigin="anonymous"
+        ></script>
+
         <Script
           src="https://www.googletagmanager.com/gtag/js?id=G-PXSNXGLE6N"
           strategy="afterInteractive"
