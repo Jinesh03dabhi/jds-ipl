@@ -114,8 +114,8 @@ export default function LiveScorePage() {
       )}
 
       {matchState === "waiting" && (
-        <div style={{ marginTop: "20px" }} className="glass-card">
-          Waiting for T20 World Cup matches 🏏
+        <div style={{ marginTop: "20px", textAlign: 'center', padding: '30px', fontSize: '1.2rem' }} className="glass-card">
+          Waiting for IPL matches 🏏
         </div>
       )}
 

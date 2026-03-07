@@ -26,12 +26,12 @@ export const metadata: Metadata = {
   },
 
   title: {
-    default: "JD’s IPL – Live Scores, Auction History & Player Stats",
+    default: "IPL Live Score 2026 | JD’s IPL Live Match Updates",
     template: "%s | JD’s IPL",
   },
 
   description:
-    "JD’s IPL provides live IPL scores, detailed player sold prices, full auction history, team squads, match predictions, and advanced cricket performance analytics.",
+    "Get IPL live scores, match scorecards, team standings, player statistics, and IPL schedule updates on JD’s IPL.",
 
   icons: {
     icon: [
@@ -41,13 +41,12 @@ export const metadata: Metadata = {
   },
 
   keywords: [
-    "IPL live score",
-    "IPL auction price",
-    "IPL player sold price",
-    "IPL team squad 2026",
-    "IPL match predictions",
-    "IPL statistics",
-    "Cricket analytics platform"
+    "ipl live score",
+    "ipl schedule",
+    "ipl points table",
+    "ipl teams",
+    "ipl live match",
+    "ipl scorecard",
   ],
 
   robots: {
@@ -65,17 +64,24 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     url: "https://jds-ipl.vercel.app",
-    title: "JD’s IPL – Live Score & Auction Analytics",
-    description:
-      "Track IPL live scores, explore player auction prices, analyze team performance and access deep cricket insights.",
+    title: "IPL Live Score | JD’s IPL",
+    description: "Live IPL scores, schedule and match updates",
     siteName: "JD’s IPL",
+    images: [
+      {
+        url: "/jds-ipl-logo-1.png",
+        width: 1200,
+        height: 630,
+        alt: "IPL Match preview image",
+      },
+    ],
   },
 
   twitter: {
     card: "summary_large_image",
-    title: "JD’s IPL – Live IPL Data & Insights",
-    description:
-      "Live IPL score updates, auction prices, player stats and advanced cricket analytics.",
+    title: "IPL Live Score Updates",
+    description: "Follow IPL live matches and scores",
+    images: ["/jds-ipl-logo-1.png"],
   },
 
   alternates: {
@@ -117,7 +123,7 @@ export default function RootLayout({
         }}
       >
         <Navbar />
-        
+
         <main
           style={{
             paddingTop: "calc(var(--nav-height))",

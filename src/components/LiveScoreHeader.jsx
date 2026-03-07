@@ -2,6 +2,7 @@
 
 import LiveBadge from "./LiveBadge";
 import { getMatchState } from "@/utils/getMatchState";
+import Link from 'next/link';
 
 export default function LiveScoreHeader({ data }) {
 
@@ -17,8 +18,19 @@ export default function LiveScoreHeader({ data }) {
   // 🔥 Use match.score (summary scoreboard)
   const scores = match?.score || [];
 
-  const team1Score = scores[0] || null;
-  const team2Score = scores[1] || null;
+  const getTeamScore = (team) => {
+    if (!team) return null;
+    return scores.find((s) => {
+      const inningStr = (s.inning || "").toLowerCase();
+      const teamName = (team.name || "").toLowerCase();
+      const shortName = (team.shortname || "").toLowerCase();
+      return (teamName && inningStr.includes(teamName)) || (shortName && inningStr.includes(shortName));
+    });
+  };
+
+  // Fallback to array indices if no match is found (e.g., matching logic fails)
+  const team1Score = getTeamScore(team1) || (scores.length > 0 && !getTeamScore(team2) ? scores[0] : null);
+  const team2Score = getTeamScore(team2) || (scores.length > 1 && !getTeamScore(team1) ? scores[1] : null);
 
   // 🧠 Run rate calculator
   const calculateRR = (runs, overs) => {
@@ -50,7 +62,9 @@ export default function LiveScoreHeader({ data }) {
             <img src={team1.img} alt={team1.name} width={40} height={40} />
           )}
           <div>
-            <div className="team-name">{team1?.name || "-"}</div>
+            <Link href="/teams" className="team-name" style={{ textDecoration: 'none', color: 'inherit' }}>
+              {team1?.name || "-"}
+            </Link>
             <div className="team-abbr">{team1?.shortname || ""}</div>
 
             {team1Score && (
@@ -76,7 +90,9 @@ export default function LiveScoreHeader({ data }) {
         {/* TEAM 2 */}
         <div className="premium-team premium-right">
           <div>
-            <div className="team-name">{team2?.name || "-"}</div>
+            <Link href="/teams" className="team-name" style={{ textDecoration: 'none', color: 'inherit' }}>
+              {team2?.name || "-"}
+            </Link>
             <div className="team-abbr">{team2?.shortname || ""}</div>
 
             {team2Score && (

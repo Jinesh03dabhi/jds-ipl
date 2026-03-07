@@ -2,6 +2,7 @@
 
 import { getMatchState } from "@/utils/getMatchState";
 import { useState, useMemo } from "react";
+import Link from 'next/link';
 
 export default function CurrentPlayers({ data, balls = [] }) {
 
@@ -90,7 +91,9 @@ export default function CurrentPlayers({ data, balls = [] }) {
                 key={player?.batsman?.id}
               >
                 <span className="live-dot">●</span>
-                {player?.batsman?.name || "Unknown"} — 
+                <Link href="/players" style={{ textDecoration: 'none', color: 'inherit' }}>
+                  {player?.batsman?.name || "Unknown"}
+                </Link> —
                 {" "}
                 {player?.r ?? "-"} ({player?.b ?? "-"})
               </div>
@@ -108,12 +111,14 @@ export default function CurrentPlayers({ data, balls = [] }) {
 
           <div style={{ padding: "10px" }}>
             <span className="live-dot">●</span>
-            {currentBowler?.bowler?.name || "-"}
+            <Link href="/players" style={{ textDecoration: 'none', color: 'inherit' }}>
+              {currentBowler?.bowler?.name || "-"}
+            </Link>
 
             {currentBowler && (
               <div style={{ fontSize: 14, opacity: 0.8, marginTop: 6 }}>
-                Over: {currentBowler.o} | 
-                Run: {currentBowler.r} | 
+                Over: {currentBowler.o} |
+                Run: {currentBowler.r} |
                 Wickets: {currentBowler.w}
               </div>
             )}
@@ -170,8 +175,9 @@ export default function CurrentPlayers({ data, balls = [] }) {
       )}
 
       <button
+        className="btn-primary"
         onClick={() => setShowHistory(!showHistory)}
-        style={{ marginTop: 16 }}
+        style={{ marginTop: 24, width: '100%' }}
       >
         {showHistory
           ? "Hide Bowling History"

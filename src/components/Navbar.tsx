@@ -1,7 +1,8 @@
 'use client'
 
 import Link from 'next/link'
-import { useState,useEffect,useRef  } from 'react'
+import Image from 'next/image'
+import { useState, useEffect, useRef } from 'react'
 import { useRouter } from 'next/navigation'
 import {
   LayoutDashboard,
@@ -67,7 +68,7 @@ export default function Navbar() {
     router.push(`/teams/${id}`)
   }
 
-   useEffect(() => {
+  useEffect(() => {
     const handleScroll = () => {
       if (!navRef.current) return;
 
@@ -88,11 +89,11 @@ export default function Navbar() {
 
         {/* LOGO */}
         <Link href="/" className="navbar-logo">
-          <img style={{height:"30px",width:"30px"}} src='/jds-ipl-logo-1.png'></img>
+          <Image src="/jds-ipl-logo-1.png" alt="JD's IPL Logo" width={30} height={30} />
           <span style={{ color: 'var(--primary)' }}>JD's</span>
           <span style={{ color: '#fff' }}>IPL</span>
         </Link>
-        
+
         {/* DESKTOP MENU */}
         <div className="navbar-menu">
           <Link href="/" className="navbar-link"><LayoutDashboard size={18} /> Dashboard</Link>
@@ -115,44 +116,44 @@ export default function Navbar() {
           />
 
           {(playerResults.length > 0 || teamResults.length > 0) && (
-  <div className="search-dropdown">
+            <div className="search-dropdown">
 
-    {/* Players Section */}
-    {playerResults.length > 0 && (
-      <>
-        <div className="search-section-title">Players</div>
+              {/* Players Section */}
+              {playerResults.length > 0 && (
+                <>
+                  <div className="search-section-title">Players</div>
 
-        {playerResults.map(p => (
-          <div
-            key={p.id}
-            className="search-item"
-            onClick={() => goToPlayer(p.id)}
-          >
-            {p.name}
-          </div>
-        ))}
-      </>
-    )}
+                  {playerResults.map(p => (
+                    <div
+                      key={p.id}
+                      className="search-item"
+                      onClick={() => goToPlayer(p.id)}
+                    >
+                      {p.name}
+                    </div>
+                  ))}
+                </>
+              )}
 
-    {/* Teams Section */}
-    {teamResults.length > 0 && (
-      <>
-        <div className="search-section-title">Teams</div>
+              {/* Teams Section */}
+              {teamResults.length > 0 && (
+                <>
+                  <div className="search-section-title">Teams</div>
 
-        {teamResults.map(t => (
-          <div
-            key={t.id}
-            className="search-item"
-            onClick={() => goToTeam(t.id)}
-          >
-            {t.name}
-          </div>
-        ))}
-      </>
-    )}
+                  {teamResults.map(t => (
+                    <div
+                      key={t.id}
+                      className="search-item"
+                      onClick={() => goToTeam(t.id)}
+                    >
+                      {t.name}
+                    </div>
+                  ))}
+                </>
+              )}
 
-  </div>
-)}
+            </div>
+          )}
         </div>
 
         {/* MOBILE TOGGLE */}

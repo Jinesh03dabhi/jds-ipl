@@ -3,6 +3,7 @@ import { PLAYERS, TEAMS } from '@/lib/data';
 import { notFound } from 'next/navigation';
 import PlayerAvatar from '@/components/PlayerAvatar';
 import Link from 'next/link';
+import Image from 'next/image';
 import {
   Award,
   MapPin,
@@ -91,10 +92,12 @@ export default async function TeamDetail({ params }: Props) {
       >
         <div className="team-header-top">
 
-          <div className="team-logo-box-lg">
-            <img
-              src={team.logoUrl}
+          <div className="team-logo-box-lg" style={{ position: 'relative', width: '100px', height: '100px' }}>
+            <Image
+              src={team.logoUrl || '/team-placeholder.png'}
               alt={team.name}
+              fill
+              style={{ objectFit: 'contain' }}
             />
           </div>
 

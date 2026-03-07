@@ -9,39 +9,58 @@ export const metadata: Metadata = {
   },
 };
 
+import { ShieldCheck, Database, Cookie, Lock, Mail } from "lucide-react";
+
 export default function PrivacyPolicyPage() {
   return (
-    <div className="container" style={{marginTop:"80px", paddingBottom: "80px" }}>
-      <h1 style={{ marginBottom: "20px" }}>Privacy Policy</h1>
+    <div className="container" style={{ marginTop: "80px", paddingBottom: "80px" }}>
+      <div className="content-wrapper">
+        <h1 className="page-headline text-gradient">Privacy Policy</h1>
 
-      <p>
-        At JD’s IPL, we respect your privacy. This page explains how we collect,
-        use, and protect your information.
-      </p>
+        <p style={{ fontSize: "18px", color: "#94a3b8", marginBottom: "40px" }}>
+          At JD’s IPL, we respect your privacy. This page explains how we collect,
+          use, and protect your information.
+        </p>
 
-      <h3 style={{ marginTop: "30px" }}>Information We Collect</h3>
-      <p>
-        We may collect basic analytics data such as browser type, pages visited,
-        and device information to improve user experience.
-      </p>
+        <div className="grid" style={{ gridTemplateColumns: "1fr", gap: "24px" }}>
 
-      <h3 style={{ marginTop: "30px" }}>Cookies</h3>
-      <p>
-        Our website may use cookies to enhance browsing experience and analyze
-        traffic performance.
-      </p>
+          <div className="info-card hover-scale">
+            <h3 className="section-title"><Database className="callout-icon" /> Information We Collect</h3>
+            <p style={{ margin: 0 }}>
+              We may collect basic analytics data such as browser type, pages visited,
+              and device information to improve user experience.
+            </p>
+          </div>
 
-      <h3 style={{ marginTop: "30px" }}>Third-Party Services</h3>
-      <p>
-        We may use third-party services such as analytics tools or advertising
-        partners which may collect limited information according to their policies.
-      </p>
+          <div className="info-card hover-scale">
+            <h3 className="section-title"><Cookie className="callout-icon" /> Cookies</h3>
+            <p style={{ margin: 0 }}>
+              Our website may use cookies to enhance browsing experience and analyze
+              traffic performance. By using our website, you agree to the use of cookies.
+            </p>
+          </div>
 
-      <h3 style={{ marginTop: "30px" }}>Contact</h3>
-      <p>
-        If you have any questions regarding this Privacy Policy, please contact us
-        through our Contact page.
-      </p>
+          <div className="info-card hover-scale">
+            <h3 className="section-title"><Lock className="callout-icon" /> Third-Party Services</h3>
+            <p style={{ margin: 0 }}>
+              We may use third-party services such as analytics tools or advertising
+              partners which may collect limited information according to their own privacy policies.
+            </p>
+          </div>
+
+          <div className="highlight-box hover-scale" style={{ display: "flex", alignItems: "center", gap: "20px" }}>
+            <Mail size={32} color="var(--primary)" />
+            <div>
+              <h3 style={{ fontSize: "18px", color: "#fff", marginBottom: "8px" }}>Contact Us</h3>
+              <p style={{ margin: 0, fontSize: "14px" }}>
+                If you have any questions regarding this Privacy Policy, please contact us
+                through our Contact page.
+              </p>
+            </div>
+          </div>
+
+        </div>
+      </div>
     </div>
   );
 }

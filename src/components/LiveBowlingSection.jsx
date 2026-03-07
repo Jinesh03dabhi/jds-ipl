@@ -1,6 +1,7 @@
 "use client";
 
 import { getMatchState } from "@/utils/getMatchState";
+import Link from 'next/link';
 
 export default function LiveBowlingSection({ data }) {
 
@@ -108,7 +109,9 @@ export default function LiveBowlingSection({ data }) {
                         ●
                       </span>
                     )}
-                    {player?.bowler?.name || "Unknown"}
+                    <Link href="/players" style={{ textDecoration: 'none', color: 'inherit' }}>
+                      {player?.bowler?.name || "Unknown"}
+                    </Link>
                   </td>
 
                   <td>{overs}</td>

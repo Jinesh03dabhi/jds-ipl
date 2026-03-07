@@ -19,10 +19,10 @@ const API_KEYS = [
   process.env.CRIC_API_KEY_6
 ].filter(Boolean);
 
-// 🎯 Only T20 World Cup
+// 🎯 Only IPL
 const isTargetSeries = (name = "") => {
   const n = name.toLowerCase();
-  return n.includes("t20") && n.includes("world");
+  return n.includes("ipl") || n.includes("indian premier league");
 };
 
 async function fetchFromAPI(key) {
@@ -63,7 +63,7 @@ async function fetchFromAPI(key) {
         type: "live",
         match: liveMatch,
         scorecard,
-        message: "Live T20 World Cup match"
+        message: "Live IPL match"
       };
     }
 
@@ -111,7 +111,7 @@ async function fetchFromAPI(key) {
 
     return {
       type: "waiting",
-      message: "Waiting for T20 World Cup matches"
+      message: "Waiting for IPL matches"
     };
 
   } catch (err) {

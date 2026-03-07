@@ -3,6 +3,7 @@
 import { PLAYERS, TEAMS } from '@/lib/data';
 import { TrendingUp, Users, Gavel, Award, ArrowUpRight, ArrowRight } from 'lucide-react';
 import Link from 'next/link';
+import Image from 'next/image';
 import PlayerAvatar from '@/components/PlayerAvatar';
 import LiveScoreClient from "./live-score/LiveScoreClient";
 
@@ -16,246 +17,277 @@ export default function Home() {
 
   return (
     <div className='container'>
+      {/* 🚀 JSON-LD Structured Data: SportsEvent & FAQ schema */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify([
+            {
+              "@context": "https://schema.org",
+              "@type": "SportsEvent",
+              "name": "IPL Match",
+              "sport": "Cricket"
+            },
+            {
+              "@context": "https://schema.org",
+              "@type": "FAQPage",
+              "mainEntity": [
+                {
+                  "@type": "Question",
+                  "name": "What is IPL?",
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "The Indian Premier League (IPL) is a professional T20 cricket competition established in 2008 by the BCCI, played in India globally recognized as the most-attended cricket league in the world."
+                  }
+                },
+                {
+                  "@type": "Question",
+                  "name": "Who won IPL 2023?",
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Chennai Super Kings (CSK) won the IPL 2023 title by defeating Gujarat Titans (GT) in the final match."
+                  }
+                }
+              ]
+            }
+          ]),
+        }}
+      />
       <LiveScoreClient />
-    <div className="container" style={{ minHeight: '100vh', paddingBottom: '80px' }}>
-      
-      {/* HERO */}
-      <section className="hero-bg"
-        style={{
-         
-  textAlign: 'center',
-  padding: '80px 16px 60px',
-  position: 'relative',
-  overflow: 'hidden'
+      <div className="container" style={{ minHeight: '100vh', paddingBottom: '80px' }}>
 
-        }}
-      >
-
-        {/* OVERLAY */}
-        <div
+        {/* HERO */}
+        <section className="hero-bg"
           style={{
-            position: 'absolute',
-            inset: 0,
-            background: 'linear-gradient(180deg, rgba(2,6,23,0.7) 0%, rgba(2, 2, 28, 0.9) 300%)',
-            zIndex: 0
+
+            textAlign: 'center',
+            padding: '80px 16px 60px',
+            position: 'relative',
+            overflow: 'hidden'
+
           }}
-        />
+        >
 
-        {/* CONTENT */}
-        <div style={{ position: 'relative', zIndex: 1, maxWidth: '900px', margin: '0 auto' }}>
+          {/* OVERLAY */}
+          <div
+            style={{
+              position: 'absolute',
+              inset: 0,
+              background: 'linear-gradient(180deg, rgba(2,6,23,0.7) 0%, rgba(2, 2, 28, 0.9) 300%)',
+              zIndex: 0
+            }}
+          />
 
-          <div style={{
-            display: 'inline-flex',
-            alignItems: 'center',
-            gap: '8px',
-            background: 'rgba(6, 82, 245, 0.1)',
-            padding: '8px 16px',
-            borderRadius: '100px',
-            color: 'var(--primary)',
-            fontSize: '14px',
-            fontWeight: 600,
-            marginBottom: '24px'
-          }}>
-            <Award size={16} /> IPL 2025 Analytics Now Live
+          {/* CONTENT */}
+          <div className="fade-in" style={{ position: 'relative', zIndex: 1, maxWidth: '900px', margin: '0 auto' }}>
+
+            <div style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '8px',
+              background: 'rgba(37, 99, 235, 0.2)',
+              padding: '8px 16px',
+              borderRadius: '100px',
+              color: '#60a5fa',
+              fontSize: '14px',
+              fontWeight: 600,
+              marginBottom: '24px',
+              border: '1px solid rgba(59, 130, 246, 0.3)'
+            }}>
+              <span style={{ display: "inline-block", width: "8px", height: "8px", background: "#f87171", borderRadius: "50%", animation: "pulse 2s infinite" }}></span>
+              IPL 2026 Analytics Now Live
+            </div>
+
+            <div>
+              <h1 className="page-headline">
+                Deep Data for Serious <br /> IPL Enthusiasts
+              </h1>
+
+              <p style={{ color: '#cbd5e1', fontSize: 'clamp(16px, 2vw, 20px)', maxWidth: '700px', margin: '0 auto 40px', lineHeight: 1.6 }}>
+                JD’s IPL provides structured datasets covering historical auctions,
+                team roster evolution and high-value player movements. Our statistical
+                approach allows users to evaluate performance consistency across seasons.
+              </p>
+
+            </div>
+
+            <div style={{ display: 'flex', gap: '16px', justifyContent: 'center', flexWrap: 'wrap' }}>
+              <Link href="/players" className="btn-primary hover-scale" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                Browse Players <ArrowUpRight size={20} />
+              </Link>
+
+              <Link href="/auction" className="glass-card hover-scale" style={{ padding: '12px 24px', color: '#fff', textDecoration: 'none' }}>
+                Auction Insights
+              </Link>
+            </div>
+
+          </div>
+        </section>
+
+        {/* QUICK STATS */}
+        <section
+          className="grid fade-in"
+          style={{
+            gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
+            marginTop: "40px",
+            marginBottom: '40px',
+            gap: '24px'
+          }}
+        >
+          <div className="info-card hover-scale" style={{ display: 'flex', alignItems: 'center', gap: '20px', padding: '24px' }}>
+            <div style={{ background: "rgba(37,99,235,0.2)", padding: '16px', borderRadius: '12px' }}>
+              <Users size={32} color="var(--primary)" />
+            </div>
+            <div>
+              <div style={{ color: '#94a3b8', fontSize: '14px', textTransform: 'uppercase', letterSpacing: '1px' }}>Total Players</div>
+              <div style={{ fontSize: '28px', fontWeight: 800, color: '#fff' }}>{PLAYERS.length}+</div>
+            </div>
           </div>
 
-          <div><h1 className="text-gradient" style={{ fontSize: 'clamp(32px, 6vw, 64px)', marginBottom: '24px' }}>
-            Deep Data for Serious <br /> IPL Enthusiasts
-          </h1>
-
-          <p style={{ color: '#94a3b8', fontSize: 'clamp(16px, 2vw, 20px)', maxWidth: '700px', margin: '0 auto 40px' }}>
-           ⭐ JD’s IPL provides structured datasets covering historical auctions,
-            team roster evolution and high-value player movements. Our statistical
-            approach allows users to evaluate performance consistency across seasons.
-          </p>
-          
+          <div className="info-card hover-scale" style={{ display: 'flex', alignItems: 'center', gap: '20px', padding: '24px' }}>
+            <div style={{ background: "rgba(234,179,8,0.2)", padding: '16px', borderRadius: '12px' }}>
+              <Gavel size={32} color="var(--secondary)" />
+            </div>
+            <div>
+              <div style={{ color: '#94a3b8', fontSize: '14px', textTransform: 'uppercase', letterSpacing: '1px' }}>Auction Records</div>
+              <div style={{ fontSize: '28px', fontWeight: 800, color: '#fff' }}>18 Seasons</div>
+            </div>
           </div>
 
-          <div style={{ display: 'flex', gap: '16px', justifyContent: 'center', flexWrap: 'wrap' }}>
-            <Link href="/players" className="btn-primary" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              Browse Players <ArrowUpRight size={20} />
+          <div className="info-card hover-scale" style={{ display: 'flex', alignItems: 'center', gap: '20px', padding: '24px' }}>
+            <div style={{ background: "rgba(34,197,94,0.2)", padding: '16px', borderRadius: '12px' }}>
+              <TrendingUp size={32} color="#22c55e" />
+            </div>
+            <div>
+              <div style={{ color: '#94a3b8', fontSize: '14px', textTransform: 'uppercase', letterSpacing: '1px' }}>Accuracy Rate</div>
+              <div style={{ fontSize: '28px', fontWeight: 800, color: '#fff' }}>92.4%</div>
+            </div>
+          </div>
+        </section>
+
+        {/* FEATURED PLAYERS */}
+        <section style={{ marginTop: '60px' }}>
+          <h2 className="section-title">Featured Analytics</h2>
+
+          <div className="grid" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '24px' }}>
+            {featuredPlayers.map(player => (
+              <div key={player.id} className="info-card hover-scale" style={{ padding: '24px' }}>
+                <Link
+                  href={`/players/${player.id}`}
+                  style={{ textDecoration: 'none', color: 'inherit' }}
+                >
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+                    <PlayerAvatar name={player.name} src={player.avatarUrl} size={80} />
+                    <span style={{ color: 'var(--secondary)', fontWeight: 800, background: 'rgba(234,179,8,0.1)', padding: '4px 12px', borderRadius: '20px', fontSize: '14px' }}>
+                      ₹ {player.soldPrice}
+                    </span>
+                  </div>
+
+                  <h3 style={{ marginTop: '16px', fontSize: '20px' }}>{player.name}</h3>
+                  <div style={{ color: '#94a3b8', fontSize: '14px', marginBottom: '16px' }}>{player.role} 🏏</div>
+
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '20px', padding: '8px', background: 'rgba(255,255,255,0.02)', borderRadius: '8px' }}>
+                    <Image src={getTeamLogo(player.currentTeam)} alt={player.currentTeam} width={24} height={24} style={{ objectFit: 'contain' }} />
+                    <span style={{ color: '#e2e8f0', fontWeight: 600, fontSize: '14px' }}>{player.currentTeam}</span>
+                  </div>
+
+                  <div style={{
+                    display: 'grid',
+                    gridTemplateColumns: 'repeat(auto-fit, minmax(60px, 1fr))',
+                    gap: '10px',
+                    fontSize: '12px'
+                  }}>
+                    {player.stats?.matches !== undefined && <Stat label="M" value={player.stats.matches} />}
+                    {player.stats?.runs !== undefined && <Stat label="R" value={player.stats.runs} />}
+                    {player.stats?.wickets !== undefined && <Stat label="W" value={player.stats.wickets} />}
+                    {player.stats?.strikeRate !== undefined && <Stat label="SR" value={player.stats.strikeRate} />}
+                    {player.stats?.economy !== undefined && <Stat label="Eco" value={player.stats.economy} />}
+                  </div>
+
+                </Link>
+              </div>
+            ))}
+          </div>
+
+          <div style={{ display: 'flex', justifyContent: 'center', marginTop: '40px' }}>
+            <Link href="/players" className='btn-primary hover-scale' style={{ width: "200px", padding: "16px", display: 'flex', gap: '8px', alignItems: 'center', justifyContent: 'center', fontSize: '16px' }}>
+              <span>View All Players</span>
+              <ArrowRight size={20} />
             </Link>
-
-            <Link href="/auction" className="glass-card" style={{ padding: '12px 24px', color: '#fff' }}>
-              Auction Insights
-            </Link>
           </div>
+        </section>
 
-        </div>
-      </section>
-      
-      {/* QUICK STATS */}
-      <section
-        className="grid"
-        style={{
-          gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
-          marginTop: "30px",
-          marginBottom: '30px',
-          gap: '20px'
-        }}
-      >
-        <div className="glass-card" style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
-          <Users size={32} />
-          <div>
-            <div style={{ color: '#94a3b8' }}>Total Players</div>
-            <div style={{ fontSize: '24px', fontWeight: 800 }}>{PLAYERS.length}+</div>
-          </div>
-        </div>
+        {/* RELATED CONTENT / INSIGHTS */}
+        <section style={{ marginTop: "80px" }}>
+          <h2 className="section-title">Deep Dive Insights</h2>
 
-        <div className="glass-card" style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
-          <Gavel size={32} />
-          <div>
-            <div style={{ color: '#94a3b8' }}>Auction Records</div>
-            <div style={{ fontSize: '24px', fontWeight: 800 }}>18 Seasons</div>
-          </div>
-        </div>
+          <div className="grid" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '24px' }}>
+            <div className="info-card hover-scale" style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
+              <div style={{ background: "rgba(37,99,235,0.1)", width: "48px", height: "48px", borderRadius: "12px", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                <TrendingUp color="var(--primary)" size={24} />
+              </div>
+              <h3 style={{ fontSize: "20px" }}>About IPL Analytics</h3>
+              <p style={{ color: "#94a3b8", fontSize: "14px", lineHeight: "1.6" }}>
+                Our platform goes beyond basic score updates by analyzing auction trends, player valuations, performance metrics and team strategies.
+              </p>
+            </div>
 
-        <div className="glass-card" style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
-          <TrendingUp size={32} />
-          <div>
-            <div style={{ color: '#94a3b8' }}>Accuracy Rate</div>
-            <div style={{ fontSize: '24px', fontWeight: 800 }}>92.4%</div>
+            <div className="info-card hover-scale" style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
+              <div style={{ background: "rgba(234,179,8,0.1)", width: "48px", height: "48px", borderRadius: "12px", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                <Award color="var(--secondary)" size={24} />
+              </div>
+              <h3 style={{ fontSize: "20px" }}>Why We Stand Out</h3>
+              <ul style={{ color: "#94a3b8", fontSize: "14px", lineHeight: "1.8", listStyle: "none", padding: 0 }}>
+                <li>🏏 Breakdown of record auction transfers</li>
+                <li>📊 Analysis of top wicket-takers</li>
+                <li>💰 Comparison of spending patterns</li>
+              </ul>
+            </div>
+
+            <div className="info-card hover-scale" style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
+              <div style={{ background: "rgba(34,197,94,0.1)", width: "48px", height: "48px", borderRadius: "12px", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                <ArrowUpRight color="#22c55e" size={24} />
+              </div>
+              <h3 style={{ fontSize: "20px" }}>Featured Research</h3>
+              <div style={{ display: "flex", flexDirection: "column", gap: "12px", fontSize: "14px" }}>
+                <Link href="/top-10-expensive-ipl-players" style={{ color: "var(--primary)", textDecoration: "none" }}>→ Top 10 Most Expensive Players</Link>
+                <Link href="/best-ipl-bowlers" style={{ color: "var(--primary)", textDecoration: "none" }}>→ Best IPL Bowlers of All Time</Link>
+                <Link href="/ipl-auction-strategy" style={{ color: "var(--primary)", textDecoration: "none" }}>→ How Auction Strategy Works</Link>
+              </div>
+            </div>
           </div>
-        </div>
-      </section>
-        <div>
-        
-        
+        </section>
+
+        {/* FAQ SECTION */}
+        <section style={{ marginTop: "80px", maxWidth: "800px", margin: "80px auto 0" }}>
+          <h2 className="section-title">Frequently Asked Questions</h2>
+
+          <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
+            <div className="highlight-box hover-scale" style={{ margin: 0, padding: "20px", borderRadius: "12px" }}>
+              <h3 style={{ fontSize: "18px", marginBottom: "12px", color: "#fff" }}>What is IPL?</h3>
+              <p style={{ color: "#94a3b8", fontSize: "15px", lineHeight: 1.6, margin: 0 }}>
+                The Indian Premier League (IPL) is a professional T20 cricket competition established in 2008 by the BCCI, played in India globally recognized as the most-attended cricket league in the world.
+              </p>
+            </div>
+
+            <div className="highlight-box hover-scale" style={{ margin: 0, padding: "20px", borderRadius: "12px", borderLeftColor: "var(--secondary)", background: "rgba(234,179,8,0.05)" }}>
+              <h3 style={{ fontSize: "18px", marginBottom: "12px", color: "#fff" }}>Who won IPL 2023?</h3>
+              <p style={{ color: "#94a3b8", fontSize: "15px", lineHeight: 1.6, margin: 0 }}>
+                Chennai Super Kings (CSK) won the IPL 2023 title by defeating Gujarat Titans (GT) in the final match.
+              </p>
+            </div>
+
+            <div className="highlight-box hover-scale" style={{ margin: 0, padding: "20px", borderRadius: "12px", borderLeftColor: "#22c55e", background: "rgba(34,197,94,0.05)" }}>
+              <h3 style={{ fontSize: "18px", marginBottom: "12px", color: "#fff" }}>Does JD's IPL offer real-time scores?</h3>
+              <p style={{ color: "#94a3b8", fontSize: "15px", lineHeight: 1.6, margin: 0 }}>
+                Yes, our Live Score section provides real-time ball-by-ball updates and detailed scorecards for all live matches during the tournament.
+              </p>
+            </div>
+          </div>
+        </section>
+
 
       </div>
-      {/* FEATURED PLAYERS */}
-      <section style={{marginTop: '30px',}}>
-        <h2 style={{ fontSize: 'clamp(24px, 4vw, 32px)', marginBottom: '32px' }}>Featured Analytics</h2>
-
-        <div className="grid" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '20px' }}>
-          {featuredPlayers.map(player => (
-            <Link
-              href={`/players/${player.id}`}
-              key={player.id}
-              className="glass-card"
-              style={{ textDecoration: 'none', color: 'inherit', padding: '20px' }}
-            >
-              {/* Avatar + Price */}
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-                <PlayerAvatar name={player.name} src={player.avatarUrl} size={80} />
-                <span style={{ color: 'var(--secondary)', fontWeight: 700 }}>₹ {player.soldPrice}</span>
-              </div>
-
-              <h3 style={{ marginTop: '12px' }}>{player.name} ({player.role} 🏏)</h3>
-
-              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '12px' }}>
-                <img src={getTeamLogo(player.currentTeam)} alt={player.currentTeam} style={{ width: '30px', height: '30px' }} />
-                <span style={{ color: '#94a3b8' }}>{player.currentTeam}</span>
-              </div>
-
-              {/* Stats */}
-              <div style={{
-                display: 'grid',
-                gridTemplateColumns: 'repeat(auto-fit, minmax(70px, 1fr))',
-                gap: '8px',
-                fontSize: '12px'
-              }}>
-                {player.stats?.matches !== undefined && <Stat label="Matches" value={player.stats.matches} />}
-                {player.stats?.runs !== undefined && <Stat label="Runs" value={player.stats.runs} />}
-                {player.stats?.wickets !== undefined && <Stat label="Wickets" value={player.stats.wickets} />}
-                {player.stats?.strikeRate !== undefined && <Stat label="SR" value={player.stats.strikeRate} />}
-                {player.stats?.economy !== undefined && <Stat label="Eco" value={player.stats.economy} />}
-              </div>
-
-            </Link>
-          ))}
-        </div>
-      </section>
-
-      {/* VIEW MORE */}
-      <div style={{ display: 'flex', justifyContent: 'center', marginTop: '45px' }}>
-        <Link href="/players" className='btn-primary' style={{ width: "180px", height: "50px", display: 'flex', gap: '8px', alignItems: 'center', justifyContent: 'center' }}>
-          <p>View More</p>
-          <ArrowRight size={22} />
-        </Link>
-      </div>
-      <section style={{ marginTop: "60px", maxWidth: "900px" }}>
-  <h2>⭐About IPL Analytics</h2>
-
-  <p>
-    JD’s IPL is an independent cricket analytics platform focused on delivering
-    structured insights into the Indian Premier League. Our platform goes beyond
-    basic score updates by analyzing auction trends, player valuations,
-    performance metrics and team strategies.
-  </p>
-
-  <p>
-    We study how franchises allocate budgets, how auction records are broken,
-    and how player performance impacts long-term team success. By combining
-    historical data with modern statistical interpretation, JD’s IPL provides
-    fans with a deeper understanding of the league’s financial and competitive ecosystem.
-  </p>
-
-  <p>
-    Whether you are a fantasy cricket enthusiast, a casual viewer or a data-driven
-    analyst, our goal is to present IPL information in a structured,
-    research-oriented format.
-  </p>
-</section>
-
-<section style={{ marginTop: "50px", maxWidth: "900px" }}>
-  <h2>⭐Why JD’s IPL Stands Out</h2>
-
-  <p>
-    The IPL is no longer just a cricket tournament — it is a multi-billion
-    dollar sports enterprise. Understanding auction strategy, player price
-    inflation and squad composition requires more than surface-level coverage.
-  </p>
-
-  <ul style={{ marginTop: "20px", lineHeight: "1.9" ,listStyle:"none"}}>
-    <li>✔ Detailed breakdown of record-breaking auction transfers</li>
-    <li>✔ Analysis of top wicket-takers and Orange Cap contenders</li>
-    <li>✔ Structured comparison of team spending patterns</li>
-    <li>✔ Player-by-player performance evaluation</li>
-    <li>✔ Long-term IPL financial trend observations</li>
-  </ul>
-
-  <p style={{ marginTop: "20px" }}>
-    Our platform is designed to help fans understand not only what happens
-    during a match, but why it happens from a strategic and financial perspective.
-  </p>
-</section>
-
-  <section style={{ marginTop: "50px", maxWidth: "900px" }}>
-  <h2>⭐Featured IPL Insights</h2>
-
-  <p>
-    Explore our in-depth research articles covering major IPL milestones
-    and historical data trends:
-  </p>
-
-  <div style={{ marginTop: "20px", lineHeight: "1.9" }}>
-    <p>
-      <Link href="/top-10-expensive-ipl-players">
-        ⭐Top 10 Most Expensive IPL Players in History
-      </Link>
-      {" "}– A detailed analysis of record-breaking auction prices and
-      franchise investment patterns.
-    </p>
-
-    <p>
-      <Link href="/best-ipl-bowlers">
-        ⭐Best IPL Bowlers of All Time
-      </Link>
-      {" "}– Evaluating wicket tallies, economy rates and match-winning spells.
-    </p>
-
-    <p>
-      <Link href="/ipl-auction-strategy">
-        ⭐How IPL Auction Strategy Works
-      </Link>
-      {" "}– Understanding salary caps, player retention rules and bidding wars.
-    </p>
-  </div>
-</section>
-
-
-    </div>
     </div>
   );
 }
