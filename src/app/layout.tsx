@@ -108,6 +108,13 @@ export default function RootLayout({
           crossOrigin="anonymous"
         ></script>
 
+        {/* AMP Auto Ads */}
+        <script
+          async
+          custom-element="amp-auto-ads"
+          src="https://cdn.ampproject.org/v0/amp-auto-ads-0.1.js"
+        ></script>
+
         <Script
           src="https://www.googletagmanager.com/gtag/js?id=G-PXSNXGLE6N"
           strategy="afterInteractive"
@@ -130,6 +137,8 @@ export default function RootLayout({
           minHeight: "100vh",
         }}
       >
+        <div dangerouslySetInnerHTML={{ __html: '<amp-auto-ads type="adsense" data-ad-client="ca-pub-3689941361378688"></amp-auto-ads>' }} />
+
         <Navbar />
 
         <main
