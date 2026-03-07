@@ -9,7 +9,7 @@ import type { Metadata } from "next";
 export const metadata: Metadata = {
   title: "IPL 2026 Auction – Sold Prices & Player Bids",
   description:
-    "Explore IPL 2026 auction results including player sold prices, highest bids, and team spending details. Complete IPL auction history on JD’s IPL.",
+    "Explore IPL 2026 auction results including player sold prices, highest bids, and team spending details. Complete IPL auction history on IPL Scorebook.",
   alternates: {
     canonical: "https://jds-ipl.vercel.app/auction",
   },
@@ -58,7 +58,7 @@ export default function AuctionClient() {
     '/team-placeholder.png';
 
   return (
-    <div className="container" style={{marginTop:"80px", paddingBottom: '80px' }}>
+    <div className="container" style={{ marginTop: "80px", paddingBottom: '80px' }}>
 
       {/* HEADER */}
       <header style={{ marginBottom: '40px' }}>
@@ -196,7 +196,7 @@ export default function AuctionClient() {
         {/* TEAM SPEND SECTION */}
         <section style={{ width: '100%', minWidth: 0 }}>
 
-          <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '24px',marginTop: '24px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '24px', marginTop: '24px' }}>
             <h2 style={{ fontSize: '24px' }}>Team Spend Share</h2>
             <TrendingUp size={20} color="var(--primary)" />
           </div>

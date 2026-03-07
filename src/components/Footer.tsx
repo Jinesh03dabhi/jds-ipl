@@ -21,9 +21,9 @@ export default function Footer() {
         {/* Section 1: Brand */}
         <div>
           <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "20px" }}>
-            <Image src="/jds-ipl-logo-1.png" alt="JD's IPL Logo" width={40} height={40} />
+            <Image src="/jds-ipl-logo-1.png" alt="IPL Scorebook Logo" width={40} height={40} />
             <div style={{ fontSize: "20px", fontWeight: "700", color: "#fff" }}>
-              <span style={{ color: "var(--primary)" }}>JD's</span> IPL
+              <span style={{ color: "var(--primary)" }}>IPL</span> Scorebook
             </div>
           </div>
           <p style={{ lineHeight: "1.6" }}>
@@ -77,10 +77,10 @@ export default function Footer() {
       {/* Section 5: Copyright */}
       <div className="container" style={{ borderTop: "1px solid rgba(255, 255, 255, 0.05)", paddingTop: "20px", textAlign: "center", display: "flex", flexDirection: "column", gap: "10px" }}>
         <div>
-          © {new Date().getFullYear()} JD’s IPL. All rights reserved.
+          © {new Date().getFullYear()} IPL Scorebook. All rights reserved.
         </div>
         <div style={{ fontSize: "12px", opacity: 0.6 }}>
-          JD's IPL is an independent platform and is not affiliated with the BCCI, IPL, or any participating franchises.
+          IPL Scorebook is an independent platform and is not affiliated with the BCCI, IPL, or any participating franchises.
         </div>
       </div>
     </footer>

@@ -104,7 +104,7 @@ export default function Home() {
               </h1>
 
               <p style={{ color: '#cbd5e1', fontSize: 'clamp(16px, 2vw, 20px)', maxWidth: '700px', margin: '0 auto 40px', lineHeight: 1.6 }}>
-                JD’s IPL provides structured datasets covering historical auctions,
+                IPL Scorebook provides structured datasets covering historical auctions,
                 team roster evolution and high-value player movements. Our statistical
                 approach allows users to evaluate performance consistency across seasons.
               </p>
@@ -278,7 +278,7 @@ export default function Home() {
             </div>
 
             <div className="highlight-box hover-scale" style={{ margin: 0, padding: "20px", borderRadius: "12px", borderLeftColor: "#22c55e", background: "rgba(34,197,94,0.05)" }}>
-              <h3 style={{ fontSize: "18px", marginBottom: "12px", color: "#fff" }}>Does JD's IPL offer real-time scores?</h3>
+              <h3 style={{ fontSize: "18px", marginBottom: "12px", color: "#fff" }}>Does IPL Scorebook offer real-time scores?</h3>
               <p style={{ color: "#94a3b8", fontSize: "15px", lineHeight: 1.6, margin: 0 }}>
                 Yes, our Live Score section provides real-time ball-by-ball updates and detailed scorecards for all live matches during the tournament.
               </p>

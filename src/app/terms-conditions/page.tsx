@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Terms & Conditions | JD’s IPL",
+  title: "Terms & Conditions | IPL Scorebook",
   description:
-    "Read the Terms and Conditions for using JD’s IPL including content usage, intellectual property rights and platform responsibilities.",
+    "Read the Terms and Conditions for using IPL Scorebook including content usage, intellectual property rights and platform responsibilities.",
   alternates: {
     canonical: "https://jds-ipl.vercel.app/terms-conditions",
   },
@@ -18,7 +18,7 @@ export default function TermsConditionsPage() {
         <h1 className="page-headline text-gradient">Terms & Conditions</h1>
 
         <p style={{ fontSize: "18px", color: "#94a3b8", marginBottom: "40px" }}>
-          By accessing and using JD’s IPL, you agree to comply with the following
+          By accessing and using IPL Scorebook, you agree to comply with the following
           Terms and Conditions. Please read them carefully.
         </p>
 
@@ -36,7 +36,7 @@ export default function TermsConditionsPage() {
           <div className="info-card hover-scale">
             <h3 className="section-title"><Briefcase className="callout-icon" /> Intellectual Property</h3>
             <p style={{ margin: 0 }}>
-              JD’s IPL is an independent analytics platform and is not affiliated
+              IPL Scorebook is an independent analytics platform and is not affiliated
               with the official IPL governing body. All trademarks and team names
               belong to their respective owners.
             </p>

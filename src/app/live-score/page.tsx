@@ -4,7 +4,7 @@ import LiveScoreClient from "./LiveScoreClient";
 export const metadata: Metadata = {
   title: "IPL 2026 Live Score – Ball by Ball Updates & Match Stats",
   description:
-    "Get IPL 2026 live score updates, ball-by-ball commentary, team stats and match analytics. Follow every over with real-time match insights on JD’s IPL.",
+    "Get IPL 2026 live score updates, ball-by-ball commentary, team stats and match analytics. Follow every over with real-time match insights on IPL Scorebook.",
   alternates: {
     canonical: "https://jds-ipl.vercel.app/live-score",
   },
@@ -19,7 +19,7 @@ export const metadata: Metadata = {
 
 export default function LiveScorePage() {
   return (
-    
-  <LiveScoreClient />
-);
+
+    <LiveScoreClient />
+  );
 }

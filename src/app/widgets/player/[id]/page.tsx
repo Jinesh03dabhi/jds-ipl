@@ -24,7 +24,7 @@ export default async function PlayerWidget({
   return (
     <div
       style={{
-        marginTop:"80px",
+        marginTop: "80px",
         fontFamily: 'Inter, sans-serif',
         padding: '20px',
         background: '#0b1220',
@@ -63,7 +63,7 @@ export default async function PlayerWidget({
           color: '#64748b',
         }}
       >
-        Powered by JD's IPL
+        Powered by IPL Scorebook
       </div>
     </div>
   )
@@ -72,17 +72,17 @@ export default async function PlayerWidget({
 function Stat({ label, value }: { label: string; value: any }) {
   return (
     <div
-    style={{
-      fontFamily: 'Inter, sans-serif',
-      padding: '20px',
-      background: '#0b1220',
-      color: '#fff',
-      width: '100%',
-      maxWidth: '350px',
-      borderRadius: '12px',
-      boxSizing: 'border-box',
-    }}
-  >
+      style={{
+        fontFamily: 'Inter, sans-serif',
+        padding: '20px',
+        background: '#0b1220',
+        color: '#fff',
+        width: '100%',
+        maxWidth: '350px',
+        borderRadius: '12px',
+        boxSizing: 'border-box',
+      }}
+    >
       <div style={{ fontSize: '10px', color: '#64748b' }}>{label}</div>
       <div style={{ fontWeight: 700 }}>{value}</div>
     </div>

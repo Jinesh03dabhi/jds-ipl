@@ -21,7 +21,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   return {
     title: `${player.name} IPL Stats, Sold Price & Career Record`,
-    description: `Check ${player.name}'s IPL career stats including total runs, wickets, strike rate, economy and latest auction sold price. Full performance breakdown on JD’s IPL.`,
+    description: `Check ${player.name}'s IPL career stats including total runs, wickets, strike rate, economy and latest auction sold price. Full performance breakdown on IPL Scorebook.`,
     openGraph: {
       title: `${player.name} IPL Stats & Auction Price`,
       description: `Complete IPL performance analytics of ${player.name} including sold price and career statistics.`,
@@ -45,19 +45,19 @@ export default async function PlayerProfile({ params }: Props) {
     return TEAMS.find(t => t.name === teamName)?.logoUrl || '/team-placeholder.png';
   };
   const structuredData = {
-  "@context": "https://schema.org",
-  "@type": "Person",
-  name: player.name,
-  nationality: player.nationality,
-  jobTitle: "IPL Cricketer",
-  memberOf: {
-    "@type": "SportsTeam",
-    name: player.currentTeam,
-  },
-};
+    "@context": "https://schema.org",
+    "@type": "Person",
+    name: player.name,
+    nationality: player.nationality,
+    jobTitle: "IPL Cricketer",
+    memberOf: {
+      "@type": "SportsTeam",
+      name: player.currentTeam,
+    },
+  };
 
   return (
-    <div className="container" style={{ marginTop:"80px",paddingBottom: '80px' }}>
+    <div className="container" style={{ marginTop: "80px", paddingBottom: '80px' }}>
       <Link href="/players" className="btn-primary profile-back-btn">
         <ArrowLeft size={24} />
         <span>Back</span>
@@ -161,9 +161,9 @@ export default async function PlayerProfile({ params }: Props) {
 
       </div>
       <script
-  type="application/ld+json"
-  dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
-/>
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+      />
 
     </div>
   );

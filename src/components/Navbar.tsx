@@ -89,9 +89,9 @@ export default function Navbar() {
 
         {/* LOGO */}
         <Link href="/" className="navbar-logo">
-          <Image src="/jds-ipl-logo-1.png" alt="JD's IPL Logo" width={30} height={30} />
-          <span style={{ color: 'var(--primary)' }}>JD's</span>
-          <span style={{ color: '#fff' }}>IPL</span>
+          <Image src="/jds-ipl-logo-1.png" alt="IPL Scorebook Logo" width={30} height={30} />
+          <span style={{ color: 'var(--primary)' }}>IPL</span>
+          <span style={{ color: '#fff' }}>Scorebook</span>
         </Link>
 
         {/* DESKTOP MENU */}

@@ -36,11 +36,11 @@ export default function WidgetsDemo() {
     `<iframe src="https://iplhistory.com/embed/player/${selectedPlayerId}" width="350" height="200" />`;
 
   const copyCode = async () => {
-  await navigator.clipboard.writeText(embedCode);
-  setCopied(true);
+    await navigator.clipboard.writeText(embedCode);
+    setCopied(true);
 
-  setTimeout(() => setCopied(false), 2000);
-};
+    setTimeout(() => setCopied(false), 2000);
+  };
 
 
   const getThemeStyle = () => {
@@ -54,7 +54,7 @@ export default function WidgetsDemo() {
   };
 
   return (
-    <div style={{marginTop:"80px",}} className="container widgets-container">
+    <div style={{ marginTop: "80px", }} className="container widgets-container">
 
       <header className="widgets-header">
         <h1 className="widgets-title">
@@ -115,22 +115,22 @@ export default function WidgetsDemo() {
               <div className="embed-header">
                 <span>EMBED CODE</span>
                 <button
-  onClick={copyCode}
-  style={{
-    background: 'none',
-    border: 'none',
-    color: copied ? '#22c55e' : 'var(--primary)',
-    fontSize: '12px',
-    cursor: 'pointer',
-    display: 'flex',
-    alignItems: 'center',
-    gap: '4px',
-    transition: 'all 0.2s ease'
-  }}
->
-  <Copy size={14} />
-  {copied ? 'Copied!' : 'Copy Code'}
-</button>
+                  onClick={copyCode}
+                  style={{
+                    background: 'none',
+                    border: 'none',
+                    color: copied ? '#22c55e' : 'var(--primary)',
+                    fontSize: '12px',
+                    cursor: 'pointer',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '4px',
+                    transition: 'all 0.2s ease'
+                  }}
+                >
+                  <Copy size={14} />
+                  {copied ? 'Copied!' : 'Copy Code'}
+                </button>
 
               </div>
 
@@ -196,7 +196,7 @@ export default function WidgetsDemo() {
                 </div>
 
                 <div className="widget-footer">
-                  Powered by <span>JD's IPL</span>
+                  Powered by <span>IPL Scorebook</span>
                 </div>
               </div>
             )}

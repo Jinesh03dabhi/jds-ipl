@@ -26,12 +26,12 @@ export const metadata: Metadata = {
   },
 
   title: {
-    default: "IPL Live Score 2026 | JD’s IPL Live Match Updates",
-    template: "%s | JD’s IPL",
+    default: "IPL Live Score 2026 | IPL Scorebook Live Match Updates",
+    template: "%s | IPL Scorebook",
   },
 
   description:
-    "Get IPL live scores, match scorecards, team standings, player statistics, and IPL schedule updates on JD’s IPL.",
+    "Get IPL live scores, match scorecards, team standings, player statistics, and IPL schedule updates on IPL Scorebook.",
 
   icons: {
     icon: [
@@ -64,9 +64,9 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     url: "https://jds-ipl.vercel.app",
-    title: "IPL Live Score | JD’s IPL",
+    title: "IPL Live Score | IPL Scorebook",
     description: "Live IPL scores, schedule and match updates",
-    siteName: "JD’s IPL",
+    siteName: "IPL Scorebook",
     images: [
       {
         url: "/jds-ipl-logo-1.png",

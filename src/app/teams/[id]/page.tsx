@@ -27,7 +27,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   return {
     title: `${team.name} Squad, Players & Auction Details`,
-    description: `Explore ${team.name} full IPL squad, player list, auction spending, performance history and championship titles. Complete team analysis on JD’s IPL.`,
+    description: `Explore ${team.name} full IPL squad, player list, auction spending, performance history and championship titles. Complete team analysis on IPL Scorebook.`,
     openGraph: {
       title: `${team.name} IPL Squad & Stats`,
       description: `Full team roster, auction stats and ranking history of ${team.name}.`,

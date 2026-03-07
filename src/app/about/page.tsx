@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "About Us | JD’s IPL",
+  title: "About Us | IPL Scorebook",
   description:
-    "Learn about JD’s IPL – an independent IPL analytics platform providing player stats, auction data, match insights and performance analysis.",
+    "Learn about IPL Scorebook – an independent IPL analytics platform providing player stats, auction data, match insights and performance analysis.",
   alternates: {
     canonical: "https://jds-ipl.vercel.app/about",
   },
@@ -15,10 +15,10 @@ export default function AboutPage() {
   return (
     <div className="container" style={{ marginTop: "80px", paddingBottom: "80px" }}>
       <div className="content-wrapper">
-        <h1 className="page-headline text-gradient">About JD’s IPL</h1>
+        <h1 className="page-headline text-gradient">About IPL Scorebook</h1>
 
         <p style={{ fontSize: "18px", color: "#94a3b8", marginBottom: "40px" }}>
-          JD’s IPL is an independent cricket analytics platform focused on
+          IPL Scorebook is an independent cricket analytics platform focused on
           delivering in-depth IPL statistics, player performance insights,
           auction history data, match analysis and predictive insights.
         </p>
@@ -51,7 +51,7 @@ export default function AboutPage() {
             <div>
               <h3 style={{ fontSize: "18px", color: "#fff", marginBottom: "8px" }}>Independence Notice</h3>
               <p style={{ margin: 0, fontSize: "14px" }}>
-                JD’s IPL is not affiliated with the official IPL governing body or
+                IPL Scorebook is not affiliated with the official IPL governing body or
                 any franchise team. All team names and trademarks belong to their
                 respective owners.
               </p>
@@ -65,7 +65,7 @@ export default function AboutPage() {
             <div>
               <h3 style={{ fontSize: "18px", color: "#fff", marginBottom: "8px" }}>Founder — Jinesh Dabhi</h3>
               <p style={{ margin: 0, fontSize: "14px" }}>
-                JD’s IPL was created with the
+                IPL Scorebook was created with the
                 goal of building a modern IPL analytics ecosystem for cricket fans.
               </p>
             </div>

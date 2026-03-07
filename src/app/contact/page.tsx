@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Contact Us | JD’s IPL",
+  title: "Contact Us | IPL Scorebook",
   description:
-    "Contact JD’s IPL for queries, feedback, business collaboration and support.",
+    "Contact IPL Scorebook for queries, feedback, business collaboration and support.",
   alternates: {
     canonical: "https://jds-ipl.vercel.app/contact",
   },

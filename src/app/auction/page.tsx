@@ -4,7 +4,7 @@ import AuctionClient from "./AuctionClient";
 export const metadata: Metadata = {
   title: "IPL 2026 Auction – Sold Prices & Player Bids",
   description:
-    "Explore IPL 2026 auction results including player sold prices, highest bids, and team spending details. Complete IPL auction history on JD’s IPL.",
+    "Explore IPL 2026 auction results including player sold prices, highest bids, and team spending details. Complete IPL auction history on IPL Scorebook.",
   alternates: {
     canonical: "https://jds-ipl.vercel.app/auction",
   },
@@ -18,7 +18,7 @@ export const metadata: Metadata = {
 };
 
 export default function AuctionDashboard() {
-  return(
+  return (
     <AuctionClient></AuctionClient>
   );
 }

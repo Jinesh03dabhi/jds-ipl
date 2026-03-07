@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Privacy Policy | JD’s IPL",
+  title: "Privacy Policy | IPL Scorebook",
   description:
-    "Read the Privacy Policy of JD’s IPL regarding data usage, cookies, third-party services and user privacy protection.",
+    "Read the Privacy Policy of IPL Scorebook regarding data usage, cookies, third-party services and user privacy protection.",
   alternates: {
     canonical: "https://jds-ipl.vercel.app/privacy-policy",
   },
@@ -18,7 +18,7 @@ export default function PrivacyPolicyPage() {
         <h1 className="page-headline text-gradient">Privacy Policy</h1>
 
         <p style={{ fontSize: "18px", color: "#94a3b8", marginBottom: "40px" }}>
-          At JD’s IPL, we respect your privacy. This page explains how we collect,
+          At IPL Scorebook, we respect your privacy. This page explains how we collect,
           use, and protect your information.
         </p>
 

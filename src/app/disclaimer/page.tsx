@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Disclaimer | JD’s IPL",
+  title: "Disclaimer | IPL Scorebook",
   description:
-    "Read the official disclaimer of JD’s IPL regarding analytics, predictions, third-party content and affiliation notice.",
+    "Read the official disclaimer of IPL Scorebook regarding analytics, predictions, third-party content and affiliation notice.",
   alternates: {
     canonical: "https://jds-ipl.vercel.app/disclaimer",
   },
@@ -18,7 +18,7 @@ export default function DisclaimerPage() {
         <h1 className="page-headline text-gradient">Disclaimer</h1>
 
         <p style={{ fontSize: "18px", color: "#94a3b8", marginBottom: "40px" }}>
-          JD’s IPL is an independent cricket analytics platform created for
+          IPL Scorebook is an independent cricket analytics platform created for
           informational and educational purposes only.
         </p>
 
@@ -29,7 +29,7 @@ export default function DisclaimerPage() {
             <div>
               <h3 style={{ fontSize: "18px", color: "#fff", marginBottom: "8px" }}>No Official Affiliation</h3>
               <p style={{ margin: 0, fontSize: "14px" }}>
-                JD’s IPL is not affiliated, associated, authorized, endorsed by,
+                IPL Scorebook is not affiliated, associated, authorized, endorsed by,
                 or in any way officially connected with the Indian Premier League (IPL),
                 its franchises, or governing bodies. All team names, logos, and trademarks
                 belong to their respective owners.
@@ -69,7 +69,7 @@ export default function DisclaimerPage() {
             <div>
               <h3 style={{ fontSize: "18px", color: "#fff", marginBottom: "8px" }}>Use at Your Own Risk</h3>
               <p style={{ margin: 0, fontSize: "14px" }}>
-                By using JD’s IPL, you acknowledge that any reliance on the information
+                By using IPL Scorebook, you acknowledge that any reliance on the information
                 provided is strictly at your own risk.
               </p>
             </div>
