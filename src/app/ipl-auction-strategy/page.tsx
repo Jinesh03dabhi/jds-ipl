@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
 import Link from "next/link";
 
 const baseUrl = "https://jds-ipl.vercel.app";
@@ -132,7 +132,7 @@ export default function AuctionStrategyPage() {
       </p>
 
       <p>
-        Successful IPL auction strategy often determines a team�s success long before the season begins.
+        Successful IPL auction strategy often determines a teams success long before the season begins.
       </p>
 
       <section style={{ marginTop: "32px" }}>
