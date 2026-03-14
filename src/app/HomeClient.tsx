@@ -11,7 +11,21 @@ import LiveScoreClient from "./live-score/LiveScoreClient";
 const baseUrl = "https://jds-ipl.vercel.app";
 
 export default function HomeClient() {
-  const [eventData, setEventData] = useState(null);
+  type LiveScoreMatch = {
+    name?: string;
+    dateTimeGMT?: string;
+    venue?: string;
+  };
+
+  type LiveScoreResponse = {
+    type?: string;
+    match?: LiveScoreMatch;
+    scorecard?: unknown;
+    message?: string;
+    lastUpdated?: number;
+  };
+
+  const [eventData, setEventData] = useState<LiveScoreResponse | null>(null);
 
   const featuredPlayers = PLAYERS.slice(0, 6);
 

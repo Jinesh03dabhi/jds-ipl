@@ -26,7 +26,7 @@ export default function TeamsClient() {
             <div className="team-card-header">
               <div className="team-logo-box">
                 <Image
-                  src={team.logoUrl}
+                  src={team.logoUrl || "/team-placeholder.png"}
                   alt={`${team.name} IPL team logo`}
                   width={56}
                   height={56}

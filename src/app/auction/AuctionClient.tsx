@@ -184,7 +184,12 @@ export default function AuctionClient() {
                 <div key={team.id} style={{ marginBottom: "20px" }}>
                   <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "8px" }}>
                     <div style={{ display: "flex", gap: "8px", alignItems: "center" }}>
-                      <Image src={team.logoUrl} alt={`${team.name} IPL team logo`} width={24} height={24} />
+                      <Image
+                        src={team.logoUrl || "/team-placeholder.png"}
+                        alt={`${team.name} IPL team logo`}
+                        width={24}
+                        height={24}
+                      />
                       <span style={{ fontWeight: 600 }}>{team.abbreviation}</span>
                     </div>
                     <span style={{ color: "#94a3b8" }}>Rs {team.spend.toFixed(2)} Cr</span>
