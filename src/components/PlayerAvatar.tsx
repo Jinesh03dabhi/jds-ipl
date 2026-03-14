@@ -7,12 +7,18 @@ interface PlayerAvatarProps {
   name: string;
   src?: string;
   size?: number;
+  alt?: string;
+  priority?: boolean;
+  fetchPriority?: "high" | "low" | "auto";
 }
 
 export default function PlayerAvatar({
   name,
   src,
-  size = 80
+  size = 80,
+  alt,
+  priority = false,
+  fetchPriority,
 }: PlayerAvatarProps) {
 
   const [imgError, setImgError] = useState(false);
@@ -22,6 +28,7 @@ export default function PlayerAvatar({
   )}&background=2563eb&color=fff&size=256`;
 
   const imageSrc = !imgError && src ? src : fallback;
+  const altText = alt ?? `${name} IPL player portrait`;
 
   return (
     <div
@@ -34,10 +41,12 @@ export default function PlayerAvatar({
     >
       <Image
         src={imageSrc}
-        alt={name}
+        alt={altText}
         fill
         sizes={`${size}px`}
         onError={() => setImgError(true)}
+        priority={priority}
+        fetchPriority={fetchPriority}
         style={{
           borderRadius: '16px',
           objectFit: 'cover',

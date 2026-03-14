@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+Disallow: /api/
+Sitemap: https://jds-ipl.vercel.app/sitemap.xml
+Sitemap: https://jds-ipl.vercel.app/news-sitemap.xml

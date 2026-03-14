@@ -1,15 +1,17 @@
 "use client";
 
 import LiveScoreHeader from "@/components/LiveScoreHeader";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import LiveBattingSection from "@/components/LiveBattingSection";
 import LiveBowlingSection from "@/components/LiveBowlingSection";
 import MatchSituation from "@/components/MatchSituation";
 import { getMatchState } from "@/utils/getMatchState";
-import CurrentPlayers from "@/components/CurrentPlayers"
+import CurrentPlayers from "@/components/CurrentPlayers";
+import Link from "next/link";
 
-export default function LiveScorePage() {
+const baseUrl = "https://jds-ipl.vercel.app";
 
+export default function LiveScorePage({ showHeading = true }) {
   const [data, setData] = useState(null);
 
   async function fetchScore() {
@@ -22,69 +24,80 @@ export default function LiveScorePage() {
     }
   }
 
-  // ✅ Initial fetch
   useEffect(() => {
     fetchScore();
   }, []);
 
   const matchState = getMatchState(data);
 
-  // ✅ SMART POLLING
   useEffect(() => {
-
     if (!data) return;
 
-    let intervalTime = 1800000; // default 30 min
+    let intervalTime = 1800000;
 
-    // 🔴 LIVE
     if (matchState === "live") {
-      intervalTime = 60000; // 1 min
+      intervalTime = 60000;
     }
 
-    // 🔜 UPCOMING (time-based logic)
     if (matchState === "upcoming" && data.match?.dateTimeGMT) {
-
       const matchStart = new Date(data.match.dateTimeGMT).getTime();
       const now = Date.now();
 
-      const twoHoursBefore = matchStart - (2 * 60 * 60 * 1000);
-      const thirtyMinutesBefore = matchStart - (30 * 60 * 1000);
+      const twoHoursBefore = matchStart - 2 * 60 * 60 * 1000;
+      const thirtyMinutesBefore = matchStart - 30 * 60 * 1000;
 
       if (now >= thirtyMinutesBefore) {
-        intervalTime = 60000; // 1 min
-      }
-      else if (now >= twoHoursBefore) {
-        intervalTime = 300000; // 5 min
-      }
-      else {
-        intervalTime = 1800000; // 30 min
+        intervalTime = 60000;
+      } else if (now >= twoHoursBefore) {
+        intervalTime = 300000;
+      } else {
+        intervalTime = 1800000;
       }
     }
 
-    // ✅ COMPLETED
     if (matchState === "completed") {
-      intervalTime = 900000; // 15 min
+      intervalTime = 900000;
     }
 
-    // ❌ ERROR → slow retry
     if (matchState === "error") {
-      intervalTime = 900000; // 15 min
+      intervalTime = 900000;
     }
-
-    console.log("Polling every:", intervalTime / 1000, "seconds");
 
     const interval = setInterval(fetchScore, intervalTime);
-
     return () => clearInterval(interval);
-
   }, [matchState, data]);
 
-  // ⭐ LOADING
+  const structuredData = useMemo(() => {
+    if (!data?.match) return null;
+
+    return {
+      "@context": "https://schema.org",
+      "@type": "SportsEvent",
+      name: data.match?.name || "IPL 2026 Live Match",
+      sport: "Cricket",
+      startDate: data.match?.dateTimeGMT || new Date().toISOString(),
+      location: {
+        "@type": "Place",
+        name: data.match?.venue || "India",
+      },
+      organizer: {
+        "@type": "Organization",
+        name: "BCCI",
+      },
+      eventStatus:
+        matchState === "live"
+          ? "https://schema.org/EventInProgress"
+          : matchState === "completed"
+          ? "https://schema.org/EventCompleted"
+          : "https://schema.org/EventScheduled",
+      url: `${baseUrl}/live-score`,
+    };
+  }, [data, matchState]);
+
   if (!data || matchState === "loading") {
-    return <div className="glass-card">Loading match data…</div>;
+    return <div className="glass-card">Loading match data...</div>;
   }
 
-  // ⭐ ERROR
   if (matchState === "error") {
     return (
       <div style={{ marginTop: "80px" }} className="glass-card">
@@ -95,7 +108,22 @@ export default function LiveScorePage() {
 
   return (
     <div style={{ marginTop: "60px" }} className="container page-content">
+      {structuredData && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+        />
+      )}
 
+      {showHeading && (
+        <header style={{ marginBottom: "24px" }}>
+          <h1>IPL 2026 Live Score</h1>
+          <p style={{ color: "#94a3b8" }}>
+            IPL 2026 live score coverage brings ball by ball updates, IPL match today details, and real-time updates for every over. Check now.
+          </p>
+        </header>
+      )}
+  
       {data?.match && (
         <div style={{ marginBottom: "10px" }}>
           <LiveScoreHeader data={data} />
@@ -114,8 +142,11 @@ export default function LiveScorePage() {
       )}
 
       {matchState === "waiting" && (
-        <div style={{ marginTop: "20px", textAlign: 'center', padding: '30px', fontSize: '1.2rem' }} className="glass-card">
-          Waiting for IPL matches 🏏
+        <div
+          style={{ marginTop: "20px", textAlign: "center", padding: "30px", fontSize: "1.2rem" }}
+          className="glass-card"
+        >
+          Waiting for IPL matches
         </div>
       )}
 
@@ -128,6 +159,18 @@ export default function LiveScorePage() {
         </>
       )}
 
+      <section style={{ marginTop: "32px" }}>
+        <h2 style={{ fontSize: "22px" }}>Related IPL 2026 Pages</h2>
+        <div style={{ display: "flex", gap: "16px", flexWrap: "wrap" }}>
+          <Link href="/standings" className="btn-primary">IPL 2026 points table and standings</Link>
+          <Link href="/players" className="glass-card" style={{ padding: "10px 18px", textDecoration: "none" }}>
+            IPL player stats directory
+          </Link>
+          <Link href="/auction" className="glass-card" style={{ padding: "10px 18px", textDecoration: "none" }}>
+            IPL 2026 auction results
+          </Link>
+        </div>
+      </section>
     </div>
   );
 }

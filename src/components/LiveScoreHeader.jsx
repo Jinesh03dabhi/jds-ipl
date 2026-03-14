@@ -3,6 +3,7 @@
 import LiveBadge from "./LiveBadge";
 import { getMatchState } from "@/utils/getMatchState";
 import Link from 'next/link';
+import Image from "next/image";
 
 export default function LiveScoreHeader({ data }) {
 
@@ -59,7 +60,12 @@ export default function LiveScoreHeader({ data }) {
         {/* TEAM 1 */}
         <div className="premium-team">
           {team1?.img && (
-            <img src={team1.img} alt={team1.name} width={40} height={40} />
+            <Image
+              src={team1.img}
+              alt={`${team1.name} IPL team logo`}
+              width={40}
+              height={40}
+            />
           )}
           <div>
             <Link href="/teams" className="team-name" style={{ textDecoration: 'none', color: 'inherit' }}>
@@ -70,7 +76,7 @@ export default function LiveScoreHeader({ data }) {
             {team1Score && (
               <div className="team-score">
                 {team1Score.r}/{team1Score.w} ({team1Score.o})
-                {isLive && <span className="rr"> • RR {team1RR}</span>}
+                {isLive && <span className="rr"> - RR {team1RR}</span>}
               </div>
             )}
           </div>
@@ -98,13 +104,18 @@ export default function LiveScoreHeader({ data }) {
             {team2Score && (
               <div className="team-score">
                 {team2Score.r}/{team2Score.w} ({team2Score.o})
-                {isLive && <span className="rr"> • RR {team2RR}</span>}
+                {isLive && <span className="rr"> - RR {team2RR}</span>}
               </div>
             )}
           </div>
 
           {team2?.img && (
-            <img src={team2.img} alt={team2.name} width={40} height={40} />
+            <Image
+              src={team2.img}
+              alt={`${team2.name} IPL team logo`}
+              width={40}
+              height={40}
+            />
           )}
         </div>
 

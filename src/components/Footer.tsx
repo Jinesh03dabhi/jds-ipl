@@ -35,7 +35,7 @@ export default function Footer() {
         <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
           <h3 style={{ color: "#fff", fontSize: "16px", marginBottom: "8px" }}>Quick Links</h3>
           <Link href="/live-score" style={{ textDecoration: "none", color: "inherit", transition: "color 0.2s" }} onMouseOver={(e) => (e.currentTarget.style.color = "var(--primary)")} onMouseOut={(e) => (e.currentTarget.style.color = "inherit")}>Live Score</Link>
-          <Link href="/teams/standings" style={{ textDecoration: "none", color: "inherit", transition: "color 0.2s" }} onMouseOver={(e) => (e.currentTarget.style.color = "var(--primary)")} onMouseOut={(e) => (e.currentTarget.style.color = "inherit")}>Points Table</Link>
+          <Link href="/standings" style={{ textDecoration: "none", color: "inherit", transition: "color 0.2s" }} onMouseOver={(e) => (e.currentTarget.style.color = "var(--primary)")} onMouseOut={(e) => (e.currentTarget.style.color = "inherit")}>Points Table</Link>
           <Link href="/teams" style={{ textDecoration: "none", color: "inherit", transition: "color 0.2s" }} onMouseOver={(e) => (e.currentTarget.style.color = "var(--primary)")} onMouseOut={(e) => (e.currentTarget.style.color = "inherit")}>Teams</Link>
           <Link href="/players" style={{ textDecoration: "none", color: "inherit", transition: "color 0.2s" }} onMouseOver={(e) => (e.currentTarget.style.color = "var(--primary)")} onMouseOut={(e) => (e.currentTarget.style.color = "inherit")}>Players</Link>
           <Link href="/auction" style={{ textDecoration: "none", color: "inherit", transition: "color 0.2s" }} onMouseOver={(e) => (e.currentTarget.style.color = "var(--primary)")} onMouseOut={(e) => (e.currentTarget.style.color = "inherit")}>Auction Hub</Link>
@@ -77,7 +77,7 @@ export default function Footer() {
       {/* Section 5: Copyright */}
       <div className="container" style={{ borderTop: "1px solid rgba(255, 255, 255, 0.05)", paddingTop: "20px", textAlign: "center", display: "flex", flexDirection: "column", gap: "10px" }}>
         <div>
-          © {new Date().getFullYear()} IPL Scorebook. All rights reserved.
+          (c) {new Date().getFullYear()} IPL Scorebook. All rights reserved.
         </div>
         <div style={{ fontSize: "12px", opacity: 0.6 }}>
           IPL Scorebook is an independent platform and is not affiliated with the BCCI, IPL, or any participating franchises.

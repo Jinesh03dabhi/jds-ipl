@@ -233,6 +233,28 @@ export const TEAMS: Team[] = [
 
 export const PLAYERS: Player[] = [
   {
+    id: "2025-001",
+    name: "Rishabh Pant",
+    role: "Wicket-keeper",
+    nationality: "Indian",
+    currentTeam: "Lucknow Super Giants",
+    soldPrice: "27.00 Cr",
+    avatarUrl: "/players/rishabh-pant.jpg",
+    stats: { matches: 0, runs: 0, wickets: 0 },
+    auctionHistory: [{ year: 2025, team: "Lucknow Super Giants", price: "27.00 Cr" }]
+  },
+  {
+    id: "2025-002",
+    name: "Shreyas Iyer",
+    role: "Batsman",
+    nationality: "Indian",
+    currentTeam: "Punjab Kings",
+    soldPrice: "26.75 Cr",
+    avatarUrl: "/players/shreyas-iyer.jpg",
+    stats: { matches: 0, runs: 0 },
+    auctionHistory: [{ year: 2025, team: "Punjab Kings", price: "26.75 Cr" }]
+  },
+  {
     id: "2026-001",
     name: "Cameron Green",
     role: "All-rounder",
@@ -1084,82 +1106,3 @@ export const PLAYERS: Player[] = [
 
 
 
-
-
-// export const PLAYERS: Player[] = [
-
-//   { id: 'cameron-green', name: 'Cameron Green', role: 'All-rounder', nationality: 'Overseas', currentTeam: 'Kolkata Knight Riders', soldPrice: '25.20 Cr', avatarUrl: '/players/cameron-green.webp', stats: { strikeRate : 153.70 }, auctionHistory: [] },
-//   { id: 'matheesha-pathirana', name: 'Matheesha Pathirana', role: 'Bowler', nationality: 'Overseas', currentTeam: 'Kolkata Knight Riders', soldPrice: '18 Cr', avatarUrl: '/players/matheesha-pathirana.webp', stats: { matches: 0 }, auctionHistory: [] },
-
-//   { id: 'prashant-veer', name: 'Prashant Veer', role: 'All-rounder', nationality: 'Indian', currentTeam: 'Chennai Super Kings', soldPrice: '14.20 Cr', avatarUrl: '/players/prashant-veer.webp', stats: { matches: 0 }, auctionHistory: [] },
-//   { id: 'kartik-sharma', name: 'Kartik Sharma', role: 'All-rounder', nationality: 'Indian', currentTeam: 'Chennai Super Kings', soldPrice: '14.20 Cr', avatarUrl: '/players/kartik-sharma.webp', stats: { matches: 0 }, auctionHistory: [] },
-
-//   { id: 'aaqib-dar', name: 'Aaqib Dar', role: 'Bowler', nationality: 'Indian', currentTeam: 'Delhi Capitals', soldPrice: '8.40 Cr', avatarUrl: '/players/aaqib-dar.jpg', stats: { matches: 0 }, auctionHistory: [] },
-
-//   { id: 'ravi-bishnoi', name: 'Ravi Bishnoi', role: 'Bowler', nationality: 'Indian', currentTeam: 'Rajasthan Royals', soldPrice: '7.20 Cr', avatarUrl: '/players/ravi-bishnoi.jpg', stats: { matches: 0 }, auctionHistory: [] },
-
-//   { id: 'venkatesh-iyer', name: 'Venkatesh Iyer', role: 'All-rounder', nationality: 'Indian', currentTeam: 'Royal Challengers Bengaluru', soldPrice: '7 Cr', avatarUrl: '/players/venkatesh-iyer.webp', stats: { matches: 0 }, auctionHistory: [] },
-
-//   { id: 'liam-livingstone', name: 'Liam Livingstone', role: 'All-rounder', nationality: 'Overseas', currentTeam: 'Sunrisers Hyderabad', soldPrice: '13 Cr', avatarUrl: '/players/liam-livingstone.jpg', stats: { matches: 0 }, auctionHistory: [] },
-
-//   { id: 'david-miller', name: 'David Miller', role: 'Batsman', nationality: 'Overseas', currentTeam: 'Delhi Capitals', soldPrice: '2 Cr', avatarUrl: '/players/david-miller.webp', stats: { matches: 0 }, auctionHistory: [] },
-
-//   { id: 'quinton-de-kock', name: 'Quinton de Kock', role: 'Wicket-keeper', nationality: 'Overseas', currentTeam: 'Mumbai Indians', soldPrice: '1 Cr', avatarUrl: '/players/quinton-de-kock.jpg', stats: { matches: 0 }, auctionHistory: [] },
-
-//   { id: 'ben-duckett', name: 'Ben Duckett', role: 'Batsman', nationality: 'Overseas', currentTeam: 'Delhi Capitals', soldPrice: '2 Cr', avatarUrl: '/players/ben-duckett.webp', stats: { matches: 0 }, auctionHistory: [] },
-
-//   { id: 'finn-allen', name: 'Finn Allen', role: 'Wicket-keeper', nationality: 'Overseas', currentTeam: 'Kolkata Knight Riders', soldPrice: '2 Cr', avatarUrl: '/players/finn-allen.webp', stats: { matches: 0 }, auctionHistory: [] },
-
-//   { id: 'akshat-raghuwanshi', name: 'Akshat Raghuwanshi', role: 'Batsman', nationality: 'Indian', currentTeam: 'Lucknow Super Giants', soldPrice: '2.2 Cr', avatarUrl: '/players/akshat-raghuwanshi.webp', stats: { matches: 0 }, auctionHistory: [] },
-
-//   { id: 'wanindu-hasaranga', name: 'Wanindu Hasaranga', role: 'All-rounder', nationality: 'Overseas', currentTeam: 'Rajasthan Royals', soldPrice: '10 Cr', avatarUrl: '/players/wanindu-hasaranga.jpg', stats: { matches: 0 }, auctionHistory: [] },
-
-//   { id: 'josh-hazlewood', name: 'Josh Hazlewood', role: 'Bowler', nationality: 'Overseas', currentTeam: 'Royal Challengers Bengaluru', soldPrice: '11 Cr', avatarUrl: '/players/josh-hazlewood.webp', stats: { matches: 0 }, auctionHistory: [] },
-
-//   { id: 'mitchell-starc', name: 'Mitchell Starc', role: 'Bowler', nationality: 'Overseas', currentTeam: 'Gujarat Titans', soldPrice: '9.5 Cr', avatarUrl: '/players/mitchell-starc.jpg', stats: { matches: 0 }, auctionHistory: [] },
-
-//   { id: 'kagiso-rabada', name: 'Kagiso Rabada', role: 'Bowler', nationality: 'Overseas', currentTeam: 'Punjab Kings', soldPrice: '9.25 Cr', avatarUrl: '/players/kagiso-rabada.jpg', stats: { matches: 0 }, auctionHistory: [] },
-
-//   { id: 'pat-cummins', name: 'Pat Cummins', role: 'Bowler', nationality: 'Overseas', currentTeam: 'Sunrisers Hyderabad', soldPrice: '8 Cr', avatarUrl: '/players/pat-cummins.jpg', stats: { matches: 0 }, auctionHistory: [] },
-
-//   { id: 'shubman-gill', name: 'Shubman Gill', role: 'Batsman', nationality: 'Indian', currentTeam: 'Gujarat Titans', soldPrice: '8 Cr', avatarUrl: '/players/shubman-gill.jpg', stats: { matches: 0 }, auctionHistory: [] },
-
-//   { id: 'ruturaj-gaikwad', name: 'Ruturaj Gaikwad', role: 'Batsman', nationality: 'Indian', currentTeam: 'Chennai Super Kings', soldPrice: '7 Cr', avatarUrl: '/players/ruturaj-gaikwad.jpg', stats: { matches: 0 }, auctionHistory: [] },
-
-//   { id: 'kl-rahul', name: 'KL Rahul', role: 'Wicket-keeper', nationality: 'Indian', currentTeam: 'Lucknow Super Giants', soldPrice: '11 Cr', avatarUrl: '/players/kl-rahul.jpg', stats: { matches: 0 }, auctionHistory: [] },
-
-//   { id: 'ishan-kishan', name: 'Ishan Kishan', role: 'Wicket-keeper', nationality: 'Indian', currentTeam: 'Mumbai Indians', soldPrice: '8.25 Cr', avatarUrl: '/players/ishan-kishan.jpg', stats: { matches: 0 }, auctionHistory: [] },
-
-//   { id: 'sanju-samson', name: 'Sanju Samson', role: 'Wicket-keeper', nationality: 'Indian', currentTeam: 'Rajasthan Royals', soldPrice: '7 Cr', avatarUrl: '/players/sanju-samson.jpg', stats: { matches: 0 }, auctionHistory: [] },
-
-//   { id: 'hardik-pandya', name: 'Hardik Pandya', role: 'All-rounder', nationality: 'Indian', currentTeam: 'Mumbai Indians', soldPrice: '15 Cr', avatarUrl: '/players/hardik-pandya.jpg', stats: { matches: 0 }, auctionHistory: [] },
-
-//   { id: 'ravindra-jadeja', name: 'Ravindra Jadeja', role: 'All-rounder', nationality: 'Indian', currentTeam: 'Chennai Super Kings', soldPrice: '16 Cr', avatarUrl: '/players/ravindra-jadeja.jpg', stats: { matches: 0 }, auctionHistory: [] },
-
-//   { id: 'jasprit-bumrah', name: 'Jasprit Bumrah', role: 'Bowler', nationality: 'Indian', currentTeam: 'Mumbai Indians', soldPrice: '12 Cr', avatarUrl: '/players/jasprit-bumrah.jpg', stats: { matches: 0 }, auctionHistory: [] },
-
-//   { id: 'axar-patel', name: 'Axar Patel', role: 'All-rounder', nationality: 'Indian', currentTeam: 'Delhi Capitals', soldPrice: '9 Cr', avatarUrl: '/players/axar-patel.webp', stats: { matches: 0 }, auctionHistory: [] },
-
-//   { id: 'mohammed-siraj', name: 'Mohammed Siraj', role: 'Bowler', nationality: 'Indian', currentTeam: 'Royal Challengers Bengaluru', soldPrice: '7 Cr', avatarUrl: '/players/mohammed-siraj.jpg', stats: { matches: 0 }, auctionHistory: [] },
-
-//   { id: 'arshdeep-singh', name: 'Arshdeep Singh', role: 'Bowler', nationality: 'Indian', currentTeam: 'Punjab Kings', soldPrice: '6 Cr', avatarUrl: '/players/arshdeep-singh.jpg', stats: { matches: 0 }, auctionHistory: [] },
-
-//   { id: 'yuzvendra-chahal', name: 'Yuzvendra Chahal', role: 'Bowler', nationality: 'Indian', currentTeam: 'Rajasthan Royals', soldPrice: '6.5 Cr', avatarUrl: '/players/yuzvendra-chahal.jpg', stats: { matches: 0 }, auctionHistory: [] },
-
-//   { id: 'kuldeep-yadav', name: 'Kuldeep Yadav', role: 'Bowler', nationality: 'Indian', currentTeam: 'Delhi Capitals', soldPrice: '6 Cr', avatarUrl: '/players/kuldeep-yadav.jpg', stats: { matches: 0 }, auctionHistory: [] },
-
-//   { id: 'bhuvneshwar-kumar', name: 'Bhuvneshwar Kumar', role: 'Bowler', nationality: 'Indian', currentTeam: 'Sunrisers Hyderabad', soldPrice: '4.2 Cr', avatarUrl: '/players/bhuvneshwar-kumar.jpg', stats: { matches: 0 }, auctionHistory: [] },
-
-//   { id: 'deepak-chahar', name: 'Deepak Chahar', role: 'Bowler', nationality: 'Indian', currentTeam: 'Chennai Super Kings', soldPrice: '6.75 Cr', avatarUrl: '/players/deepak-chahar.webp', stats: { matches: 0 }, auctionHistory: [] },
-
-//   { id: 'rashid-khan', name: 'Rashid Khan', role: 'Bowler', nationality: 'Overseas', currentTeam: 'Gujarat Titans', soldPrice: '15 Cr', avatarUrl: '/players/rashid-khan.jpg', stats: { matches: 0 }, auctionHistory: [] },
-
-//   { id: 'sam-curran', name: 'Sam Curran', role: 'All-rounder', nationality: 'Overseas', currentTeam: 'Punjab Kings', soldPrice: '18.5 Cr', avatarUrl: '/players/sam-curran.jpg', stats: { matches: 0 }, auctionHistory: [] },
-
-//   { id: 'ben-stokes', name: 'Ben Stokes', role: 'All-rounder', nationality: 'Overseas', currentTeam: 'Chennai Super Kings', soldPrice: '16.25 Cr', avatarUrl: '/players/ben-stokes.webp', stats: { matches: 0 }, auctionHistory: [] },
-
-//   { id: 'daryl-mitchell', name: 'Daryl Mitchell', role: 'All-rounder', nationality: 'Overseas', currentTeam: 'Chennai Super Kings', soldPrice: '14 Cr', avatarUrl: '/players/daryl-mitchell.webp', stats: { matches: 0 }, auctionHistory: [] },
-
-//   { id: 'mohammed-shami', name: 'Mohammed Shami', role: 'Bowler', nationality: 'Indian', currentTeam: 'Gujarat Titans', soldPrice: '6.25 Cr', avatarUrl: '/players/mohammed-shami.jpg', stats: { matches: 0 }, auctionHistory: [] },
-
-// ];

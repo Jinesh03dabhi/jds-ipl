@@ -1,80 +1,80 @@
-'use client';
+import type { Metadata } from "next";
+import TeamsClient from "./TeamsClient";
+import { TEAMS } from "@/lib/data";
 
-import { TEAMS } from '@/lib/data';
-import Link from 'next/link';
-import { Award, Target, Users } from 'lucide-react';
+const baseUrl = "https://jds-ipl.vercel.app";
 
-export default function TeamsList() {
+export const metadata: Metadata = {
+  title: "IPL Teams 2026: Franchises & Squads | IPL Scorebook",
+  description:
+    "Explore all 10 IPL 2026 teams, their squads, home venues, titles won, and performance history in IPL Scorebook. Check now.",
+  keywords: [
+    "ipl 2026 teams",
+    "ipl franchises",
+    "ipl squads",
+    "ipl team stats",
+    "ipl team standings",
+  ],
+  robots: {
+    index: true,
+    follow: true,
+  },
+  alternates: {
+    canonical: `${baseUrl}/teams`,
+    languages: {
+      en: `${baseUrl}/teams`,
+    },
+  },
+  openGraph: {
+    title: "IPL Teams 2026: Franchises & Squads | IPL Scorebook",
+    description:
+      "Explore all 10 IPL 2026 teams, their squads, home venues, titles won, and performance history in IPL Scorebook. Check now.",
+    url: `${baseUrl}/teams`,
+    type: "website",
+    siteName: "IPL Scorebook",
+    locale: "en_IN",
+    images: [
+      {
+        url: `${baseUrl}/opengraph-image`,
+        width: 1200,
+        height: 630,
+        alt: "IPL teams and franchises preview",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "IPL Teams 2026: Franchises & Squads | IPL Scorebook",
+    description:
+      "Explore all 10 IPL 2026 teams, their squads, home venues, titles won, and performance history in IPL Scorebook. Check now.",
+    images: [`${baseUrl}/opengraph-image`],
+  },
+};
+
+export default function TeamsPage() {
+  const structuredData = {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    name: "IPL 2026 Teams",
+    itemListElement: TEAMS.map((team, index) => ({
+      "@type": "ListItem",
+      position: index + 1,
+      item: {
+        "@type": "SportsTeam",
+        name: team.name,
+        sport: "Cricket",
+        url: `${baseUrl}/teams/${team.id}`,
+      },
+    })),
+  };
+
   return (
-    <div className="container" style={{ marginTop:"80px",paddingBottom: '80px' }}>
-
-      <header className="teams-header">
-        <h1 className="teams-title">
-          IPL Franchises
-        </h1>
-        <p className="teams-subtitle">
-          Explore the powerhouse teams of the Indian Premier League, their history, and world-class rosters.
-        </p>
-      </header>
-
-      <div className="teams-grid">
-        {TEAMS.map(team => (
-          <Link
-            href={`/teams/${team.id}`}
-            key={team.id}
-            className="glass-card team-card"
-            style={{
-              borderTop: `4px solid ${team.color}`
-            }}
-          >
-            <div className="team-card-header">
-              <div className="team-logo-box">
-                <img
-                  src={team.logoUrl}
-                  alt={team.name}
-                />
-              </div>
-
-              <div>
-                <h2 className="team-name">{team.name}</h2>
-                <div
-                  className="team-abbr"
-                  style={{ color: team.color }}
-                >
-                  {team.abbreviation}
-                </div>
-              </div>
-            </div>
-
-            <div className="team-stats">
-              <div className="team-stat-box">
-                <div className="stat-label">TITLES</div>
-                <div className="stat-value">
-                  <Award size={16} color="gold" /> {team.titles.length}
-                </div>
-              </div>
-
-              <div className="team-stat-box">
-                <div className="stat-label">2025 RANK</div>
-                <div className="stat-value">
-                  #{team.lastYearRank}
-                </div>
-              </div>
-            </div>
-
-            <div className="team-meta">
-              <div>
-                <Target size={14} /> {team.venue.split(',')[0]}
-              </div>
-              <div>
-                <Users size={14} /> {team.owner}
-              </div>
-            </div>
-
-          </Link>
-        ))}
-      </div>
-
-    </div>
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+      />
+      <TeamsClient />
+    </>
   );
 }
