@@ -17,7 +17,7 @@ export default function Standings() {
     itemListElement: [
       { "@type": "ListItem", position: 1, name: "Home", item: baseUrl },
       { "@type": "ListItem", position: 2, name: "Teams", item: `${baseUrl}/teams` },
-      { "@type": "ListItem", position: 3, name: "Standings", item: `${baseUrl}/standings` },
+      { "@type": "ListItem", position: 3, name: "Points Table", item: `${baseUrl}/ipl-points-table-2026` },
     ],
   };
 

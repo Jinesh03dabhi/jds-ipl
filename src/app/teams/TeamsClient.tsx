@@ -70,12 +70,12 @@ export default function TeamsClient() {
       <section style={{ marginTop: "40px" }}>
         <h2 style={{ fontSize: "22px" }}>Explore More IPL 2026 Insights</h2>
         <div style={{ display: "flex", gap: "16px", flexWrap: "wrap" }}>
-          <Link href="/standings" className="btn-primary">IPL points table and standings</Link>
+          <Link href="/ipl-points-table-2026" className="btn-primary">IPL points table and standings</Link>
           <Link href="/players" className="glass-card" style={{ padding: "10px 18px", textDecoration: "none" }}>
             IPL player stats directory
           </Link>
-          <Link href="/live-score" className="glass-card" style={{ padding: "10px 18px", textDecoration: "none" }}>
-            IPL 2026 live score updates
+          <Link href="/ipl-live-score-today" className="glass-card" style={{ padding: "10px 18px", textDecoration: "none" }}>
+            IPL live score today
           </Link>
         </div>
       </section>

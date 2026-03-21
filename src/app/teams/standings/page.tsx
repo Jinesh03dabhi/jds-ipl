@@ -1,5 +1,5 @@
 import { redirect } from "next/navigation";
 
 export default function TeamsStandingsRedirect() {
-  redirect("/standings");
+  redirect("/ipl-points-table-2026");
 }

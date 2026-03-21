@@ -162,12 +162,12 @@ export default function LiveScorePage({ showHeading = true }) {
       <section style={{ marginTop: "32px" }}>
         <h2 style={{ fontSize: "22px" }}>Related IPL 2026 Pages</h2>
         <div style={{ display: "flex", gap: "16px", flexWrap: "wrap" }}>
-          <Link href="/standings" className="btn-primary">IPL 2026 points table and standings</Link>
-          <Link href="/players" className="glass-card" style={{ padding: "10px 18px", textDecoration: "none" }}>
-            IPL player stats directory
+          <Link href="/ipl-live-score-today" className="btn-primary">IPL live score today hub</Link>
+          <Link href="/ipl-points-table-2026" className="glass-card" style={{ padding: "10px 18px", textDecoration: "none" }}>
+            IPL 2026 points table
           </Link>
-          <Link href="/auction" className="glass-card" style={{ padding: "10px 18px", textDecoration: "none" }}>
-            IPL 2026 auction results
+          <Link href="/predictions" className="glass-card" style={{ padding: "10px 18px", textDecoration: "none" }}>
+            Upcoming match predictions
           </Link>
         </div>
       </section>

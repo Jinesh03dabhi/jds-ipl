@@ -185,12 +185,12 @@ export default function HomeClient() {
             </div>
 
             <div style={{ display: "flex", gap: "16px", justifyContent: "center", flexWrap: "wrap" }}>
-              <Link href="/players" className="btn-primary hover-scale" style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-                Browse IPL player stats <ArrowUpRight size={20} />
+              <Link href="/ipl-live-score-today" className="btn-primary hover-scale" style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                IPL live score today <ArrowUpRight size={20} />
               </Link>
 
-              <Link href="/auction" className="glass-card hover-scale" style={{ padding: "12px 24px", color: "#fff", textDecoration: "none" }}>
-                IPL 2026 auction insights
+              <Link href="/predictions" className="glass-card hover-scale" style={{ padding: "12px 24px", color: "#fff", textDecoration: "none" }}>
+                Match prediction hub
               </Link>
             </div>
           </div>
@@ -210,8 +210,11 @@ export default function HomeClient() {
               <Users size={32} color="var(--primary)" />
             </div>
             <div>
-              <div style={{ color: "#94a3b8", fontSize: "14px", textTransform: "uppercase", letterSpacing: "1px" }}>Total Players</div>
-              <div style={{ fontSize: "28px", fontWeight: 800, color: "#fff" }}>{PLAYERS.length}+</div>
+              <div style={{ color: "#94a3b8", fontSize: "14px", textTransform: "uppercase", letterSpacing: "1px" }}>IPL Teams</div>
+              <div style={{ fontSize: "28px", fontWeight: 800, color: "#fff" }}>{TEAMS.length}</div>
+              <div style={{ color: "#94a3b8", fontSize: "13px", marginTop: "6px" }}>
+                Active franchise pages with team profiles and venues
+              </div>
             </div>
           </div>
 
@@ -220,8 +223,11 @@ export default function HomeClient() {
               <Gavel size={32} color="var(--secondary)" />
             </div>
             <div>
-              <div style={{ color: "#94a3b8", fontSize: "14px", textTransform: "uppercase", letterSpacing: "1px" }}>Auction Records</div>
-              <div style={{ fontSize: "28px", fontWeight: 800, color: "#fff" }}>18 Seasons</div>
+              <div style={{ color: "#94a3b8", fontSize: "14px", textTransform: "uppercase", letterSpacing: "1px" }}>Player Profiles</div>
+              <div style={{ fontSize: "28px", fontWeight: 800, color: "#fff" }}>{PLAYERS.length}</div>
+              <div style={{ color: "#94a3b8", fontSize: "13px", marginTop: "6px" }}>
+                Searchable player pages inside the current site dataset
+              </div>
             </div>
           </div>
 
@@ -230,8 +236,11 @@ export default function HomeClient() {
               <TrendingUp size={32} color="#22c55e" />
             </div>
             <div>
-              <div style={{ color: "#94a3b8", fontSize: "14px", textTransform: "uppercase", letterSpacing: "1px" }}>Accuracy Rate</div>
-              <div style={{ fontSize: "28px", fontWeight: 800, color: "#fff" }}>92.4%</div>
+              <div style={{ color: "#94a3b8", fontSize: "14px", textTransform: "uppercase", letterSpacing: "1px" }}>Intent Routes</div>
+              <div style={{ fontSize: "28px", fontWeight: 800, color: "#fff" }}>3 Core + Dynamic</div>
+              <div style={{ color: "#94a3b8", fontSize: "13px", marginTop: "6px" }}>
+                Live today, result yesterday, points table, match predictions and pitch reports
+              </div>
             </div>
           </div>
         </section>

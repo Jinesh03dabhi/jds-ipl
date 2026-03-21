@@ -111,8 +111,8 @@ export default function PlayersClient() {
           <Link href="/auction" className="glass-card" style={{ padding: "10px 18px", textDecoration: "none" }}>
             IPL 2026 auction results
           </Link>
-          <Link href="/live-score" className="glass-card" style={{ padding: "10px 18px", textDecoration: "none" }}>
-            IPL 2026 live score updates
+          <Link href="/ipl-live-score-today" className="glass-card" style={{ padding: "10px 18px", textDecoration: "none" }}>
+            IPL live score today
           </Link>
         </div>
       </section>

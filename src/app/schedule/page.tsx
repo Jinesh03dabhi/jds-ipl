@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import ScheduleClient from "./ScheduleClient";
+import { getIplSchedule } from "@/lib/ipl-data";
 
 const baseUrl = "https://jds-ipl.vercel.app";
 
@@ -48,20 +49,8 @@ export const metadata: Metadata = {
   },
 };
 
-const getSchedule = async () => {
-  try {
-    const res = await fetch(`${baseUrl}/api/schedule`, {
-      next: { revalidate: 3600 },
-    });
-    if (!res.ok) return { matches: [] };
-    return res.json();
-  } catch {
-    return { matches: [] };
-  }
-};
-
 export default async function SchedulePage() {
-  const data = await getSchedule();
+  const data = await getIplSchedule();
   const matches = data?.matches || [];
 
   const structuredData = {

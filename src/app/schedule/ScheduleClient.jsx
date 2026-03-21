@@ -429,13 +429,13 @@ export default function ScheduleClient() {
                       </div>
 
                       <div className="match-footer">
-                        <Link href="/live-score" className="match-link">
-                          Live score center <ChevronRight size={14} />
+                        <Link href={`/matches/${match.detailSlug}`} className="match-link">
+                          Match preview <ChevronRight size={14} />
                         </Link>
-                        <Link href="/teams" className="match-link">
-                          Team profiles <ChevronRight size={14} />
+                        <Link href={`/${match.predictionSlug}`} className="match-link">
+                          Prediction page <ChevronRight size={14} />
                         </Link>
-                        <Link href="/standings" className="match-link">
+                        <Link href="/ipl-points-table-2026" className="match-link">
                           Points table <ChevronRight size={14} />
                         </Link>
                       </div>
@@ -451,12 +451,12 @@ export default function ScheduleClient() {
       <section style={{ marginTop: "40px" }}>
         <h2 className="section-title">More IPL 2026 Fixtures and Results</h2>
         <div style={{ display: "flex", gap: "16px", flexWrap: "wrap" }}>
-          <Link href="/live-score" className="btn-primary">IPL 2026 live score updates</Link>
-          <Link href="/players" className="glass-card" style={{ padding: "10px 18px", textDecoration: "none" }}>
-            IPL player stats directory
+          <Link href="/ipl-live-score-today" className="btn-primary">IPL live score today</Link>
+          <Link href="/predictions" className="glass-card" style={{ padding: "10px 18px", textDecoration: "none" }}>
+            Match prediction hub
           </Link>
-          <Link href="/auction" className="glass-card" style={{ padding: "10px 18px", textDecoration: "none" }}>
-            IPL 2026 auction results
+          <Link href="/ipl-points-table-2026" className="glass-card" style={{ padding: "10px 18px", textDecoration: "none" }}>
+            IPL 2026 points table
           </Link>
         </div>
       </section>

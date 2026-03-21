@@ -109,7 +109,7 @@ export default function Navbar() {
           <Link href="/" className="navbar-link" style={linkStyle("/")}><LayoutDashboard size={18} /> Dashboard</Link>
           <Link href="/players" className="navbar-link" style={linkStyle("/players")}><Users size={18} /> Players</Link>
           <Link href="/teams" className="navbar-link" style={linkStyle("/teams")}><ShieldAlert size={18} /> Teams</Link>
-          <Link href="/standings" className="navbar-link" style={linkStyle("/standings")}><Trophy size={18} /> Ranking</Link>
+          <Link href="/ipl-points-table-2026" className="navbar-link" style={linkStyle("/ipl-points-table-2026")}><Trophy size={18} /> Points Table</Link>
           <Link href="/schedule" className="navbar-link" style={linkStyle("/schedule")}><Calendar size={18} /> Schedule</Link>
           <Link href="/auction" className="navbar-link" style={linkStyle("/auction")}><Gavel size={18} /> Auction</Link>
           <Link href="/ipl-winners" className="navbar-link" style={linkStyle("/ipl-winners")}><Trophy size={18} /> Winners</Link>
@@ -183,7 +183,7 @@ export default function Navbar() {
           <Link href="/" onClick={() => setMobileOpen(false)} style={linkStyle("/")}>Dashboard</Link>
           <Link href="/players" onClick={() => setMobileOpen(false)} style={linkStyle("/players")}>Players</Link>
           <Link href="/teams" onClick={() => setMobileOpen(false)} style={linkStyle("/teams")}>Teams</Link>
-          <Link href="/standings" onClick={() => setMobileOpen(false)} style={linkStyle("/standings")}>Ranking</Link>
+          <Link href="/ipl-points-table-2026" onClick={() => setMobileOpen(false)} style={linkStyle("/ipl-points-table-2026")}>Points Table</Link>
           <Link href="/schedule" onClick={() => setMobileOpen(false)} style={linkStyle("/schedule")}>Schedule</Link>
           <Link href="/auction" onClick={() => setMobileOpen(false)} style={linkStyle("/auction")}>Auction</Link>
           <Link href="/ipl-winners" onClick={() => setMobileOpen(false)} style={linkStyle("/ipl-winners")}>Winners</Link>
