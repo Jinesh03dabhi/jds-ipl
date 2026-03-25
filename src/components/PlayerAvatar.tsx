@@ -44,6 +44,7 @@ export default function PlayerAvatar({
         alt={altText}
         fill
         sizes={`${size}px`}
+        unoptimized
         onError={() => setImgError(true)}
         priority={priority}
         fetchPriority={fetchPriority}
