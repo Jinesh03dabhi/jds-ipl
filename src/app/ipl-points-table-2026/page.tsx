@@ -120,6 +120,8 @@ export default async function IplPointsTable2026Page() {
         </div>
       </section>
 
+      <PointsTablePanel rows={tableRows} />
+
       <section className={styles.section}>
         <div className={styles.splitGrid}>
           <article className={styles.card}>
@@ -172,7 +174,7 @@ export default async function IplPointsTable2026Page() {
         </div>
       </section>
 
-      <PointsTablePanel rows={tableRows} />
+      
 
       <section className={styles.section}>
         <div className={styles.card}>
