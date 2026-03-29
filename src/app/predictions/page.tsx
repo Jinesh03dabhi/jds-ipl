@@ -150,7 +150,7 @@ export default async function PredictionsPage() {
             description: "Yesterday-result route with verified no-match handling when needed.",
           },
           {
-            href: "/ipl-points-table-2026",
+            href: "/points-table",
             label: "IPL Points Table 2026",
             description: "Standings, points and NRR without fake pre-season rankings.",
           },

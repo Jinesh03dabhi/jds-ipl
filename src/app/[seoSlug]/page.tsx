@@ -402,7 +402,7 @@ export default async function SeoSlugPage({ params }: PageProps) {
             description: "Browse all current team-vs-team prediction pages.",
           },
           {
-            href: "/ipl-points-table-2026",
+            href: "/points-table",
             label: "Points Table",
             description: "See how results at this venue can affect the season table.",
           },

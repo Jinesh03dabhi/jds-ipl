@@ -35,8 +35,8 @@ export default function Footer() {
         <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
           <h3 style={{ color: "#fff", fontSize: "16px", marginBottom: "8px" }}>Quick Links</h3>
           <Link href="/ipl-live-score-today" style={{ textDecoration: "none", color: "inherit", transition: "color 0.2s" }} onMouseOver={(e) => (e.currentTarget.style.color = "var(--primary)")} onMouseOut={(e) => (e.currentTarget.style.color = "inherit")}>Live Score Today</Link>
-          <Link href="/ipl-points-table-2026" style={{ textDecoration: "none", color: "inherit", transition: "color 0.2s" }} onMouseOver={(e) => (e.currentTarget.style.color = "var(--primary)")} onMouseOut={(e) => (e.currentTarget.style.color = "inherit")}>Points Table</Link>
-          <Link href="/teams" style={{ textDecoration: "none", color: "inherit", transition: "color 0.2s" }} onMouseOver={(e) => (e.currentTarget.style.color = "var(--primary)")} onMouseOut={(e) => (e.currentTarget.style.color = "inherit")}>Teams</Link>
+          <Link href="/points-table" style={{ textDecoration: "none", color: "inherit", transition: "color 0.2s" }} onMouseOver={(e) => (e.currentTarget.style.color = "var(--primary)")} onMouseOut={(e) => (e.currentTarget.style.color = "inherit")}>Points Table</Link>
+          <Link href="/ipl-teams" style={{ textDecoration: "none", color: "inherit", transition: "color 0.2s" }} onMouseOver={(e) => (e.currentTarget.style.color = "var(--primary)")} onMouseOut={(e) => (e.currentTarget.style.color = "inherit")}>Teams</Link>
           <Link href="/players" style={{ textDecoration: "none", color: "inherit", transition: "color 0.2s" }} onMouseOver={(e) => (e.currentTarget.style.color = "var(--primary)")} onMouseOut={(e) => (e.currentTarget.style.color = "inherit")}>Players</Link>
           <Link href="/predictions" style={{ textDecoration: "none", color: "inherit", transition: "color 0.2s" }} onMouseOver={(e) => (e.currentTarget.style.color = "var(--primary)")} onMouseOut={(e) => (e.currentTarget.style.color = "inherit")}>Prediction Hub</Link>
         </div>
@@ -47,7 +47,7 @@ export default function Footer() {
           <Link href="/about" style={{ textDecoration: "none", color: "inherit", transition: "color 0.2s" }} onMouseOver={(e) => (e.currentTarget.style.color = "var(--primary)")} onMouseOut={(e) => (e.currentTarget.style.color = "inherit")}>About Us</Link>
           <Link href="/contact" style={{ textDecoration: "none", color: "inherit", transition: "color 0.2s" }} onMouseOver={(e) => (e.currentTarget.style.color = "var(--primary)")} onMouseOut={(e) => (e.currentTarget.style.color = "inherit")}>Contact</Link>
           <Link href="/privacy-policy" style={{ textDecoration: "none", color: "inherit", transition: "color 0.2s" }} onMouseOver={(e) => (e.currentTarget.style.color = "var(--primary)")} onMouseOut={(e) => (e.currentTarget.style.color = "inherit")}>Privacy Policy</Link>
-          <Link href="/terms-conditions" style={{ textDecoration: "none", color: "inherit", transition: "color 0.2s" }} onMouseOver={(e) => (e.currentTarget.style.color = "var(--primary)")} onMouseOut={(e) => (e.currentTarget.style.color = "inherit")}>Terms & Conditions</Link>
+          <Link href="/terms" style={{ textDecoration: "none", color: "inherit", transition: "color 0.2s" }} onMouseOver={(e) => (e.currentTarget.style.color = "var(--primary)")} onMouseOut={(e) => (e.currentTarget.style.color = "inherit")}>Terms</Link>
           <Link href="/disclaimer" style={{ textDecoration: "none", color: "inherit", transition: "color 0.2s" }} onMouseOver={(e) => (e.currentTarget.style.color = "var(--primary)")} onMouseOut={(e) => (e.currentTarget.style.color = "inherit")}>Disclaimer</Link>
         </div>
 

@@ -225,7 +225,7 @@ export default function PredictionsClient() {
           <Link href="/players" className="glass-card" style={{ padding: "10px 18px", textDecoration: "none" }}>
             IPL player stats directory
           </Link>
-          <Link href="/teams" className="glass-card" style={{ padding: "10px 18px", textDecoration: "none" }}>
+          <Link href="/ipl-teams" className="glass-card" style={{ padding: "10px 18px", textDecoration: "none" }}>
             IPL teams and squads
           </Link>
         </div>

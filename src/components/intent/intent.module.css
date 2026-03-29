@@ -439,6 +439,20 @@
   border: 1px solid rgba(148, 163, 184, 0.14);
 }
 
+.tableHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.tableMeta {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
 .table {
   width: 100%;
   min-width: 840px;
@@ -471,8 +485,77 @@
   background: rgba(255, 255, 255, 0.02);
 }
 
+.table tbody tr {
+  transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
 .teamCell {
   font-weight: 800;
+}
+
+.teamIdentity {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.teamIdentityText {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.playoffBadge {
+  display: inline-flex;
+  align-items: center;
+  width: fit-content;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: rgba(34, 197, 94, 0.16);
+  color: #86efac;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.playoffRow {
+  background: rgba(34, 197, 94, 0.05);
+}
+
+.positionCell {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.positionBadge {
+  min-width: 34px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  text-align: center;
+  background: rgba(15, 23, 42, 0.84);
+  border: 1px solid rgba(148, 163, 184, 0.12);
+  color: #f8fafc;
+  font-weight: 800;
+}
+
+.positionUp {
+  color: #86efac;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.positionDown {
+  color: #fca5a5;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.positionFlat {
+  color: #94a3b8;
+  font-size: 12px;
+  font-weight: 700;
 }
 
 .positive {
@@ -531,6 +614,228 @@
   line-height: 1.65;
 }
 
+.trustCard {
+  padding: 22px;
+  border-radius: 22px;
+  background:
+    radial-gradient(circle at top right, rgba(45, 212, 191, 0.12), transparent 32%),
+    rgba(15, 23, 42, 0.78);
+  border: 1px solid rgba(148, 163, 184, 0.14);
+}
+
+.trustGrid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.trustItem {
+  padding: 16px;
+  border-radius: 18px;
+  background: rgba(2, 6, 23, 0.56);
+  border: 1px solid rgba(148, 163, 184, 0.1);
+}
+
+.trustLabel {
+  color: #94a3b8;
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.trustValue {
+  margin-top: 10px;
+  color: #f8fafc;
+  font-size: 1rem;
+  font-weight: 700;
+  line-height: 1.55;
+}
+
+.trustNote {
+  margin-top: 18px;
+  color: #cbd5e1;
+  line-height: 1.72;
+}
+
+.actionPanel {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  padding: 22px;
+  border-radius: 22px;
+  background: rgba(15, 23, 42, 0.74);
+  border: 1px solid rgba(148, 163, 184, 0.14);
+}
+
+.actionGroup {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.actionButton {
+  border: 1px solid rgba(148, 163, 184, 0.16);
+  background: rgba(2, 6, 23, 0.64);
+  color: #e2e8f0;
+  padding: 11px 16px;
+  border-radius: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform 0.2s ease, border-color 0.2s ease;
+}
+
+.actionButton:hover {
+  transform: translateY(-2px);
+  border-color: rgba(56, 189, 248, 0.34);
+}
+
+.actionButtonActive {
+  color: #f8fafc;
+  background: linear-gradient(135deg, rgba(14, 165, 233, 0.18), rgba(37, 99, 235, 0.3));
+  border-color: rgba(56, 189, 248, 0.42);
+}
+
+.inlineAd {
+  margin-top: 28px;
+  padding: 18px;
+  border-radius: 20px;
+  background: rgba(15, 23, 42, 0.72);
+  border: 1px dashed rgba(148, 163, 184, 0.18);
+}
+
+.inlineAdLabel {
+  color: #94a3b8;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.inlineAdFrame {
+  margin-top: 12px;
+  min-height: 120px;
+  border-radius: 16px;
+  background: rgba(2, 6, 23, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.focusGrid {
+  display: grid;
+  gap: 14px;
+}
+
+.focusCard {
+  padding: 16px;
+  border-radius: 18px;
+  background: rgba(2, 6, 23, 0.62);
+  border: 1px solid rgba(148, 163, 184, 0.1);
+}
+
+.focusTeam {
+  color: #94a3b8;
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.focusPrimary {
+  margin-top: 8px;
+  color: #f8fafc;
+  font-size: 1.1rem;
+  font-weight: 800;
+}
+
+.focusSecondary {
+  margin-top: 6px;
+  color: #cbd5e1;
+  font-size: 13px;
+}
+
+.focusNote {
+  margin-top: 10px;
+  color: #94a3b8;
+  line-height: 1.65;
+}
+
+.timelineList {
+  display: grid;
+  gap: 14px;
+}
+
+.timelineItem {
+  padding: 16px;
+  border-radius: 18px;
+  background: rgba(2, 6, 23, 0.62);
+  border: 1px solid rgba(148, 163, 184, 0.1);
+}
+
+.timelineTitle {
+  margin: 0;
+  color: #f8fafc;
+  font-size: 1rem;
+}
+
+.timelineDetail {
+  margin-top: 10px;
+  color: #cbd5e1;
+  line-height: 1.65;
+}
+
+.comparisonList {
+  display: grid;
+  gap: 14px;
+}
+
+.comparisonItem {
+  padding: 16px;
+  border-radius: 18px;
+  background: rgba(2, 6, 23, 0.62);
+  border: 1px solid rgba(148, 163, 184, 0.1);
+}
+
+.comparisonLabel {
+  color: #94a3b8;
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.comparisonValues {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  margin-top: 10px;
+  color: #f8fafc;
+  font-size: 1.05rem;
+  font-weight: 800;
+}
+
+.comparisonValues span {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 48px;
+  padding: 10px 12px;
+  border-radius: 14px;
+  background: rgba(15, 23, 42, 0.78);
+  border: 1px solid rgba(148, 163, 184, 0.12);
+}
+
+.tablePlayerLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  color: inherit;
+  text-decoration: none;
+}
+
+.tableTeamLogo {
+  border-radius: 999px;
+  object-fit: contain;
+}
+
 .liveDot {
   width: 10px;
   height: 10px;
@@ -546,6 +851,15 @@
 
   .microGrid {
     grid-template-columns: 1fr;
+  }
+
+  .trustGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .actionPanel {
+    flex-direction: column;
+    align-items: flex-start;
   }
 }
 
@@ -565,5 +879,9 @@
 
   .vsBlock {
     order: -1;
+  }
+
+  .comparisonValues {
+    grid-template-columns: 1fr;
   }
 }

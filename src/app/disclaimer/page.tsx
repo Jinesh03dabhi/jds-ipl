@@ -126,7 +126,7 @@ export default function DisclaimerPage() {
         <section style={{ marginTop: "32px" }}>
           <h2 style={{ fontSize: "22px" }}>Related IPL Scorebook Pages</h2>
           <div style={{ display: "flex", gap: "16px", flexWrap: "wrap" }}>
-            <Link href="/terms-conditions" className="btn-primary">Terms and conditions</Link>
+            <Link href="/terms" className="btn-primary">Terms and conditions</Link>
             <Link href="/privacy-policy" className="glass-card" style={{ padding: "10px 18px", textDecoration: "none" }}>
               Privacy policy
             </Link>

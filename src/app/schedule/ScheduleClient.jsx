@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useEffectEvent, useMemo, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { Calendar, MapPin, Clock, Trophy, ChevronRight } from "lucide-react";
@@ -109,15 +109,31 @@ export default function ScheduleClient() {
   const [now, setNow] = useState(Date.now());
   const todayRef = useRef(null);
 
+  const loadSchedule = useEffectEvent(async () => {
+    try {
+      const res = await fetch("/api/schedule", {
+        cache: "no-store",
+      });
+      const data = await res.json();
+      setSchedule(data.matches || []);
+      setLastUpdated(data.lastUpdated || null);
+    } finally {
+      setLoading(false);
+    }
+  });
+
   useEffect(() => {
-    fetch("/api/schedule")
-      .then((res) => res.json())
-      .then((data) => {
-        setSchedule(data.matches || []);
-        setLastUpdated(data.lastUpdated || null);
-        setLoading(false);
-      })
-      .catch(() => setLoading(false));
+    const timerId = window.setTimeout(() => {
+      void loadSchedule();
+    }, 0);
+    const intervalId = window.setInterval(() => {
+      void loadSchedule();
+    }, 60000);
+
+    return () => {
+      window.clearTimeout(timerId);
+      window.clearInterval(intervalId);
+    };
   }, []);
 
   useEffect(() => {
@@ -435,7 +451,7 @@ export default function ScheduleClient() {
                         <Link href={`/${match.predictionSlug}`} className="match-link">
                           Prediction page <ChevronRight size={14} />
                         </Link>
-                        <Link href="/ipl-points-table-2026" className="match-link">
+                        <Link href="/points-table" className="match-link">
                           Points table <ChevronRight size={14} />
                         </Link>
                       </div>
@@ -455,7 +471,7 @@ export default function ScheduleClient() {
           <Link href="/predictions" className="glass-card" style={{ padding: "10px 18px", textDecoration: "none" }}>
             Match prediction hub
           </Link>
-          <Link href="/ipl-points-table-2026" className="glass-card" style={{ padding: "10px 18px", textDecoration: "none" }}>
+          <Link href="/points-table" className="glass-card" style={{ padding: "10px 18px", textDecoration: "none" }}>
             IPL 2026 points table
           </Link>
         </div>

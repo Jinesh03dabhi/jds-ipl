@@ -87,6 +87,16 @@ export default function Navbar() {
 
   const isActive = (href: string) => {
     if (href === "/") return pathname === "/";
+    if (href === "/ipl-teams") {
+      return pathname?.startsWith("/ipl-teams") || pathname?.startsWith("/teams");
+    }
+    if (href === "/points-table") {
+      return (
+        pathname?.startsWith("/points-table") ||
+        pathname?.startsWith("/ipl-points-table-2026") ||
+        pathname?.startsWith("/standings")
+      );
+    }
     return pathname?.startsWith(href);
   };
 
@@ -108,8 +118,8 @@ export default function Navbar() {
         <div className="navbar-menu">
           <Link href="/" className="navbar-link" style={linkStyle("/")}><LayoutDashboard size={18} /> Dashboard</Link>
           <Link href="/players" className="navbar-link" style={linkStyle("/players")}><Users size={18} /> Players</Link>
-          <Link href="/teams" className="navbar-link" style={linkStyle("/teams")}><ShieldAlert size={18} /> Teams</Link>
-          <Link href="/ipl-points-table-2026" className="navbar-link" style={linkStyle("/ipl-points-table-2026")}><Trophy size={18} /> Points Table</Link>
+          <Link href="/ipl-teams" className="navbar-link" style={linkStyle("/ipl-teams")}><ShieldAlert size={18} /> Teams</Link>
+          <Link href="/points-table" className="navbar-link" style={linkStyle("/points-table")}><Trophy size={18} /> Points Table</Link>
           <Link href="/schedule" className="navbar-link" style={linkStyle("/schedule")}><Calendar size={18} /> Schedule</Link>
           <Link href="/auction" className="navbar-link" style={linkStyle("/auction")}><Gavel size={18} /> Auction</Link>
           <Link href="/ipl-winners" className="navbar-link" style={linkStyle("/ipl-winners")}><Trophy size={18} /> Winners</Link>
@@ -182,8 +192,8 @@ export default function Navbar() {
         <div className="navbar-menu">
           <Link href="/" onClick={() => setMobileOpen(false)} style={linkStyle("/")}>Dashboard</Link>
           <Link href="/players" onClick={() => setMobileOpen(false)} style={linkStyle("/players")}>Players</Link>
-          <Link href="/teams" onClick={() => setMobileOpen(false)} style={linkStyle("/teams")}>Teams</Link>
-          <Link href="/ipl-points-table-2026" onClick={() => setMobileOpen(false)} style={linkStyle("/ipl-points-table-2026")}>Points Table</Link>
+          <Link href="/ipl-teams" onClick={() => setMobileOpen(false)} style={linkStyle("/ipl-teams")}>Teams</Link>
+          <Link href="/points-table" onClick={() => setMobileOpen(false)} style={linkStyle("/points-table")}>Points Table</Link>
           <Link href="/schedule" onClick={() => setMobileOpen(false)} style={linkStyle("/schedule")}>Schedule</Link>
           <Link href="/auction" onClick={() => setMobileOpen(false)} style={linkStyle("/auction")}>Auction</Link>
           <Link href="/ipl-winners" onClick={() => setMobileOpen(false)} style={linkStyle("/ipl-winners")}>Winners</Link>

@@ -64,7 +64,7 @@ export default function MatchContent({
           <h3 className={styles.cardTitle}>Toss Winner and Match Call</h3>
           <p className={styles.cardText}>{tossText}</p>
           <div className={styles.cardNote}>
-            Search intent phrases like "ipl toss winner today" matter most close to start time, so this block updates only when the source has the toss outcome.
+            Search intent phrases like &quot;ipl toss winner today&quot; matter most close to start time, so this block updates only when the source has the toss outcome.
           </div>
         </article>
 

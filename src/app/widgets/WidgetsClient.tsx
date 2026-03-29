@@ -173,7 +173,7 @@ export default function WidgetsClient() {
         <h2 style={{ fontSize: "22px" }}>Related IPL Pages</h2>
         <div style={{ display: "flex", gap: "16px", flexWrap: "wrap" }}>
           <Link href="/players" className="btn-primary">IPL player stats directory</Link>
-          <Link href="/teams" className="glass-card" style={{ padding: "10px 18px", textDecoration: "none" }}>
+          <Link href="/ipl-teams" className="glass-card" style={{ padding: "10px 18px", textDecoration: "none" }}>
             IPL teams and squads
           </Link>
           <Link href="/contact" className="glass-card" style={{ padding: "10px 18px", textDecoration: "none" }}>

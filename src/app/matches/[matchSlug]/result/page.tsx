@@ -3,15 +3,25 @@ import { notFound } from "next/navigation";
 import JsonLd from "@/components/intent/JsonLd";
 import FaqSection, { buildFaqSchema, type FaqItem } from "@/components/intent/FaqSection";
 import InternalLinkGrid from "@/components/intent/InternalLinkGrid";
+import EngagementPanel from "@/components/intent/EngagementPanel";
 import MatchContent from "@/components/intent/MatchContent";
+import MatchEditorialSections from "@/components/intent/MatchEditorialSections";
+import TrustSignals from "@/components/intent/TrustSignals";
 import styles from "@/components/intent/intent.module.css";
 import {
   formatIndiaDateTime,
+  getIplSchedule,
   getKeyPlayers,
   getMatchByDetailSlug,
   getPredictionForMatch,
 } from "@/lib/ipl-data";
-import { SITE_URL } from "@/lib/site";
+import {
+  buildArticleSchema,
+  buildBreadcrumbSchema,
+  formatEditorialTimestamp,
+} from "@/lib/content";
+import { buildMatchEditorial } from "@/lib/match-editorial";
+import { DEFAULT_EDITOR_NAME, SITE_URL } from "@/lib/site";
 
 type PageProps = {
   params: Promise<{
@@ -41,7 +51,10 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
 export default async function MatchResultPage({ params }: PageProps) {
   const { matchSlug } = await params;
-  const match = await getMatchByDetailSlug(matchSlug);
+  const [match, schedule] = await Promise.all([
+    getMatchByDetailSlug(matchSlug),
+    getIplSchedule(),
+  ]);
 
   if (!match) {
     notFound();
@@ -49,6 +62,22 @@ export default async function MatchResultPage({ params }: PageProps) {
 
   const prediction = getPredictionForMatch(match);
   const hasResult = match.status === "completed";
+  const editorial = buildMatchEditorial(match, "result");
+  const relatedMatches = schedule.matches
+    .filter((candidate) => {
+      if (candidate.id === match.id) {
+        return false;
+      }
+
+      return (
+        candidate.venueSlug === match.venueSlug ||
+        candidate.team1.name === match.team1.name ||
+        candidate.team1.name === match.team2.name ||
+        candidate.team2.name === match.team1.name ||
+        candidate.team2.name === match.team2.name
+      );
+    })
+    .slice(0, 3);
   const faqs: FaqItem[] = [
     {
       question: `Is the ${match.team1.name} vs ${match.team2.name} result available?`,
@@ -73,6 +102,25 @@ export default async function MatchResultPage({ params }: PageProps) {
       <JsonLd
         data={[
           buildFaqSchema(faqs),
+          buildArticleSchema({
+            headline: `${match.team1.name} vs ${match.team2.name} Result`,
+            description:
+              `${match.team1.name} vs ${match.team2.name} result page with recap analysis, venue context and prediction-versus-outcome coverage.`,
+            path: `/matches/${matchSlug}/result`,
+            keywords: [
+              `${match.team1.name} vs ${match.team2.name} result`,
+              "ipl result page",
+              `${match.team1.shortName} vs ${match.team2.shortName} recap`,
+            ],
+          }),
+          buildBreadcrumbSchema([
+            { name: "Home", path: "/" },
+            { name: "IPL Result Yesterday", path: "/ipl-match-result-yesterday" },
+            {
+              name: `${match.team1.shortName} vs ${match.team2.shortName} Result`,
+              path: `/matches/${matchSlug}/result`,
+            },
+          ]),
           {
             "@context": "https://schema.org",
             "@type": "SportsEvent",
@@ -188,6 +236,25 @@ export default async function MatchResultPage({ params }: PageProps) {
         team2Players={getKeyPlayers(match.team2.name)}
       />
 
+      <MatchEditorialSections editorial={editorial} />
+
+      {relatedMatches.length ? (
+        <InternalLinkGrid
+          title="Related Matches"
+          links={relatedMatches.map((candidate) => ({
+            href: `/matches/${candidate.detailSlug}`,
+            label: `${candidate.team1.shortName} vs ${candidate.team2.shortName}`,
+            description: `${candidate.matchNumber} • ${formatIndiaDateTime(candidate.dateTimeGMT)} IST • ${candidate.venue}`,
+          }))}
+        />
+      ) : null}
+
+      <EngagementPanel
+        pageKey={`match-result:${match.id}`}
+        title={`${match.team1.name} vs ${match.team2.name} Result`}
+        path={`/matches/${matchSlug}/result`}
+      />
+
       <InternalLinkGrid
         title="Match Recap Navigation"
         links={[
@@ -202,7 +269,7 @@ export default async function MatchResultPage({ params }: PageProps) {
             description: "Open the live route linked to the same match.",
           },
           {
-            href: "/ipl-points-table-2026",
+            href: "/points-table",
             label: "Points Table 2026",
             description: "See whether this result changes the standings and NRR.",
           },
@@ -212,6 +279,13 @@ export default async function MatchResultPage({ params }: PageProps) {
             description: "Compare the pre-match prediction route with the final result.",
           },
         ]}
+      />
+
+      <TrustSignals
+        authorName={DEFAULT_EDITOR_NAME}
+        lastUpdatedLabel={formatEditorialTimestamp()}
+        sourcesNote={editorial.sourcesNote}
+        wordCount={editorial.contentWordCount}
       />
 
       <FaqSection title="Match Result FAQ" faqs={faqs} />

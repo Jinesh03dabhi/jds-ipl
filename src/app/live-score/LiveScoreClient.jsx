@@ -95,7 +95,43 @@ export default function LiveScorePage({ showHeading = true }) {
   }, [data, matchState]);
 
   if (!data || matchState === "loading") {
-    return <div className="glass-card">Loading match data...</div>;
+    return (
+      <div style={{ marginTop: "24px" }} className="container page-content">
+        <div className="glass-card" style={{ display: "grid", gap: "18px" }}>
+          <div
+            style={{
+              width: "180px",
+              height: "16px",
+              borderRadius: "999px",
+              background: "rgba(148, 163, 184, 0.18)",
+            }}
+          />
+          <div
+            style={{
+              width: "100%",
+              minHeight: "180px",
+              borderRadius: "18px",
+              background:
+                "linear-gradient(90deg, rgba(15,23,42,0.9), rgba(30,41,59,0.9), rgba(15,23,42,0.9))",
+              border: "1px solid rgba(148, 163, 184, 0.14)",
+            }}
+          />
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: "14px" }}>
+            {[0, 1, 2].map((item) => (
+              <div
+                key={item}
+                style={{
+                  minHeight: "110px",
+                  borderRadius: "16px",
+                  background: "rgba(15, 23, 42, 0.72)",
+                  border: "1px solid rgba(148, 163, 184, 0.12)",
+                }}
+              />
+            ))}
+          </div>
+        </div>
+      </div>
+    );
   }
 
   if (matchState === "error") {
@@ -163,7 +199,7 @@ export default function LiveScorePage({ showHeading = true }) {
         <h2 style={{ fontSize: "22px" }}>Related IPL 2026 Pages</h2>
         <div style={{ display: "flex", gap: "16px", flexWrap: "wrap" }}>
           <Link href="/ipl-live-score-today" className="btn-primary">IPL live score today hub</Link>
-          <Link href="/ipl-points-table-2026" className="glass-card" style={{ padding: "10px 18px", textDecoration: "none" }}>
+          <Link href="/points-table" className="glass-card" style={{ padding: "10px 18px", textDecoration: "none" }}>
             IPL 2026 points table
           </Link>
           <Link href="/predictions" className="glass-card" style={{ padding: "10px 18px", textDecoration: "none" }}>

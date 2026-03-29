@@ -75,7 +75,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.92,
     },
     {
-      url: `${baseUrl}/ipl-points-table-2026`,
+      url: `${baseUrl}/points-table`,
       lastModified: now,
       changeFrequency: "daily",
       priority: 0.97,
@@ -93,10 +93,22 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.9,
     },
     {
-      url: `${baseUrl}/teams`,
+      url: `${baseUrl}/ipl-teams`,
       lastModified: now,
       changeFrequency: "weekly",
       priority: 0.9,
+    },
+    {
+      url: `${baseUrl}/orange-cap`,
+      lastModified: now,
+      changeFrequency: "daily",
+      priority: 0.84,
+    },
+    {
+      url: `${baseUrl}/purple-cap`,
+      lastModified: now,
+      changeFrequency: "daily",
+      priority: 0.84,
     },
     {
       url: `${baseUrl}/auction`,
@@ -129,7 +141,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.3,
     },
     {
-      url: `${baseUrl}/terms-conditions`,
+      url: `${baseUrl}/terms`,
       lastModified: now,
       changeFrequency: "monthly",
       priority: 0.3,

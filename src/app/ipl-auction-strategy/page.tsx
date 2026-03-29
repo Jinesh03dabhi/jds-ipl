@@ -142,7 +142,7 @@ export default function AuctionStrategyPage() {
           <Link href="/top-10-expensive-ipl-players" className="glass-card" style={{ padding: "10px 18px", textDecoration: "none" }}>
             Top 10 most expensive IPL players
           </Link>
-          <Link href="/teams" className="glass-card" style={{ padding: "10px 18px", textDecoration: "none" }}>
+          <Link href="/ipl-teams" className="glass-card" style={{ padding: "10px 18px", textDecoration: "none" }}>
             IPL teams and squads
           </Link>
         </div>

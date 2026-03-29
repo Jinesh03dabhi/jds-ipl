@@ -111,7 +111,7 @@ export default async function TeamDetail({ params }: Props) {
         "@type": "ListItem",
         position: 2,
         name: "Teams",
-        item: `${baseUrl}/teams`,
+        item: `${baseUrl}/ipl-teams`,
       },
       {
         "@type": "ListItem",
@@ -154,7 +154,7 @@ export default async function TeamDetail({ params }: Props) {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
       />
 
-      <Link href="/teams" className="btn btn-primary team-back-btn">
+      <Link href="/ipl-teams" className="btn btn-primary team-back-btn">
         <ArrowLeft size={16} /> Back to IPL teams
       </Link>
 
@@ -267,7 +267,7 @@ export default async function TeamDetail({ params }: Props) {
       <section style={{ marginTop: "32px" }}>
         <h2 style={{ fontSize: "22px" }}>Explore More IPL 2026 Pages</h2>
         <div style={{ display: "flex", gap: "16px", flexWrap: "wrap" }}>
-          <Link href="/teams" className="btn-primary">All IPL teams</Link>
+          <Link href="/ipl-teams" className="btn-primary">All IPL teams</Link>
           <Link href="/players" className="glass-card" style={{ padding: "10px 18px", textDecoration: "none" }}>
             IPL player stats directory
           </Link>

@@ -6,7 +6,7 @@ export async function GET() {
 
   return NextResponse.json(data, {
     headers: {
-      "Cache-Control": "public, max-age=600, must-revalidate",
+      "Cache-Control": "public, max-age=60, must-revalidate",
     },
   });
 }

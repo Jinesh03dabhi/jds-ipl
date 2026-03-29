@@ -193,7 +193,7 @@ export default function IPLWinnersPage() {
         <section className="section">
           <h2 style={{ fontSize: "22px" }}>Related IPL Pages</h2>
           <div style={{ display: "flex", gap: "16px", flexWrap: "wrap" }}>
-            <Link href="/teams" className="btn-primary">IPL teams and franchises</Link>
+            <Link href="/ipl-teams" className="btn-primary">IPL teams and franchises</Link>
             <Link href="/players" className="glass-card" style={{ padding: "10px 18px", textDecoration: "none" }}>
               IPL player stats directory
             </Link>

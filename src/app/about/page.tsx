@@ -1,150 +1,171 @@
 import type { Metadata } from "next";
-import { Info, Target, List, Shield, User } from "lucide-react";
-import Link from "next/link";
+import JsonLd from "@/components/intent/JsonLd";
+import FaqSection, { buildFaqSchema, type FaqItem } from "@/components/intent/FaqSection";
+import InternalLinkGrid from "@/components/intent/InternalLinkGrid";
+import TrustSignals from "@/components/intent/TrustSignals";
+import styles from "@/components/intent/intent.module.css";
+import {
+  buildArticleSchema,
+  buildBreadcrumbSchema,
+  countWords,
+  formatEditorialTimestamp,
+} from "@/lib/content";
+import { CONTACT_EMAIL, DEFAULT_EDITOR_NAME, SITE_URL } from "@/lib/site";
 
-const baseUrl = "https://jds-ipl.vercel.app";
+const pageUrl = `${SITE_URL}/about`;
 
 export const metadata: Metadata = {
-  title: "About IPL Scorebook Platform | IPL Scorebook",
+  title: "About IPL Scorebook | Cricket Data, Context and Matchday Coverage",
   description:
-    "Learn about IPL Scorebook, an independent IPL analytics platform for player stats, auction data, live scores and team insights. Check now.",
-  keywords: [
-    "about ipl scorebook",
-    "ipl analytics platform",
-    "ipl stats site",
-    "ipl auction data",
-    "ipl live scores",
-  ],
-  robots: {
-    index: true,
-    follow: true,
-  },
+    "Learn how IPL Scorebook approaches live scores, player research, franchise pages and matchday context as an independent cricket platform.",
   alternates: {
-    canonical: `${baseUrl}/about`,
-    languages: {
-      en: `${baseUrl}/about`,
-    },
-  },
-  openGraph: {
-    title: "About IPL Scorebook Platform | IPL Scorebook",
-    description:
-      "Learn about IPL Scorebook, an independent IPL analytics platform for player stats, auction data, live scores and team insights. Check now.",
-    url: `${baseUrl}/about`,
-    type: "website",
-    siteName: "IPL Scorebook",
-    locale: "en_IN",
-    images: [
-      {
-        url: `${baseUrl}/opengraph-image`,
-        width: 1200,
-        height: 630,
-        alt: "About IPL Scorebook preview",
-      },
-    ],
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "About IPL Scorebook Platform | IPL Scorebook",
-    description:
-      "Learn about IPL Scorebook, an independent IPL analytics platform for player stats, auction data, live scores and team insights. Check now.",
-    images: [`${baseUrl}/opengraph-image`],
+    canonical: pageUrl,
   },
 };
 
 export default function AboutPage() {
-  const structuredData = [
+  const missionParagraphs = [
+    "IPL Scorebook was built to solve a common problem with cricket websites: too many pages answer the what, but not enough explain the why. Fans can usually find a score somewhere, but a score alone does not tell them how a team has been constructed, why a venue matters, or which players are shaping a season in ways that survive beyond a single evening. Our goal is to turn that thin information layer into a richer cricket research experience built around context, trust and reusable matchday pages.",
+    "That is why the site is designed as a content platform rather than only an API shell. A match page should stay useful before the toss, during the game and after the result. A player directory should connect auction price, role and season performance. A points-table route should explain NRR honestly instead of borrowing old rankings. We treat those pages as editorial assets, not placeholders, because useful sports coverage is built from repeatable context rather than one-time novelty.",
+  ];
+
+  const editorialParagraphs = [
+    "The site is independent and not affiliated with the IPL, BCCI or any franchise. That independence matters because it shapes how we write. We avoid pretending to have official access when we do not, and we avoid publishing made-up playing XIs, fake toss calls or thin recap pages that only exist to catch search traffic. If live fields are unavailable, we say so. If a page is early in the match loop, we explain what is confirmed and what is still pending.",
+    `Our publishing model is centered on useful connected pages: previews, live routes, result pages, team hubs, player directories, venue notes, table coverage and leaderboard pages. The aim is to help a reader move naturally from one question to the next without landing on dead ends. If someone starts with a team search, they should be able to reach players, standings and match previews easily. If they start with a live score route, they should be able to step into player and venue context without leaving the site. That is how we think about value, session depth and topical authority.`,
+    `We also believe visible trust signals matter. Pages should show who maintains them, when they were updated and what kind of source data they rely on. For general support or editorial questions, readers can always reach us at ${CONTACT_EMAIL}. That level of openness is part of how we want IPL Scorebook to grow: not as a black-box score widget, but as a dependable cricket information project with a clear editorial posture.`,
+  ];
+
+  const faqs: FaqItem[] = [
     {
-      "@context": "https://schema.org",
-      "@type": "AboutPage",
-      name: "About IPL Scorebook",
-      url: `${baseUrl}/about`,
-      description:
-        "IPL Scorebook is an independent analytics platform for IPL live scores, auction prices and player statistics.",
-      about: {
-        "@type": "Organization",
-        name: "IPL Scorebook",
-        url: baseUrl,
-      },
+      question: "What is IPL Scorebook?",
+      answer:
+        "IPL Scorebook is an independent cricket platform focused on IPL live coverage, player research, franchise context and richer matchday pages.",
     },
     {
-      "@context": "https://schema.org",
-      "@type": "Organization",
-      name: "IPL Scorebook",
-      url: baseUrl,
-      logo: `${baseUrl}/jds-ipl-logo-1.png`,
+      question: "Is IPL Scorebook an official IPL website?",
+      answer:
+        "No. It is an independent platform and is not affiliated with the IPL, BCCI or any franchise.",
+    },
+    {
+      question: "How does IPL Scorebook try to improve match coverage?",
+      answer:
+        "By combining live information with original editorial sections, venue notes, player comparisons and connected routes that stay useful before and after the game.",
     },
   ];
 
+  const wordCount = countWords(missionParagraphs, editorialParagraphs);
+
   return (
-    <div className="container" style={{ marginTop: "80px", paddingBottom: "80px" }}>
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }} />
-      <div className="content-wrapper">
-        <h1 className="page-headline text-gradient">About IPL Scorebook</h1>
+    <div className={`container ${styles.page}`}>
+      <JsonLd
+        data={[
+          buildFaqSchema(faqs),
+          buildArticleSchema({
+            headline: "About IPL Scorebook",
+            description:
+              "How IPL Scorebook approaches live scores, player research and content-first cricket coverage.",
+            path: "/about",
+            keywords: ["about ipl scorebook", "ipl cricket platform", "ipl editorial site"],
+          }),
+          buildBreadcrumbSchema([
+            { name: "Home", path: "/" },
+            { name: "About", path: "/about" },
+          ]),
+        ]}
+      />
 
-        <p style={{ fontSize: "18px", color: "#94a3b8", marginBottom: "40px" }}>
-          IPL Scorebook is an independent IPL analytics platform delivering player stats, auction history, live scores and match insights for every season. Check now.
-        </p>
-
-        <div className="grid" style={{ gridTemplateColumns: "1fr", gap: "24px" }}>
-          <div className="info-card hover-scale">
-            <h2 className="section-title" style={{ marginBottom: "16px" }}>
-              <Target className="callout-icon" /> Our Mission for IPL Analytics
-            </h2>
-            <p>
-              Our mission is to provide cricket fans with structured, data-driven IPL insights. We simplify complex statistics and present them in an engaging format.
-            </p>
-          </div>
-
-          <div className="info-card hover-scale">
-            <h2 className="section-title" style={{ marginBottom: "16px" }}>
-              <List className="callout-icon" /> What IPL Scorebook Provides
-            </h2>
-            <ul style={{ margin: 0, paddingLeft: "20px", display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: "10px" }}>
-              <li style={{ color: "#fff" }}>Player performance analytics</li>
-              <li style={{ color: "#fff" }}>IPL auction history and sold prices</li>
-              <li style={{ color: "#fff" }}>Live match score tracking</li>
-              <li style={{ color: "#fff" }}>Team standings and rankings</li>
-              <li style={{ color: "#fff" }}>Orange and Purple Cap leaders</li>
-              <li style={{ color: "#fff" }}>Match predictions and polling</li>
-            </ul>
-          </div>
-
-          <div className="callout-panel hover-scale">
-            <Shield className="callout-icon" size={32} />
-            <div>
-              <h3 style={{ fontSize: "18px", color: "#fff", marginBottom: "8px" }}>Independence Notice</h3>
-              <p style={{ margin: 0, fontSize: "14px" }}>
-                IPL Scorebook is not affiliated with the official IPL governing body or any franchise team. All team names and trademarks belong to their respective owners.
-              </p>
-            </div>
-          </div>
-
-          <div className="info-card hover-scale" style={{ display: "flex", alignItems: "center", gap: "20px" }}>
-            <div style={{ background: "rgba(37, 99, 235, 0.2)", padding: "16px", borderRadius: "50%" }}>
-              <User size={32} color="var(--primary)" />
-            </div>
-            <div>
-              <h3 style={{ fontSize: "18px", color: "#fff", marginBottom: "8px" }}>Founder - Jinesh Dabhi</h3>
-              <p style={{ margin: 0, fontSize: "14px" }}>
-                IPL Scorebook was created to build a modern IPL analytics ecosystem for cricket fans worldwide.
-              </p>
-            </div>
+      <section className={styles.hero}>
+        <div className={styles.heroInner}>
+          <div className={styles.eyebrow}>About The Platform</div>
+          <h1 className={styles.title}>About IPL Scorebook</h1>
+          <p className={styles.subtitle}>
+            An independent IPL content platform focused on live match context, player research,
+            franchise structure and high-trust editorial pages.
+          </p>
+          <div className={styles.metaRow}>
+            <span className={styles.metaBadge}>Independent cricket platform</span>
+            <span className={styles.metaBadge}>Content-first match coverage</span>
+            <span className={styles.metaBadge}>Contact: {CONTACT_EMAIL}</span>
           </div>
         </div>
+      </section>
 
-        <section style={{ marginTop: "32px" }}>
-          <h2 style={{ fontSize: "22px" }}>Explore More IPL Scorebook Pages</h2>
-          <div style={{ display: "flex", gap: "16px", flexWrap: "wrap" }}>
-            <Link href="/contact" className="btn-primary">Contact IPL Scorebook</Link>
-            <Link href="/privacy-policy" className="glass-card" style={{ padding: "10px 18px", textDecoration: "none" }}>
-              Privacy policy
-            </Link>
-            <Link href="/teams" className="glass-card" style={{ padding: "10px 18px", textDecoration: "none" }}>
-              IPL teams and squads
-            </Link>
+      <section className={styles.section}>
+        <div className={styles.splitGrid}>
+          <article className={styles.card}>
+            <h2 className={styles.sectionTitle}>Why We Built This</h2>
+            <div className={styles.textBlock}>
+              {missionParagraphs.map((paragraph) => (
+                <p key={paragraph}>{paragraph}</p>
+              ))}
+            </div>
+          </article>
+
+          <article className={`${styles.card} ${styles.cardAlt}`}>
+            <h2 className={styles.sectionTitle}>What Users Should Expect</h2>
+            <div className={styles.summaryList}>
+              <div className={styles.summaryItem}>
+                <span>Original match summaries and analysis blocks alongside score-driven pages.</span>
+              </div>
+              <div className={styles.summaryItem}>
+                <span>Connected player, team, venue and leaderboard routes instead of isolated pages.</span>
+              </div>
+              <div className={styles.summaryItem}>
+                <span>Clear disclosures when a live field or official lineup has not been confirmed yet.</span>
+              </div>
+              <div className={styles.summaryItem}>
+                <span>Trust signals such as visible last-updated timestamps and contact details.</span>
+              </div>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section className={styles.section}>
+        <div className={styles.card}>
+          <h2 className={styles.sectionTitle}>How The Editorial Model Works</h2>
+          <div className={styles.textBlock}>
+            {editorialParagraphs.map((paragraph) => (
+              <p key={paragraph}>{paragraph}</p>
+            ))}
           </div>
-        </section>
-      </div>
+        </div>
+      </section>
+
+      <InternalLinkGrid
+        title="Explore IPL Scorebook"
+        links={[
+          {
+            href: "/ipl-live-score-today",
+            label: "Live Score Today",
+            description: "See the matchday route that connects live state with editorial context.",
+          },
+          {
+            href: "/players",
+            label: "Player Directory",
+            description: "Browse player profiles, roles and performance context.",
+          },
+          {
+            href: "/ipl-teams",
+            label: "IPL Teams",
+            description: "Open the richer franchise hub with venues, titles and squad context.",
+          },
+          {
+            href: "/contact",
+            label: "Contact",
+            description: "Reach out with feedback, support needs or partnership questions.",
+          },
+        ]}
+      />
+
+      <TrustSignals
+        authorName={DEFAULT_EDITOR_NAME}
+        lastUpdatedLabel={formatEditorialTimestamp()}
+        sourcesNote="About-page content reflects IPL Scorebook's editorial approach, publishing standards and internal data usage across the site."
+        wordCount={wordCount}
+      />
+
+      <FaqSection title="About IPL Scorebook FAQ" faqs={faqs} />
     </div>
   );
 }

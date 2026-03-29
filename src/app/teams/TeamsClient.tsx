@@ -5,15 +5,24 @@ import Link from "next/link";
 import Image from "next/image";
 import { Award, Target, Users } from "lucide-react";
 
-export default function TeamsClient() {
+type TeamsClientProps = {
+  showHeader?: boolean;
+};
+
+export default function TeamsClient({ showHeader = true }: TeamsClientProps) {
   return (
-    <div className="container" style={{ marginTop: "80px", paddingBottom: "80px" }}>
-      <header className="teams-header">
-        <h1 className="teams-title">IPL 2026 Teams and Franchises</h1>
-        <p className="teams-subtitle">
-          The IPL 2026 teams list covers every franchise, squad core, home venue and historical title count. Check now.
-        </p>
-      </header>
+    <div
+      className="container"
+      style={{ marginTop: showHeader ? "80px" : "32px", paddingBottom: "80px" }}
+    >
+      {showHeader ? (
+        <header className="teams-header">
+          <h1 className="teams-title">IPL 2026 Teams and Franchises</h1>
+          <p className="teams-subtitle">
+            The IPL 2026 teams list covers every franchise, squad core, home venue and historical title count. Check now.
+          </p>
+        </header>
+      ) : null}
 
       <div className="teams-grid">
         {TEAMS.map((team) => (
@@ -70,7 +79,7 @@ export default function TeamsClient() {
       <section style={{ marginTop: "40px" }}>
         <h2 style={{ fontSize: "22px" }}>Explore More IPL 2026 Insights</h2>
         <div style={{ display: "flex", gap: "16px", flexWrap: "wrap" }}>
-          <Link href="/ipl-points-table-2026" className="btn-primary">IPL points table and standings</Link>
+          <Link href="/points-table" className="btn-primary">IPL points table and standings</Link>
           <Link href="/players" className="glass-card" style={{ padding: "10px 18px", textDecoration: "none" }}>
             IPL player stats directory
           </Link>

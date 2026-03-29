@@ -7,7 +7,11 @@ import Link from "next/link";
 import Image from "next/image";
 import PlayerAvatar from "@/components/PlayerAvatar";
 
-export default function PlayersClient() {
+type PlayersClientProps = {
+  showHeader?: boolean;
+};
+
+export default function PlayersClient({ showHeader = true }: PlayersClientProps) {
   const [search, setSearch] = useState("");
   const [roleFilter, setRoleFilter] = useState("All");
 
@@ -30,13 +34,18 @@ export default function PlayersClient() {
   };
 
   return (
-    <div className="container" style={{ marginTop: "80px", paddingBottom: "80px" }}>
-      <header style={{ marginBottom: "40px" }}>
-        <h1 className="directory-title">IPL 2026 Player Directory</h1>
-        <p style={{ color: "#94a3b8" }}>
-          The IPL 2026 player directory lets you search by name, role, or franchise to discover the latest player stats and auction prices. Check now.
-        </p>
-      </header>
+    <div
+      className="container"
+      style={{ marginTop: showHeader ? "80px" : "32px", paddingBottom: "80px" }}
+    >
+      {showHeader ? (
+        <header style={{ marginBottom: "40px" }}>
+          <h1 className="directory-title">IPL 2026 Player Directory</h1>
+          <p style={{ color: "#94a3b8" }}>
+            The IPL 2026 player directory lets you search by name, role, or franchise to discover the latest player stats and auction prices. Check now.
+          </p>
+        </header>
+      ) : null}
 
       <div className="glass-card filter-bar">
         <div className="search-box">
@@ -107,7 +116,7 @@ export default function PlayersClient() {
       <section style={{ marginTop: "40px" }}>
         <h2 style={{ fontSize: "22px" }}>Explore Related IPL 2026 Pages</h2>
         <div style={{ display: "flex", gap: "16px", flexWrap: "wrap" }}>
-          <Link href="/teams" className="btn-primary">IPL teams and squads</Link>
+          <Link href="/ipl-teams" className="btn-primary">IPL teams and squads</Link>
           <Link href="/auction" className="glass-card" style={{ padding: "10px 18px", textDecoration: "none" }}>
             IPL 2026 auction results
           </Link>

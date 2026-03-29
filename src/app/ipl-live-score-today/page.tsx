@@ -309,7 +309,7 @@ export default async function IplLiveScoreTodayPage() {
             description: "Ball-by-ball coverage and live scorecards when the match is underway.",
           },
           {
-            href: "/ipl-points-table-2026",
+            href: "/points-table",
             label: "IPL 2026 Points Table",
             description: "Track standings, points and NRR in the season table.",
           },

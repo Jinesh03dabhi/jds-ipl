@@ -3,15 +3,25 @@ import { notFound } from "next/navigation";
 import JsonLd from "@/components/intent/JsonLd";
 import FaqSection, { buildFaqSchema, type FaqItem } from "@/components/intent/FaqSection";
 import InternalLinkGrid from "@/components/intent/InternalLinkGrid";
+import EngagementPanel from "@/components/intent/EngagementPanel";
 import MatchContent from "@/components/intent/MatchContent";
+import MatchEditorialSections from "@/components/intent/MatchEditorialSections";
+import TrustSignals from "@/components/intent/TrustSignals";
 import styles from "@/components/intent/intent.module.css";
 import {
   formatIndiaDateTime,
+  getIplSchedule,
   getKeyPlayers,
   getMatchByDetailSlug,
   getPredictionForMatch,
 } from "@/lib/ipl-data";
-import { SITE_URL } from "@/lib/site";
+import {
+  buildArticleSchema,
+  buildBreadcrumbSchema,
+  formatEditorialTimestamp,
+} from "@/lib/content";
+import { buildMatchEditorial } from "@/lib/match-editorial";
+import { DEFAULT_EDITOR_NAME, SITE_URL } from "@/lib/site";
 
 type PageProps = {
   params: Promise<{
@@ -41,13 +51,32 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
 export default async function MatchPreviewPage({ params }: PageProps) {
   const { matchSlug } = await params;
-  const match = await getMatchByDetailSlug(matchSlug);
+  const [match, schedule] = await Promise.all([
+    getMatchByDetailSlug(matchSlug),
+    getIplSchedule(),
+  ]);
 
   if (!match) {
     notFound();
   }
 
   const prediction = getPredictionForMatch(match);
+  const editorial = buildMatchEditorial(match, "preview");
+  const relatedMatches = schedule.matches
+    .filter((candidate) => {
+      if (candidate.id === match.id) {
+        return false;
+      }
+
+      return (
+        candidate.venueSlug === match.venueSlug ||
+        candidate.team1.name === match.team1.name ||
+        candidate.team1.name === match.team2.name ||
+        candidate.team2.name === match.team1.name ||
+        candidate.team2.name === match.team2.name
+      );
+    })
+    .slice(0, 3);
   const faqs: FaqItem[] = [
     {
       question: `When is ${match.team1.name} vs ${match.team2.name}?`,
@@ -70,6 +99,25 @@ export default async function MatchPreviewPage({ params }: PageProps) {
       <JsonLd
         data={[
           buildFaqSchema(faqs),
+          buildArticleSchema({
+            headline: `${match.team1.name} vs ${match.team2.name} Preview`,
+            description:
+              `${match.team1.name} vs ${match.team2.name} preview with match summary, player analysis, venue insights and FAQ coverage.`,
+            path: `/matches/${matchSlug}`,
+            keywords: [
+              `${match.team1.name} vs ${match.team2.name} preview`,
+              `${match.team1.shortName} vs ${match.team2.shortName} prediction`,
+              "ipl match preview",
+            ],
+          }),
+          buildBreadcrumbSchema([
+            { name: "Home", path: "/" },
+            { name: "Predictions", path: "/predictions" },
+            {
+              name: `${match.team1.shortName} vs ${match.team2.shortName} Preview`,
+              path: `/matches/${matchSlug}`,
+            },
+          ]),
           {
             "@context": "https://schema.org",
             "@type": "SportsEvent",
@@ -151,6 +199,25 @@ export default async function MatchPreviewPage({ params }: PageProps) {
         team2Players={getKeyPlayers(match.team2.name)}
       />
 
+      <MatchEditorialSections editorial={editorial} />
+
+      {relatedMatches.length ? (
+        <InternalLinkGrid
+          title="Related Matches"
+          links={relatedMatches.map((candidate) => ({
+            href: `/matches/${candidate.detailSlug}`,
+            label: `${candidate.team1.shortName} vs ${candidate.team2.shortName}`,
+            description: `${candidate.matchNumber} • ${formatIndiaDateTime(candidate.dateTimeGMT)} IST • ${candidate.venue}`,
+          }))}
+        />
+      ) : null}
+
+      <EngagementPanel
+        pageKey={`match-preview:${match.id}`}
+        title={`${match.team1.name} vs ${match.team2.name} Preview`}
+        path={`/matches/${matchSlug}`}
+      />
+
       <InternalLinkGrid
         title="This Match Loop"
         links={[
@@ -175,6 +242,13 @@ export default async function MatchPreviewPage({ params }: PageProps) {
             description: "Read the venue-specific pitch report for this match.",
           },
         ]}
+      />
+
+      <TrustSignals
+        authorName={DEFAULT_EDITOR_NAME}
+        lastUpdatedLabel={formatEditorialTimestamp()}
+        sourcesNote={editorial.sourcesNote}
+        wordCount={editorial.contentWordCount}
       />
 
       <FaqSection title="Match Preview FAQ" faqs={faqs} />

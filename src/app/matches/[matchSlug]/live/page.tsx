@@ -4,16 +4,26 @@ import { notFound } from "next/navigation";
 import JsonLd from "@/components/intent/JsonLd";
 import FaqSection, { buildFaqSchema, type FaqItem } from "@/components/intent/FaqSection";
 import InternalLinkGrid from "@/components/intent/InternalLinkGrid";
+import EngagementPanel from "@/components/intent/EngagementPanel";
 import MatchContent from "@/components/intent/MatchContent";
+import MatchEditorialSections from "@/components/intent/MatchEditorialSections";
+import TrustSignals from "@/components/intent/TrustSignals";
 import styles from "@/components/intent/intent.module.css";
 import {
   formatIndiaDateTime,
   getIplLiveSnapshot,
+  getIplSchedule,
   getKeyPlayers,
   getMatchByDetailSlug,
   getPredictionForMatch,
 } from "@/lib/ipl-data";
-import { SITE_URL } from "@/lib/site";
+import {
+  buildArticleSchema,
+  buildBreadcrumbSchema,
+  formatEditorialTimestamp,
+} from "@/lib/content";
+import { buildMatchEditorial } from "@/lib/match-editorial";
+import { DEFAULT_EDITOR_NAME, SITE_URL } from "@/lib/site";
 
 type PageProps = {
   params: Promise<{
@@ -40,9 +50,10 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
 export default async function MatchLivePage({ params }: PageProps) {
   const { matchSlug } = await params;
-  const [match, liveSnapshot] = await Promise.all([
+  const [match, liveSnapshot, schedule] = await Promise.all([
     getMatchByDetailSlug(matchSlug),
     getIplLiveSnapshot(),
+    getIplSchedule(),
   ]);
 
   if (!match) {
@@ -51,6 +62,22 @@ export default async function MatchLivePage({ params }: PageProps) {
 
   const isThisMatchLive = liveSnapshot.match?.id === match.id && liveSnapshot.type === "live";
   const prediction = getPredictionForMatch(match);
+  const editorial = buildMatchEditorial(match, "live");
+  const relatedMatches = schedule.matches
+    .filter((candidate) => {
+      if (candidate.id === match.id) {
+        return false;
+      }
+
+      return (
+        candidate.venueSlug === match.venueSlug ||
+        candidate.team1.name === match.team1.name ||
+        candidate.team1.name === match.team2.name ||
+        candidate.team2.name === match.team1.name ||
+        candidate.team2.name === match.team2.name
+      );
+    })
+    .slice(0, 3);
   const faqs: FaqItem[] = [
     {
       question: `Is ${match.team1.name} vs ${match.team2.name} live right now?`,
@@ -75,6 +102,25 @@ export default async function MatchLivePage({ params }: PageProps) {
       <JsonLd
         data={[
           buildFaqSchema(faqs),
+          buildArticleSchema({
+            headline: `${match.team1.name} vs ${match.team2.name} Live Updates`,
+            description:
+              `${match.team1.name} vs ${match.team2.name} live page with editorial analysis, venue insight and reader-friendly matchday context.`,
+            path: `/matches/${matchSlug}/live`,
+            keywords: [
+              `${match.team1.name} vs ${match.team2.name} live`,
+              "ipl live match page",
+              `${match.team1.shortName} vs ${match.team2.shortName} live score`,
+            ],
+          }),
+          buildBreadcrumbSchema([
+            { name: "Home", path: "/" },
+            { name: "Live Score Today", path: "/ipl-live-score-today" },
+            {
+              name: `${match.team1.shortName} vs ${match.team2.shortName} Live`,
+              path: `/matches/${matchSlug}/live`,
+            },
+          ]),
           {
             "@context": "https://schema.org",
             "@type": "SportsEvent",
@@ -168,6 +214,25 @@ export default async function MatchLivePage({ params }: PageProps) {
         team2Players={getKeyPlayers(match.team2.name)}
       />
 
+      <MatchEditorialSections editorial={editorial} />
+
+      {relatedMatches.length ? (
+        <InternalLinkGrid
+          title="Related Matches"
+          links={relatedMatches.map((candidate) => ({
+            href: `/matches/${candidate.detailSlug}`,
+            label: `${candidate.team1.shortName} vs ${candidate.team2.shortName}`,
+            description: `${candidate.matchNumber} • ${formatIndiaDateTime(candidate.dateTimeGMT)} IST • ${candidate.venue}`,
+          }))}
+        />
+      ) : null}
+
+      <EngagementPanel
+        pageKey={`match-live:${match.id}`}
+        title={`${match.team1.name} vs ${match.team2.name} Live Page`}
+        path={`/matches/${matchSlug}/live`}
+      />
+
       <InternalLinkGrid
         title="Live Match Navigation"
         links={[
@@ -192,6 +257,13 @@ export default async function MatchLivePage({ params }: PageProps) {
             description: "Review the venue conditions tied to this match.",
           },
         ]}
+      />
+
+      <TrustSignals
+        authorName={DEFAULT_EDITOR_NAME}
+        lastUpdatedLabel={formatEditorialTimestamp()}
+        sourcesNote={editorial.sourcesNote}
+        wordCount={editorial.contentWordCount}
       />
 
       <FaqSection title="Match Live Page FAQ" faqs={faqs} />

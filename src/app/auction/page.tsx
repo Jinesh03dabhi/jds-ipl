@@ -69,7 +69,7 @@ export default function AuctionDashboard() {
         name: "IPL Scorebook",
         url: baseUrl,
       },
-      license: `${baseUrl}/terms-conditions`,
+      license: `${baseUrl}/terms`,
       inLanguage: "en-IN",
     },
     {

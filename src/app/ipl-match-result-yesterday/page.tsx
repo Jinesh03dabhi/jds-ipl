@@ -294,7 +294,7 @@ export default async function IplMatchResultYesterdayPage() {
             description: "Move from yesterday&apos;s answer into today&apos;s verified match status.",
           },
           {
-            href: "/ipl-points-table-2026",
+            href: "/points-table",
             label: "Points Table 2026",
             description: "See whether the latest result changed points and NRR.",
           },

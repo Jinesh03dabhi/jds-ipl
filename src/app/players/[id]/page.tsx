@@ -187,7 +187,7 @@ export default async function PlayerProfile({ params }: Props) {
               <h3 className="profile-role">{player.role} role</h3>
 
               <div className="profile-team">
-                <Link href="/teams" style={{ textDecoration: "none", color: "inherit" }}>
+                <Link href="/ipl-teams" style={{ textDecoration: "none", color: "inherit" }}>
                   <Image
                     src={getTeamLogo(player.currentTeam)}
                     alt={`${player.currentTeam} IPL team logo`}
@@ -260,7 +260,7 @@ export default async function PlayerProfile({ params }: Props) {
         <h2 style={{ fontSize: "22px" }}>More IPL 2026 Resources</h2>
         <div style={{ display: "flex", gap: "16px", flexWrap: "wrap" }}>
           <Link href="/players" className="btn-primary">IPL player stats directory</Link>
-          <Link href="/teams" className="glass-card" style={{ padding: "10px 18px", textDecoration: "none" }}>
+          <Link href="/ipl-teams" className="glass-card" style={{ padding: "10px 18px", textDecoration: "none" }}>
             IPL teams and squads
           </Link>
           <Link href="/auction" className="glass-card" style={{ padding: "10px 18px", textDecoration: "none" }}>

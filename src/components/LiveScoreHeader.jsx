@@ -68,7 +68,7 @@ export default function LiveScoreHeader({ data }) {
             />
           )}
           <div>
-            <Link href="/teams" className="team-name" style={{ textDecoration: 'none', color: 'inherit' }}>
+            <Link href="/ipl-teams" className="team-name" style={{ textDecoration: 'none', color: 'inherit' }}>
               {team1?.name || "-"}
             </Link>
             <div className="team-abbr">{team1?.shortname || ""}</div>
@@ -96,7 +96,7 @@ export default function LiveScoreHeader({ data }) {
         {/* TEAM 2 */}
         <div className="premium-team premium-right">
           <div>
-            <Link href="/teams" className="team-name" style={{ textDecoration: 'none', color: 'inherit' }}>
+            <Link href="/ipl-teams" className="team-name" style={{ textDecoration: 'none', color: 'inherit' }}>
               {team2?.name || "-"}
             </Link>
             <div className="team-abbr">{team2?.shortname || ""}</div>

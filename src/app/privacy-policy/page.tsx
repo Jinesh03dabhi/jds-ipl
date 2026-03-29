@@ -1,128 +1,137 @@
 import type { Metadata } from "next";
-import { ShieldCheck, Database, Cookie, Lock, Mail } from "lucide-react";
-import Link from "next/link";
+import JsonLd from "@/components/intent/JsonLd";
+import FaqSection, { buildFaqSchema, type FaqItem } from "@/components/intent/FaqSection";
+import InternalLinkGrid from "@/components/intent/InternalLinkGrid";
+import TrustSignals from "@/components/intent/TrustSignals";
+import styles from "@/components/intent/intent.module.css";
+import {
+  buildArticleSchema,
+  buildBreadcrumbSchema,
+  countWords,
+  formatEditorialTimestamp,
+} from "@/lib/content";
+import { CONTACT_EMAIL, DEFAULT_EDITOR_NAME, SITE_URL } from "@/lib/site";
 
-const baseUrl = "https://jds-ipl.vercel.app";
+const pageUrl = `${SITE_URL}/privacy-policy`;
 
 export const metadata: Metadata = {
-  title: "IPL Scorebook Privacy Policy | IPL Scorebook",
+  title: "IPL Scorebook Privacy Policy",
   description:
-    "Read the IPL Scorebook privacy policy covering data usage, cookies, analytics, and user protections across our IPL analytics platform. Check now.",
-  keywords: [
-    "ipl scorebook privacy policy",
-    "ipl analytics privacy",
-    "cookie policy",
-    "data usage",
-    "user privacy",
-  ],
-  robots: {
-    index: true,
-    follow: true,
-  },
+    "Read how IPL Scorebook handles analytics, cookies, support messages and basic user privacy across the platform.",
   alternates: {
-    canonical: `${baseUrl}/privacy-policy`,
-    languages: {
-      en: `${baseUrl}/privacy-policy`,
-    },
-  },
-  openGraph: {
-    title: "IPL Scorebook Privacy Policy | IPL Scorebook",
-    description:
-      "Read the IPL Scorebook privacy policy covering data usage, cookies, analytics, and user protections across our IPL analytics platform. Check now.",
-    url: `${baseUrl}/privacy-policy`,
-    type: "website",
-    siteName: "IPL Scorebook",
-    locale: "en_IN",
-    images: [
-      {
-        url: `${baseUrl}/opengraph-image`,
-        width: 1200,
-        height: 630,
-        alt: "IPL Scorebook privacy policy preview",
-      },
-    ],
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "IPL Scorebook Privacy Policy | IPL Scorebook",
-    description:
-      "Read the IPL Scorebook privacy policy covering data usage, cookies, analytics, and user protections across our IPL analytics platform. Check now.",
-    images: [`${baseUrl}/opengraph-image`],
+    canonical: pageUrl,
   },
 };
 
 export default function PrivacyPolicyPage() {
-  const structuredData = {
-    "@context": "https://schema.org",
-    "@type": "PrivacyPolicy",
-    name: "IPL Scorebook Privacy Policy",
-    url: `${baseUrl}/privacy-policy`,
-    description:
-      "Privacy policy describing data usage, cookies and user protections on IPL Scorebook.",
-  };
+  const paragraphs = [
+    "Privacy policies are strongest when they explain the real behavior of a site in plain language. IPL Scorebook is a cricket content platform, so most of the information flowing through the site relates to page views, navigation behavior, analytics signals and any direct messages a user sends through the published contact methods. We do not ask readers to create a public account just to browse score pages, player directories or team hubs, which means our privacy model is lighter than a full social platform. Even so, users deserve clarity about what may be collected and why.",
+    "Like most modern websites, IPL Scorebook may rely on standard analytics and infrastructure signals to understand which pages are working well, where performance issues appear and how readers move through the site. That can include browser type, approximate device information, referrer data and general usage patterns. This data helps us improve page speed, fix thin or confusing routes, and understand which content journeys are most useful. It is not used to create public user profiles, and we try to keep collection aligned with practical product improvement rather than unnecessary expansion.",
+    "Cookies and similar technologies may be used to support analytics, session continuity and, where enabled, advertising systems. That matters because sports sites often need to balance fast page loads with reliable analytics and monetization controls. Our policy approach is to keep monetization subordinate to user experience. In practice, that means we do not intentionally place ads on empty or low-value screens, and we use content thresholds and page structure rules to keep advertising aligned with meaningful editorial content.",
+    `If a user contacts IPL Scorebook directly at ${CONTACT_EMAIL} or through the public support channels, we may retain that message long enough to respond, resolve the issue or maintain a basic support history. We do not sell direct-contact information as a standalone asset. We also do not claim perfect technical immunity from all third-party risk; any site that uses analytics, hosting or external scripts depends partly on those services' own privacy and security standards. That is why this page should be read alongside their applicable policies where relevant.`,
+    "Users who prefer not to share optional data can usually do so by limiting direct outreach, adjusting browser cookie controls or using privacy-oriented browsing settings. Because the site does not require a reader login for normal use, most visitors can access the core cricket content with relatively limited data exchange. If policy changes are needed as the platform evolves, this page will be updated with a fresh timestamp so the change history remains visible.",
+  ];
+
+  const faqs: FaqItem[] = [
+    {
+      question: "What user data does IPL Scorebook collect?",
+      answer:
+        "The site may collect basic analytics and technical usage information plus any details a user shares directly through contact channels.",
+    },
+    {
+      question: "Does IPL Scorebook use cookies?",
+      answer:
+        "Yes. Cookies or similar technologies may be used for analytics, site functionality and content-safe advertising systems where enabled.",
+    },
+    {
+      question: "How can I ask a privacy-related question?",
+      answer:
+        `You can contact IPL Scorebook directly at ${CONTACT_EMAIL} for privacy or data-handling questions.`,
+    },
+  ];
+
+  const wordCount = countWords(paragraphs);
 
   return (
-    <div className="container" style={{ marginTop: "80px", paddingBottom: "80px" }}>
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }} />
-      <div className="content-wrapper">
-        <h1 className="page-headline text-gradient">IPL Scorebook Privacy Policy</h1>
+    <div className={`container ${styles.page}`}>
+      <JsonLd
+        data={[
+          buildFaqSchema(faqs),
+          buildArticleSchema({
+            headline: "IPL Scorebook Privacy Policy",
+            description:
+              "How IPL Scorebook handles analytics, cookies, support messages and user privacy.",
+            path: "/privacy-policy",
+            keywords: ["privacy policy", "cookie policy", "ipl scorebook privacy"],
+          }),
+          buildBreadcrumbSchema([
+            { name: "Home", path: "/" },
+            { name: "Privacy Policy", path: "/privacy-policy" },
+          ]),
+        ]}
+      />
 
-        <p style={{ fontSize: "18px", color: "#94a3b8", marginBottom: "40px" }}>
-          The IPL Scorebook privacy policy explains how we collect, use and protect data for IPL analytics and live score experiences. Check now.
-        </p>
-
-        <div className="grid" style={{ gridTemplateColumns: "1fr", gap: "24px" }}>
-          <div className="info-card hover-scale">
-            <h2 className="section-title">
-              <Database className="callout-icon" /> Information We Collect
-            </h2>
-            <p style={{ margin: 0 }}>
-              We may collect basic analytics data such as browser type, pages visited and device information to improve user experience.
-            </p>
-          </div>
-
-          <div className="info-card hover-scale">
-            <h2 className="section-title">
-              <Cookie className="callout-icon" /> Cookies
-            </h2>
-            <p style={{ margin: 0 }}>
-              IPL Scorebook may use cookies to enhance browsing experience and analyze traffic performance. By using our website, you agree to cookie usage.
-            </p>
-          </div>
-
-          <div className="info-card hover-scale">
-            <h2 className="section-title">
-              <Lock className="callout-icon" /> Third-Party Services
-            </h2>
-            <p style={{ margin: 0 }}>
-              We may use third-party services such as analytics tools or advertising partners that collect limited information according to their privacy policies.
-            </p>
-          </div>
-
-          <div className="highlight-box hover-scale" style={{ display: "flex", alignItems: "center", gap: "20px" }}>
-            <Mail size={32} color="var(--primary)" />
-            <div>
-              <h3 style={{ fontSize: "18px", color: "#fff", marginBottom: "8px" }}>Contact Us</h3>
-              <p style={{ margin: 0, fontSize: "14px" }}>
-                If you have questions about this IPL Scorebook privacy policy, please contact us through our Contact page.
-              </p>
-            </div>
+      <section className={styles.hero}>
+        <div className={styles.heroInner}>
+          <div className={styles.eyebrow}>Privacy And Data Use</div>
+          <h1 className={styles.title}>IPL Scorebook Privacy Policy</h1>
+          <p className={styles.subtitle}>
+            A plain-language explanation of how analytics, cookies, support messages and platform
+            usage data are handled across IPL Scorebook.
+          </p>
+          <div className={styles.metaRow}>
+            <span className={styles.metaBadge}>Lightweight browsing model</span>
+            <span className={styles.metaBadge}>No required user login for core pages</span>
+            <span className={styles.metaBadge}>Privacy contact: {CONTACT_EMAIL}</span>
           </div>
         </div>
+      </section>
 
-        <section style={{ marginTop: "32px" }}>
-          <h2 style={{ fontSize: "22px" }}>Related IPL Scorebook Pages</h2>
-          <div style={{ display: "flex", gap: "16px", flexWrap: "wrap" }}>
-            <Link href="/contact" className="btn-primary">Contact IPL Scorebook</Link>
-            <Link href="/terms-conditions" className="glass-card" style={{ padding: "10px 18px", textDecoration: "none" }}>
-              Terms and conditions
-            </Link>
-            <Link href="/disclaimer" className="glass-card" style={{ padding: "10px 18px", textDecoration: "none" }}>
-              Disclaimer page
-            </Link>
+      <section className={styles.section}>
+        <div className={styles.card}>
+          <h2 className={styles.sectionTitle}>Privacy Overview</h2>
+          <div className={styles.textBlock}>
+            {paragraphs.map((paragraph) => (
+              <p key={paragraph}>{paragraph}</p>
+            ))}
           </div>
-        </section>
-      </div>
+        </div>
+      </section>
+
+      <InternalLinkGrid
+        title="Related Trust Pages"
+        links={[
+          {
+            href: "/terms",
+            label: "Terms",
+            description: "Review platform-use expectations alongside this privacy policy.",
+          },
+          {
+            href: "/contact",
+            label: "Contact",
+            description: "Reach out directly for privacy or support questions.",
+          },
+          {
+            href: "/about",
+            label: "About",
+            description: "Read how the site approaches editorial transparency and data-backed pages.",
+          },
+          {
+            href: "/disclaimer",
+            label: "Disclaimer",
+            description: "See the platform's broader disclosure language for independent coverage.",
+          },
+        ]}
+      />
+
+      <TrustSignals
+        authorName={DEFAULT_EDITOR_NAME}
+        lastUpdatedLabel={formatEditorialTimestamp()}
+        sourcesNote="This privacy policy describes IPL Scorebook's current handling of analytics, cookies and direct user contact. Third-party services may apply their own policies where relevant."
+        wordCount={wordCount}
+      />
+
+      <FaqSection title="Privacy Policy FAQ" faqs={faqs} />
     </div>
   );
 }

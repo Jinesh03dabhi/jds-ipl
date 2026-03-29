@@ -1,8 +1,11 @@
-import type { PointsTableRow } from "@/lib/ipl-data";
+import Image from "next/image";
 import styles from "./intent.module.css";
+import type { PointsTableEntry } from "@/lib/points-table";
 
 type PointsTablePanelProps = {
-  rows: PointsTableRow[];
+  rows: PointsTableEntry[];
+  lastUpdatedLabel?: string | null;
+  isRealtime?: boolean;
 };
 
 const formTone = (token: "W" | "L" | "NR" | "T") => {
@@ -11,38 +14,121 @@ const formTone = (token: "W" | "L" | "NR" | "T") => {
   return styles.formNeutral;
 };
 
-export default function PointsTablePanel({ rows }: PointsTablePanelProps) {
+function renderPositionChange(positionChange: number) {
+  if (positionChange > 0) {
+    return (
+      <span className={styles.positionUp}>
+        {"\u2191"} {positionChange}
+      </span>
+    );
+  }
+
+  if (positionChange < 0) {
+    return (
+      <span className={styles.positionDown}>
+        {"\u2193"} {Math.abs(positionChange)}
+      </span>
+    );
+  }
+
+  return <span className={styles.positionFlat}>-</span>;
+}
+
+export default function PointsTablePanel({
+  rows,
+  lastUpdatedLabel = null,
+  isRealtime = false,
+}: PointsTablePanelProps) {
+  const hasAppliedResults = rows.some((row) => row.played > 0);
+
   return (
     <section className={styles.section}>
-      <h2 className={styles.sectionTitle}>IPL 2026 Points Table</h2>
+      <div className={styles.tableHeader}>
+        <h2 className={styles.sectionTitle}>IPL 2026 Points Table</h2>
+        <div className={styles.tableMeta}>
+          <span className={styles.metaBadge}>
+            {isRealtime
+              ? "Live client updates active"
+              : hasAppliedResults
+                ? "Results synced from schedule feed"
+                : "Server-seeded standings"}
+          </span>
+          {lastUpdatedLabel ? (
+            <span className={styles.metaBadge}>Updated: {lastUpdatedLabel}</span>
+          ) : null}
+        </div>
+      </div>
+
       <div className={styles.tableWrap}>
         <table className={styles.table}>
           <thead>
             <tr>
               <th>Pos</th>
               <th>Team</th>
-              <th>P</th>
+              <th>M</th>
               <th>W</th>
               <th>L</th>
               <th>NR</th>
               <th>Pts</th>
               <th>NRR</th>
+              <th>Last</th>
               <th>Form</th>
             </tr>
           </thead>
           <tbody>
-            {rows.map((row, index) => (
-              <tr key={row.team.name}>
-                <td>{index + 1}</td>
-                <td className={styles.teamCell}>{row.team.name}</td>
+            {rows.map((row) => (
+              <tr
+                key={row.team.name}
+                className={row.isPlayoffZone ? styles.playoffRow : undefined}
+              >
+                <td>
+                  <div className={styles.positionCell}>
+                    <span className={styles.positionBadge}>{row.position}</span>
+                    {renderPositionChange(row.positionChange)}
+                  </div>
+                </td>
+                <td className={styles.teamCell}>
+                  <div className={styles.teamIdentity}>
+                    <Image
+                      src={row.team.logo}
+                      alt={`${row.team.name} logo`}
+                      width={30}
+                      height={30}
+                      className={styles.tableTeamLogo}
+                    />
+                    <div className={styles.teamIdentityText}>
+                      <span>{row.team.name}</span>
+                      {row.isPlayoffZone ? (
+                        <span className={styles.playoffBadge}>Top 4</span>
+                      ) : null}
+                    </div>
+                  </div>
+                </td>
                 <td>{row.played}</td>
-                <td className={styles.positive}>{row.wins}</td>
-                <td className={styles.negative}>{row.losses}</td>
+                <td className={styles.positive}>{row.won}</td>
+                <td className={styles.negative}>{row.lost}</td>
                 <td>{row.noResult}</td>
                 <td>{row.points}</td>
-                <td className={row.nrr > 0 ? styles.positive : row.nrr < 0 ? styles.negative : styles.neutral}>
-                  {row.nrr > 0 ? "+" : ""}
-                  {row.nrr.toFixed(3)}
+                <td
+                  className={
+                    row.netRunRate > 0
+                      ? styles.positive
+                      : row.netRunRate < 0
+                        ? styles.negative
+                        : styles.neutral
+                  }
+                >
+                  {row.netRunRate > 0 ? "+" : ""}
+                  {row.netRunRate.toFixed(3)}
+                </td>
+                <td>
+                  <span
+                    className={`${styles.formBadge} ${
+                      row.lastMatchResult ? formTone(row.lastMatchResult) : styles.formNeutral
+                    }`}
+                  >
+                    {row.lastMatchResult || "-"}
+                  </span>
                 </td>
                 <td>
                   <div className={styles.formRow}>
@@ -66,7 +152,8 @@ export default function PointsTablePanel({ rows }: PointsTablePanelProps) {
         </table>
       </div>
       <div className={styles.smallText}>
-        NRR is derived from completed match scorelines available in the current schedule feed. If the season has not started yet, every team remains on zero points.
+        The table auto-applies completed matches, sorts by points and NRR, highlights the playoff
+        zone, and keeps rank movement stable between updates.
       </div>
     </section>
   );

@@ -216,7 +216,7 @@ export default function AuctionClient() {
         <h2 style={{ fontSize: "22px" }}>Explore More IPL 2026 Data</h2>
         <div style={{ display: "flex", gap: "16px", flexWrap: "wrap" }}>
           <Link href="/players" className="btn-primary">IPL 2026 player stats directory</Link>
-          <Link href="/teams" className="glass-card" style={{ padding: "10px 18px", textDecoration: "none" }}>
+          <Link href="/ipl-teams" className="glass-card" style={{ padding: "10px 18px", textDecoration: "none" }}>
             IPL teams and squads overview
           </Link>
           <Link href="/top-10-expensive-ipl-players" className="glass-card" style={{ padding: "10px 18px", textDecoration: "none" }}>

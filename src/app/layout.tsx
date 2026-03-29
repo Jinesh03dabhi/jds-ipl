@@ -4,7 +4,7 @@ import "./globals.css";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import Script from "next/script";
-
+import { ADSENSE_CLIENT_ID, ADSENSE_ENABLED } from "@/lib/ads";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -99,19 +99,13 @@ export default function RootLayout({
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
         <link rel="preconnect" href="https://api.cricapi.com" />
 
-        {/* Google AdSense */}
-        <script
-          async
-          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3689941361378688"
-          crossOrigin="anonymous"
-        ></script>
-
-        {/* AMP Auto Ads */}
-        <script
-          async
-          custom-element="amp-auto-ads"
-          src="https://cdn.ampproject.org/v0/amp-auto-ads-0.1.js"
-        ></script>
+        {ADSENSE_ENABLED ? (
+          <Script
+            src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${ADSENSE_CLIENT_ID}`}
+            strategy="afterInteractive"
+            crossOrigin="anonymous"
+          />
+        ) : null}
 
         <Script
           src="https://www.googletagmanager.com/gtag/js?id=G-PXSNXGLE6N"
@@ -135,8 +129,6 @@ export default function RootLayout({
           minHeight: "100vh",
         }}
       >
-        <div dangerouslySetInnerHTML={{ __html: '<amp-auto-ads type="adsense" data-ad-client="ca-pub-3689941361378688"></amp-auto-ads>' }} />
-
         <Navbar />
 
         <main
