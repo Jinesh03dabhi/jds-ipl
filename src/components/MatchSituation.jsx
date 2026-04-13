@@ -3,128 +3,99 @@
 import { getMatchState } from "@/utils/getMatchState";
 import WinnerCard from "@/components/WinnerCard";
 
-export default function MatchSituation({ data }) {
+function parseScore(scoreText) {
+  if (!scoreText) {
+    return null;
+  }
 
+  const match = String(scoreText).match(/(\d+)\/(\d+)\s+\(([\d.]+)\)/);
+  if (!match) {
+    return null;
+  }
+
+  return {
+    runs: Number(match[1]),
+    wickets: Number(match[2]),
+    overs: match[3],
+  };
+}
+
+function oversToBalls(overs) {
+  const [full, balls] = String(overs || "0").split(".");
+  return Number(full) * 6 + Number(balls || 0);
+}
+
+export default function MatchSituation({ data }) {
   const matchState = getMatchState(data);
 
   if (matchState !== "live" && matchState !== "completed") return null;
 
-  const status = (data?.match?.status || "").toLowerCase();
+  const match = data?.match;
+  const score1 = parseScore(match?.score?.team1);
+  const score2 = parseScore(match?.score?.team2);
+  const summaryLine = match?.liveContext?.chaseText || match?.liveContext?.commentary || data?.message;
 
-  // ⭐ Finished Match Detection
-  if (
-    status.includes("won") ||
-    status.includes("tie") ||
-    status.includes("no result") ||
-    status.includes("abandoned")
-  ) {
-    return <WinnerCard teamName={data?.match?.status} />;
+  if (matchState === "completed") {
+    return <WinnerCard teamName={match?.result || match?.winner || "Match completed"} />;
   }
 
-  /* ----------------------------------------------------
-     USE match.score FOR SITUATION (NOT scorecard.scorecard)
-  ---------------------------------------------------- */
-
-  const scores = data?.match?.score || [];
-
-  if (!scores.length) {
-    return (
-      <div className="glass-card">
-        Waiting for innings to begin…
-      </div>
-    );
+  if (!score1 && !score2) {
+    return <div className="glass-card">{summaryLine || "Waiting for innings to begin..."}</div>;
   }
 
-  // ⭐ If only 1 innings → first innings in progress
-  if (scores.length < 2) {
+  if (score1 && !score2) {
     return (
       <div className="glass-card">
-        <h3>Match Situation</h3>
+        <h3 style={{ marginBottom: 16 }}>Match Situation</h3>
         <div style={{ opacity: 0.7 }}>
-          First innings in progress
+          {summaryLine || `${match?.team2?.shortName || "Chasing side"} have not started the chase yet.`}
         </div>
       </div>
     );
   }
 
-  const firstInnings = scores[0];
-  const secondInnings = scores[1];
-
-  const target = firstInnings?.r
-    ? Number(firstInnings.r) + 1
-    : null;
-
-  if (!target) {
-    return (
-      <div className="glass-card">
-        Match in progress
-      </div>
-    );
+  if (!score1 || !score2) {
+    return <div className="glass-card">{summaryLine || "Match in progress"}</div>;
   }
 
-  const runsScored = Number(secondInnings?.r ?? 0);
-  const oversValue = secondInnings?.o ?? 0;
-
-  const convertOversToBalls = (overs) => {
-    if (!overs && overs !== 0) return 0;
-    const [full, balls] = overs.toString().split(".");
-    return Number(full) * 6 + Number(balls || 0);
-  };
-
-  const ballsBowled = convertOversToBalls(oversValue);
-
-  const format = data?.match?.matchType?.toLowerCase();
-
-  let totalBalls = null;
-
-  if (format === "t20") totalBalls = 20 * 6;
-  if (format === "odi") totalBalls = 50 * 6;
-
-  if (!totalBalls) {
-    return (
-      <div className="glass-card">
-        Match in progress
-      </div>
-    );
-  }
-
+  const target = score1.runs + 1;
+  const ballsBowled = oversToBalls(score2.overs);
+  const totalBalls = 20 * 6;
   const ballsRemaining = Math.max(totalBalls - ballsBowled, 0);
-  const runsNeeded = Math.max(target - runsScored, 0);
-
-  const requiredRR =
-    ballsRemaining > 0
-      ? ((runsNeeded / ballsRemaining) * 6).toFixed(2)
-      : "-";
+  const runsNeeded = Math.max(target - score2.runs, 0);
+  const requiredRR = ballsRemaining > 0 ? ((runsNeeded / ballsRemaining) * 6).toFixed(2) : "-";
 
   return (
     <div className="glass-card">
-
       <h3 style={{ marginBottom: 16 }}>Match Situation</h3>
 
       <div className="situation-grid">
-
         <div className="situation-box">
           <span className="label">Target</span>
-          <span style={{margin:"5px"}} className=" value">{target}</span>
+          <span style={{ margin: "5px" }} className="value">{target}</span>
         </div>
 
         <div className="situation-box">
           <span className="label">Runs Needed</span>
-          <span style={{margin:"5px"}} className="value">{runsNeeded}</span>
+          <span style={{ margin: "5px" }} className="value">{runsNeeded}</span>
         </div>
 
         <div className="situation-box">
           <span className="label">Balls Left</span>
-          <span style={{margin:"5px"}} className="value">{ballsRemaining}</span>
+          <span style={{ margin: "5px" }} className="value">{ballsRemaining}</span>
         </div>
 
         <div className="situation-box">
           <span className="label">Req. Run Rate</span>
-          <span style={{margin:"5px"}} className="value">{requiredRR}</span>
+          <span style={{ margin: "5px" }} className="value">{requiredRR}</span>
         </div>
-
       </div>
 
+      {summaryLine && (
+        <div style={{ marginTop: 16, opacity: 0.7 }}>
+          {summaryLine}
+        </div>
+      )}
     </div>
   );
 }

@@ -416,6 +416,15 @@ export async function fetchCricApiJson(requestPath: string) {
     return entry.inFlight;
   }
 
+  if (entry.retryAfter > now && !entry.payload) {
+    logClient("Skipping request during cooldown", {
+      requestPath,
+      retryAfter: new Date(entry.retryAfter).toISOString(),
+      lastError: entry.lastError,
+    });
+    return null;
+  }
+
   if (entry.payload && entry.retryAfter > now) {
     logClient("Cache STALE-HIT during cooldown", requestPath);
     return entry.payload;

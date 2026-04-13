@@ -1,6 +1,11 @@
 import { unstable_cache } from "next/cache";
 import { fetchCricApiJson } from "@/lib/cricapi-client";
 import { PLAYERS, TEAMS } from "@/lib/data";
+import {
+  discoverOfficialIplCompetition,
+  fetchOfficialIplScheduleFeed,
+  type OfficialIplCompetition,
+} from "@/lib/ipl-official-client";
 import { IPL_SEASON_YEAR, IPL_TIMEZONE } from "@/lib/site";
 
 export type MatchStatus = "upcoming" | "live" | "completed";
@@ -27,8 +32,36 @@ type InningScoreSummary = {
 export type IplSeries = {
   id: string;
   name: string;
-  startDate: string;
-  endDate: string;
+  startDate: string | null;
+  endDate: string | null;
+};
+
+export type LiveBatterSummary = {
+  name: string;
+  runs: number | null;
+  balls: number | null;
+  fours: number | null;
+  sixes: number | null;
+  strikeRate: number | null;
+  image: string | null;
+};
+
+export type LiveBowlerSummary = {
+  name: string;
+  overs: string | null;
+  runs: number | null;
+  wickets: number | null;
+  maidens: number | null;
+  economy: number | null;
+  image: string | null;
+};
+
+export type MatchLiveContext = {
+  commentary: string | null;
+  chaseText: string | null;
+  currentInnings: number | null;
+  currentBatters: LiveBatterSummary[];
+  currentBowler: LiveBowlerSummary | null;
 };
 
 export type IplMatch = {
@@ -49,12 +82,13 @@ export type IplMatch = {
   detailSlug: string;
   tossWinner?: string | null;
   tossChoice?: string | null;
+  liveContext?: MatchLiveContext | null;
 };
 
 export type IplScheduleResponse = {
   matches: IplMatch[];
   lastUpdated: string;
-  source: "cricapi" | "official-seed";
+  source: "official-feed" | "cricapi" | "unavailable";
   series: IplSeries | null;
 };
 
@@ -142,76 +176,6 @@ const PITCH_SLUG_ALIASES = new Map([
 
 const teamIndex = new Map(TEAMS.map((team) => [team.name, team]));
 const IPL_CACHE_VERSION = "2026-03-29-points-table-fix-v2";
-
-const OFFICIAL_PHASE_ONE_MATCHES: IplMatch[] = [
-  seedMatch("match-1", "Match 1", "2026-03-28", "2026-03-28T14:00:00Z", "Royal Challengers Bengaluru", "Sunrisers Hyderabad", "M. Chinnaswamy Stadium, Bengaluru"),
-  seedMatch("match-2", "Match 2", "2026-03-29", "2026-03-29T14:00:00Z", "Mumbai Indians", "Kolkata Knight Riders", "Wankhede Stadium, Mumbai"),
-  seedMatch("match-3", "Match 3", "2026-03-30", "2026-03-30T14:00:00Z", "Rajasthan Royals", "Chennai Super Kings", "Barsapara Cricket Stadium, Guwahati"),
-  seedMatch("match-4", "Match 4", "2026-03-31", "2026-03-31T14:00:00Z", "Punjab Kings", "Gujarat Titans", "New PCA Stadium, New Chandigarh"),
-  seedMatch("match-5", "Match 5", "2026-04-01", "2026-04-01T14:00:00Z", "Lucknow Super Giants", "Delhi Capitals", "Ekana Cricket Stadium, Lucknow"),
-  seedMatch("match-6", "Match 6", "2026-04-02", "2026-04-02T14:00:00Z", "Kolkata Knight Riders", "Sunrisers Hyderabad", "Eden Gardens, Kolkata"),
-  seedMatch("match-7", "Match 7", "2026-04-03", "2026-04-03T14:00:00Z", "Chennai Super Kings", "Punjab Kings", "M. A. Chidambaram Stadium, Chennai"),
-  seedMatch("match-8", "Match 8", "2026-04-04", "2026-04-04T10:00:00Z", "Delhi Capitals", "Mumbai Indians", "Arun Jaitley Stadium, Delhi"),
-  seedMatch("match-9", "Match 9", "2026-04-04", "2026-04-04T14:00:00Z", "Gujarat Titans", "Rajasthan Royals", "Narendra Modi Stadium, Ahmedabad"),
-  seedMatch("match-10", "Match 10", "2026-04-05", "2026-04-05T10:00:00Z", "Sunrisers Hyderabad", "Lucknow Super Giants", "Rajiv Gandhi International Stadium, Hyderabad"),
-  seedMatch("match-11", "Match 11", "2026-04-05", "2026-04-05T14:00:00Z", "Royal Challengers Bengaluru", "Chennai Super Kings", "M. Chinnaswamy Stadium, Bengaluru"),
-  seedMatch("match-12", "Match 12", "2026-04-06", "2026-04-06T14:00:00Z", "Kolkata Knight Riders", "Punjab Kings", "Eden Gardens, Kolkata"),
-  seedMatch("match-13", "Match 13", "2026-04-07", "2026-04-07T14:00:00Z", "Rajasthan Royals", "Mumbai Indians", "Barsapara Cricket Stadium, Guwahati"),
-  seedMatch("match-14", "Match 14", "2026-04-08", "2026-04-08T14:00:00Z", "Delhi Capitals", "Gujarat Titans", "Arun Jaitley Stadium, Delhi"),
-  seedMatch("match-15", "Match 15", "2026-04-09", "2026-04-09T14:00:00Z", "Kolkata Knight Riders", "Lucknow Super Giants", "Eden Gardens, Kolkata"),
-  seedMatch("match-16", "Match 16", "2026-04-10", "2026-04-10T14:00:00Z", "Rajasthan Royals", "Royal Challengers Bengaluru", "Barsapara Cricket Stadium, Guwahati"),
-  seedMatch("match-17", "Match 17", "2026-04-11", "2026-04-11T10:00:00Z", "Punjab Kings", "Sunrisers Hyderabad", "New PCA Stadium, New Chandigarh"),
-  seedMatch("match-18", "Match 18", "2026-04-11", "2026-04-11T14:00:00Z", "Chennai Super Kings", "Delhi Capitals", "M. A. Chidambaram Stadium, Chennai"),
-  seedMatch("match-19", "Match 19", "2026-04-12", "2026-04-12T10:00:00Z", "Lucknow Super Giants", "Gujarat Titans", "Ekana Cricket Stadium, Lucknow"),
-  seedMatch("match-20", "Match 20", "2026-04-12", "2026-04-12T14:00:00Z", "Mumbai Indians", "Royal Challengers Bengaluru", "Wankhede Stadium, Mumbai"),
-];
-
-const MANUAL_MATCH_OVERRIDES = [
-  {
-    dateTimeGMT: "2026-03-28T14:00:00Z",
-    team1: "Royal Challengers Bengaluru",
-    team2: "Sunrisers Hyderabad",
-    status: "completed" as const,
-    result: "Royal Challengers Bengaluru won by 6 wkts",
-    winner: "Royal Challengers Bengaluru",
-    score: {
-      team1: "203/4 (15.4)",
-      team2: "201/9 (20)",
-    } satisfies MatchScore,
-    tossWinner: "Royal Challengers Bengaluru",
-    tossChoice: "bowl",
-  },
-];
-
-function seedMatch(
-  id: string,
-  matchNumber: string,
-  date: string,
-  dateTimeGMT: string,
-  team1Name: string,
-  team2Name: string,
-  venue: string
-): IplMatch {
-  const team1 = toTeamInfo(team1Name);
-  const team2 = toTeamInfo(team2Name);
-  return {
-    id,
-    matchNumber,
-    matchNumberValue: extractMatchNumber(matchNumber),
-    date,
-    dateTimeGMT,
-    team1,
-    team2,
-    venue,
-    venueSlug: getVenueSlug(venue),
-    status: "upcoming",
-    result: null,
-    score: { team1: null, team2: null },
-    winner: null,
-    predictionSlug: getPredictionSlug(team1.name, team2.name),
-    detailSlug: getDetailSlug(matchNumber, team1.name, team2.name),
-  };
-}
 
 function normalizeTeamName(name: string) {
   return TEAM_ALIASES.get(name) || name;
@@ -537,6 +501,90 @@ const COMPLETED_STATUS_PATTERN =
 const LIVE_STATUS_PATTERN =
   /\b(need(?:s)?\b|require(?:s|d)?\b|trail by|lead by|innings break|stumps|day \d|drinks|lunch|tea)\b/i;
 
+function normalizeWhitespace(value: string | null | undefined) {
+  return String(value || "")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+function extractYear(value: unknown) {
+  const match = String(value || "").match(/\b(20\d{2})\b/);
+  return match ? Number(match[1]) : null;
+}
+
+function toNullableNumber(value: unknown) {
+  const numericValue = Number(value);
+  return Number.isFinite(numericValue) ? numericValue : null;
+}
+
+function parseScoreSummaryText(scoreText: string | null | undefined) {
+  const normalized = normalizeWhitespace(scoreText);
+
+  if (!normalized) {
+    return null;
+  }
+
+  const match = normalized.match(/(\d+)\s*\/\s*(\d+)\s*\(([\d.]+)\s*(?:ov|overs?)?\.?\)/i);
+  if (!match) {
+    return null;
+  }
+
+  return {
+    runs: Number(match[1]),
+    wickets: Number(match[2]),
+    overs: match[3],
+  };
+}
+
+function normalizeScoreSummaryText(scoreText: string | null | undefined) {
+  const parsed = parseScoreSummaryText(scoreText);
+
+  if (!parsed) {
+    return normalizeWhitespace(scoreText) || null;
+  }
+
+  return `${parsed.runs}/${parsed.wickets} (${parsed.overs})`;
+}
+
+function buildOfficialDateTimeGmt(match: any, fallbackDate: string) {
+  const gmtDate = String(match?.GMTMatchDate || "").trim() || fallbackDate;
+  const gmtTime = String(match?.GMTMatchTime || "")
+    .replace(/\s*GMT/i, "")
+    .trim();
+
+  if (/^\d{4}-\d{2}-\d{2}$/.test(gmtDate) && /^\d{1,2}:\d{2}$/.test(gmtTime)) {
+    return `${gmtDate}T${gmtTime}:00Z`;
+  }
+
+  const commenceAt = normalizeWhitespace(match?.MATCH_COMMENCE_START_DATE);
+  if (commenceAt) {
+    const parsed = new Date(commenceAt.replace(" ", "T") + "+05:30");
+    if (!Number.isNaN(parsed.getTime())) {
+      return parsed.toISOString();
+    }
+  }
+
+  return `${fallbackDate}T14:00:00Z`;
+}
+
+function parseTossChoice(details: string | null | undefined) {
+  const normalized = normalizeWhitespace(details).toLowerCase();
+
+  if (!normalized) {
+    return null;
+  }
+
+  if (normalized.includes("field") || normalized.includes("bowl")) {
+    return "bowl";
+  }
+
+  if (normalized.includes("bat")) {
+    return "bat";
+  }
+
+  return null;
+}
+
 function hasRecordedScore(match: any) {
   const scores = Array.isArray(match?.score) ? match.score : [];
   return scores.some((entry: any) => {
@@ -548,12 +596,27 @@ function hasRecordedScore(match: any) {
 
 function matchStatus(match: any): MatchStatus {
   const statusText = String(match?.status || match?.statusStr || "");
+  const startTime = new Date(match?.dateTimeGMT || "").getTime();
+  const now = Date.now();
 
   if (match?.matchEnded || COMPLETED_STATUS_PATTERN.test(statusText)) {
     return "completed";
   }
 
+  if (
+    hasRecordedScore(match) &&
+    Number.isFinite(startTime) &&
+    startTime > 0 &&
+    now - startTime > 8 * 60 * 60 * 1000
+  ) {
+    return "completed";
+  }
+
   if (match?.matchStarted || LIVE_STATUS_PATTERN.test(statusText) || hasRecordedScore(match)) {
+    return "live";
+  }
+
+  if (Number.isFinite(startTime) && startTime > 0 && now >= startTime && !match?.matchEnded) {
     return "live";
   }
 
@@ -576,188 +639,137 @@ function buildScore(match: any, team1: TeamInfo, team2: TeamInfo): MatchScore {
   };
 }
 
-function applyManualMatchOverride(match: IplMatch): IplMatch {
-  const override = MANUAL_MATCH_OVERRIDES.find((item) => {
-    return (
-      sameTeamName(item.team1, match.team1.name) &&
-      sameTeamName(item.team2, match.team2.name) &&
-      new Date(item.dateTimeGMT).getTime() === new Date(match.dateTimeGMT).getTime()
-    );
-  });
+function getOfficialScoreEntries(match: any) {
+  return [
+    {
+      teamName: normalizeWhitespace(match?.FirstBattingTeamName),
+      score: normalizeScoreSummaryText(match?.FirstBattingSummary || match?.["1Summary"]),
+    },
+    {
+      teamName: normalizeWhitespace(match?.SecondBattingTeamName),
+      score: normalizeScoreSummaryText(match?.SecondBattingSummary || match?.["2Summary"]),
+    },
+    {
+      teamName: normalizeWhitespace(match?.SecondInningsFirstBattingName),
+      score: normalizeScoreSummaryText(match?.["3Summary"]),
+    },
+    {
+      teamName: normalizeWhitespace(match?.SecondInningsSecondBattingName),
+      score: normalizeScoreSummaryText(match?.["4Summary"]),
+    },
+  ].filter((entry) => entry.teamName && entry.score);
+}
 
-  if (!override) {
-    return match;
-  }
+function buildOfficialScore(match: any, team1: TeamInfo, team2: TeamInfo): MatchScore {
+  const entries = getOfficialScoreEntries(match);
+
+  const findTeamScore = (team: TeamInfo) => {
+    const matchEntry = entries.find((entry) => textMentionsTeam(entry.teamName, team));
+    return matchEntry?.score || null;
+  };
 
   return {
-    ...match,
-    status: override.status,
-    result: override.result,
-    winner: override.winner,
-    score: {
-      team1: override.score.team1,
-      team2: override.score.team2,
-    },
-    tossWinner: override.tossWinner || match.tossWinner || null,
-    tossChoice: override.tossChoice || match.tossChoice || null,
+    team1: findTeamScore(team1),
+    team2: findTeamScore(team2),
   };
 }
 
-function sameTeamName(left: string, right: string) {
-  return normalizeTeamName(left) === normalizeTeamName(right);
-}
-
-function sameTeamPair(
-  left: Pick<IplMatch, "team1" | "team2">,
-  right: Pick<IplMatch, "team1" | "team2">,
-) {
-  return (
-    (sameTeamName(left.team1.name, right.team1.name) &&
-      sameTeamName(left.team2.name, right.team2.name)) ||
-    (sameTeamName(left.team1.name, right.team2.name) &&
-      sameTeamName(left.team2.name, right.team1.name))
-  );
-}
-
-function isSameFixture(left: IplMatch, right: IplMatch) {
-  if (left.id === right.id) {
-    return true;
-  }
-
-  if (!sameTeamPair(left, right)) {
-    return false;
-  }
+function getOfficialMatchStatus(match: any): MatchStatus {
+  const rawStatus = normalizeWhitespace(match?.MatchStatus).toLowerCase();
+  const resultText = normalizeWhitespace(match?.Commentss || match?.Comments);
+  const hasOfficialScore = getOfficialScoreEntries(match).length > 0;
+  const startAt = new Date(buildOfficialDateTimeGmt(match, String(match?.MatchDate || ""))).getTime();
+  const now = Date.now();
 
   if (
-    left.matchNumberValue !== null &&
-    right.matchNumberValue !== null &&
-    left.matchNumberValue === right.matchNumberValue
+    rawStatus === "post" ||
+    rawStatus === "completed" ||
+    rawStatus === "result" ||
+    COMPLETED_STATUS_PATTERN.test(resultText) ||
+    normalizeWhitespace(match?.WinningTeamID)
   ) {
-    return true;
+    return "completed";
   }
 
-  const leftTime = new Date(left.dateTimeGMT).getTime();
-  const rightTime = new Date(right.dateTimeGMT).getTime();
-
-  if (!Number.isFinite(leftTime) || !Number.isFinite(rightTime)) {
-    return false;
+  if (rawStatus === "live" || rawStatus === "in progress" || LIVE_STATUS_PATTERN.test(resultText)) {
+    return "live";
   }
 
-  return Math.abs(leftTime - rightTime) <= 36 * 60 * 60 * 1000;
+  if (hasOfficialScore && Number.isFinite(startAt) && startAt > 0 && now >= startAt) {
+    return "live";
+  }
+
+  return "upcoming";
 }
 
-function alignCurrentMatchToSchedule(scheduleMatch: IplMatch, currentMatch: IplMatch) {
-  const isDirectOrder =
-    sameTeamName(scheduleMatch.team1.name, currentMatch.team1.name) &&
-    sameTeamName(scheduleMatch.team2.name, currentMatch.team2.name);
-
-  if (isDirectOrder) {
-    return currentMatch;
-  }
-
-  const isSwappedOrder =
-    sameTeamName(scheduleMatch.team1.name, currentMatch.team2.name) &&
-    sameTeamName(scheduleMatch.team2.name, currentMatch.team1.name);
-
-  if (!isSwappedOrder) {
-    return currentMatch;
-  }
-
-  return {
-    ...currentMatch,
-    team1: currentMatch.team2,
-    team2: currentMatch.team1,
-    score: {
-      team1: currentMatch.score.team2,
-      team2: currentMatch.score.team1,
+function buildOfficialLiveContext(match: any): MatchLiveContext | null {
+  const currentBatters: LiveBatterSummary[] = [
+    {
+      name: normalizeWhitespace(match?.CurrentStrikerName),
+      runs: toNullableNumber(match?.StrikerRuns),
+      balls: toNullableNumber(match?.StrikerBalls),
+      fours: toNullableNumber(match?.StrikerFours),
+      sixes: toNullableNumber(match?.StrikerSixes),
+      strikeRate: toNullableNumber(match?.StrikerSR),
+      image: normalizeWhitespace(match?.StrikerImage) || null,
     },
-  };
-}
+    {
+      name: normalizeWhitespace(match?.CurrentNonStrikerName),
+      runs: toNullableNumber(match?.NonStrikerRuns),
+      balls: toNullableNumber(match?.NonStrikerBalls),
+      fours: toNullableNumber(match?.NonStrikerFours),
+      sixes: toNullableNumber(match?.NonStrikerSixes),
+      strikeRate: toNullableNumber(match?.NonStrikerSR),
+      image: normalizeWhitespace(match?.NonStrikerImage) || null,
+    },
+  ].filter((player) => player.name);
 
-function mergeMatchScores(baseScore: MatchScore, currentScore: MatchScore): MatchScore {
-  return {
-    team1: currentScore.team1 || baseScore.team1,
-    team2: currentScore.team2 || baseScore.team2,
-  };
-}
+  const bowlerName = normalizeWhitespace(match?.CurrentBowlerName);
+  const currentBowler: LiveBowlerSummary | null = bowlerName
+    ? {
+        name: bowlerName,
+        overs: normalizeWhitespace(match?.BowlerOvers) || null,
+        runs: toNullableNumber(match?.BowlerRuns),
+        wickets: toNullableNumber(match?.BowlerWickets),
+        maidens: toNullableNumber(match?.BowlerMaidens),
+        economy: toNullableNumber(match?.BowlerEconomy),
+        image: normalizeWhitespace(match?.BowlerImage) || null,
+      }
+    : null;
 
-function pickFreshestStatus(baseStatus: MatchStatus, currentStatus: MatchStatus) {
-  const priority: Record<MatchStatus, number> = {
-    upcoming: 0,
-    live: 1,
-    completed: 2,
-  };
+  const commentary = normalizeWhitespace(match?.Comments || match?.MatchBreakComments) || null;
+  const chaseText = normalizeWhitespace(match?.ChasingText) || null;
+  const currentInnings = toNullableNumber(match?.CurrentInnings);
 
-  return priority[currentStatus] >= priority[baseStatus] ? currentStatus : baseStatus;
-}
-
-function mergeScheduledMatch(scheduleMatch: IplMatch, currentMatch: IplMatch): IplMatch {
-  const alignedCurrent = alignCurrentMatchToSchedule(scheduleMatch, currentMatch);
-  const result = alignedCurrent.result || scheduleMatch.result;
-  const winner =
-    resolveMatchWinnerName({
-      winner: alignedCurrent.winner || scheduleMatch.winner,
-      result,
-      team1: scheduleMatch.team1,
-      team2: scheduleMatch.team2,
-    }) ||
-    alignedCurrent.winner ||
-    scheduleMatch.winner ||
-    null;
+  if (!commentary && !chaseText && !currentBatters.length && !currentBowler) {
+    return null;
+  }
 
   return {
-    ...scheduleMatch,
-    ...alignedCurrent,
-    id: alignedCurrent.id || scheduleMatch.id,
-    matchNumber: scheduleMatch.matchNumber || alignedCurrent.matchNumber,
-    matchNumberValue:
-      scheduleMatch.matchNumberValue ?? alignedCurrent.matchNumberValue ?? null,
-    date: alignedCurrent.date || scheduleMatch.date,
-    dateTimeGMT: alignedCurrent.dateTimeGMT || scheduleMatch.dateTimeGMT,
-    team1: scheduleMatch.team1,
-    team2: scheduleMatch.team2,
-    venue: alignedCurrent.venue || scheduleMatch.venue,
-    venueSlug: scheduleMatch.venueSlug || alignedCurrent.venueSlug,
-    status: pickFreshestStatus(scheduleMatch.status, alignedCurrent.status),
-    result,
-    score: mergeMatchScores(scheduleMatch.score, alignedCurrent.score),
-    winner,
-    predictionSlug: scheduleMatch.predictionSlug,
-    detailSlug: scheduleMatch.detailSlug,
-    tossWinner: alignedCurrent.tossWinner || scheduleMatch.tossWinner || null,
-    tossChoice: alignedCurrent.tossChoice || scheduleMatch.tossChoice || null,
+    commentary,
+    chaseText,
+    currentInnings,
+    currentBatters,
+    currentBowler,
   };
+}
+
+function getOfficialResultText(match: any, status: MatchStatus) {
+  if (status === "completed") {
+    return normalizeWhitespace(match?.Commentss || match?.Comments) || null;
+  }
+
+  if (status === "live") {
+    return normalizeWhitespace(match?.Comments || match?.ChasingText || match?.MatchBreakComments) || null;
+  }
+
+  return normalizeWhitespace(match?.TossDetails) || null;
 }
 
 function sortMatchesByStartTime(matches: IplMatch[]) {
   return [...matches].sort(
     (a, b) => new Date(a.dateTimeGMT).getTime() - new Date(b.dateTimeGMT).getTime(),
   );
-}
-
-function mergeScheduleWithCurrentMatches(
-  scheduleMatches: IplMatch[],
-  currentMatches: IplMatch[],
-) {
-  if (!currentMatches.length) {
-    return sortMatchesByStartTime(scheduleMatches);
-  }
-
-  const remainingCurrentMatches = [...currentMatches];
-  const mergedMatches = scheduleMatches.map((scheduleMatch) => {
-    const currentMatchIndex = remainingCurrentMatches.findIndex((currentMatch) =>
-      isSameFixture(scheduleMatch, currentMatch),
-    );
-
-    if (currentMatchIndex === -1) {
-      return scheduleMatch;
-    }
-
-    const [currentMatch] = remainingCurrentMatches.splice(currentMatchIndex, 1);
-    return mergeScheduledMatch(scheduleMatch, currentMatch);
-  });
-
-  return sortMatchesByStartTime([...mergedMatches, ...remainingCurrentMatches]);
 }
 
 function normalizeApiMatch(match: any, index: number): IplMatch | null {
@@ -830,35 +842,138 @@ function normalizeApiMatch(match: any, index: number): IplMatch | null {
     detailSlug: getDetailSlug(matchNumber, team1.name, team2.name),
     tossWinner: match?.tossWinner || null,
     tossChoice: match?.tossChoice || null,
+    liveContext: null,
+  };
+}
+
+function normalizeOfficialSeries(competition: OfficialIplCompetition | null): IplSeries | null {
+  if (!competition) {
+    return null;
+  }
+
+  return {
+    id: competition.id,
+    name: competition.name,
+    startDate: null,
+    endDate: null,
+  };
+}
+
+function normalizeOfficialMatch(match: any, index: number): IplMatch | null {
+  const homeTeamName = normalizeWhitespace(match?.HomeTeamName);
+  const awayTeamName = normalizeWhitespace(match?.AwayTeamName);
+
+  if (!homeTeamName || !awayTeamName) {
+    return null;
+  }
+
+  const team1 = toTeamInfo(
+    homeTeamName,
+    match?.MatchHomeTeamLogo || match?.HomeTeamLogo,
+    match?.HomeTeamCode || match?.HomeTeamShortName,
+  );
+  const team2 = toTeamInfo(
+    awayTeamName,
+    match?.MatchAwayTeamLogo || match?.AwayTeamLogo,
+    match?.AwayTeamCode || match?.AwayTeamShortName,
+  );
+  const date = String(match?.GMTMatchDate || match?.MatchDate || "").trim() || getIndiaDateKey(new Date());
+  const dateTimeGMT = buildOfficialDateTimeGmt(match, date);
+  const matchNumber = normalizeWhitespace(match?.MatchOrder) || `Match ${index + 1}`;
+  const status = getOfficialMatchStatus(match);
+  const venueBase = normalizeWhitespace(match?.GroundName) || "TBD";
+  const city = normalizeWhitespace(match?.city);
+  const venue = city && !venueBase.toLowerCase().includes(city.toLowerCase()) ? `${venueBase}, ${city}` : venueBase;
+  const result = getOfficialResultText(match, status);
+  const winner =
+    resolveMatchWinnerName({
+      winner: normalizeWhitespace(match?.WinningTeamName) || normalizeWhitespace(match?.WinningTeamID),
+      result,
+      team1,
+      team2,
+    }) ||
+    (String(match?.WinningTeamID || "") === String(match?.HomeTeamID || "") ? team1.name : null) ||
+    (String(match?.WinningTeamID || "") === String(match?.AwayTeamID || "") ? team2.name : null) ||
+    null;
+
+  return {
+    id: String(match?.MatchID || `${slugify(team1.name)}-${slugify(team2.name)}-${index + 1}`),
+    matchNumber,
+    matchNumberValue: extractMatchNumber(matchNumber),
+    date,
+    dateTimeGMT,
+    team1,
+    team2,
+    venue,
+    venueSlug: getVenueSlug(venue),
+    status,
+    result,
+    score: buildOfficialScore(match, team1, team2),
+    winner,
+    predictionSlug: getPredictionSlug(team1.name, team2.name),
+    detailSlug: getDetailSlug(matchNumber, team1.name, team2.name),
+    tossWinner: normalizeWhitespace(match?.TossTeam) || null,
+    tossChoice: parseTossChoice(match?.TossDetails),
+    liveContext: buildOfficialLiveContext(match),
   };
 }
 
 const getDiscoveredSeries = unstable_cache(
   async (): Promise<IplSeries | null> => {
-    const queries = ["indian%20premier%20league", "ipl", "tata%20ipl"];
+    const queries = [
+      "indian%20premier%20league",
+      "ipl",
+      "tata%20ipl",
+      `indian%20premier%20league%20${IPL_SEASON_YEAR}`,
+      `tata%20ipl%20${IPL_SEASON_YEAR}`,
+    ];
+    const discoveredSeries = new Map<string, IplSeries & { score: number }>();
 
     for (const query of queries) {
       const payload = await fetchCricApiJson(`series?search=${query}`);
       const seriesList = Array.isArray(payload?.data) ? payload.data : [];
-      const series = seriesList.find((item: any) => {
-        const name = String(item?.name || "").toLowerCase();
-        return (
-          name.includes(String(IPL_SEASON_YEAR)) &&
-          (name.includes("indian premier league") || /\bipl\b/.test(name))
-        );
-      });
 
-      if (series) {
-        if (process.env.NODE_ENV !== "production") {
-          console.log("[IPL API] Discovered IPL series", series.name, series.id);
+      for (const item of seriesList) {
+        const id = String(item?.id || "");
+        const name = String(item?.name || "").toLowerCase();
+
+        if (!id || (!name.includes("indian premier league") && !/\bipl\b/.test(name))) {
+          continue;
         }
-        return {
-          id: series.id,
-          name: series.name,
-          startDate: series.startDate,
-          endDate: series.endDate,
-        };
+
+        const discoveredYear = extractYear(item?.name || item?.startDate || item?.endDate);
+        let score = 0;
+
+        if (name.includes("indian premier league")) score += 80;
+        if (/\bipl\b/.test(name)) score += 40;
+        if (discoveredYear === IPL_SEASON_YEAR) score += 100;
+        if (discoveredYear) score += discoveredYear;
+
+        const currentBest = discoveredSeries.get(id);
+        if (!currentBest || score > currentBest.score) {
+          discoveredSeries.set(id, {
+            id,
+            name: String(item?.name || ""),
+            startDate: item?.startDate || null,
+            endDate: item?.endDate || null,
+            score,
+          });
+        }
       }
+    }
+
+    const series = [...discoveredSeries.values()].sort((left, right) => right.score - left.score)[0];
+
+    if (series) {
+      if (process.env.NODE_ENV !== "production") {
+        console.log("[IPL API] Discovered IPL series", series.name, series.id);
+      }
+      return {
+        id: series.id,
+        name: series.name,
+        startDate: series.startDate,
+        endDate: series.endDate,
+      };
     }
 
     if (process.env.NODE_ENV !== "production") {
@@ -871,48 +986,90 @@ const getDiscoveredSeries = unstable_cache(
   { revalidate: 60 * 30 }
 );
 
+async function getCricApiScheduleFallback() {
+  const series = await getDiscoveredSeries();
+  const currentMatches = await getCurrentIplMatchesFromApi();
+
+  if (!series) {
+    return {
+      matches: currentMatches,
+      series: null as IplSeries | null,
+    };
+  }
+
+  const payload = await fetchCricApiJson(`series_info?id=${series.id}`);
+  const seriesData =
+    payload?.data && typeof payload.data === "object"
+      ? (payload.data as {
+          matchList?: unknown;
+          matchlist?: unknown;
+        })
+      : null;
+  const matchList = Array.isArray(seriesData?.matchList)
+    ? seriesData.matchList
+    : Array.isArray(seriesData?.matchlist)
+      ? seriesData.matchlist
+      : [];
+  const normalizedMatches = matchList
+    .map((match: any, index: number) => normalizeApiMatch(match, index))
+    .filter(Boolean) as IplMatch[];
+
+  return {
+    matches: normalizedMatches.length ? normalizedMatches : currentMatches,
+    series,
+  };
+}
+
 export const getIplSchedule = unstable_cache(
   async (): Promise<IplScheduleResponse> => {
-    const [series, currentMatches] = await Promise.all([
-      getDiscoveredSeries(),
-      getCurrentIplMatchesFromApi(),
-    ]);
+    const lastUpdated = new Date().toISOString();
+    let officialCompetition: OfficialIplCompetition | null = null;
 
-    let scheduleMatches = OFFICIAL_PHASE_ONE_MATCHES;
-    let scheduleSource: IplScheduleResponse["source"] = "official-seed";
+    try {
+      officialCompetition = await discoverOfficialIplCompetition();
 
-    if (series) {
-      const payload = await fetchCricApiJson(`series_info?id=${series.id}`);
-      const seriesData =
-        payload?.data && typeof payload.data === "object"
-          ? (payload.data as {
-              matchList?: unknown;
-              matchlist?: unknown;
-            })
-          : null;
-      const matchList = Array.isArray(seriesData?.matchList)
-        ? seriesData.matchList
-        : Array.isArray(seriesData?.matchlist)
-          ? seriesData.matchlist
-          : [];
-      const normalized = matchList
-        .map((match: any, index: number) => normalizeApiMatch(match, index))
-        .filter(Boolean) as IplMatch[];
+      if (officialCompetition) {
+        const officialMatches = (await fetchOfficialIplScheduleFeed(officialCompetition))
+          .map((match: any, index: number) => normalizeOfficialMatch(match, index))
+          .filter(Boolean) as IplMatch[];
 
-      if (normalized.length) {
-        scheduleMatches = normalized;
-        scheduleSource = "cricapi";
+        if (officialMatches.length) {
+          return {
+            matches: sortMatchesByStartTime(officialMatches),
+            lastUpdated,
+            source: "official-feed",
+            series: normalizeOfficialSeries(officialCompetition),
+          };
+        }
+
+        console.warn("[IPL Data] Official schedule feed returned no matches", {
+          competitionId: officialCompetition.id,
+          competitionName: officialCompetition.name,
+        });
       }
+    } catch (error) {
+      console.error("[IPL Data] Official schedule feed failed", {
+        reason: error instanceof Error ? error.message : String(error),
+      });
     }
 
-    const mergedMatches = mergeScheduleWithCurrentMatches(scheduleMatches, currentMatches);
-    const hydratedMatches = await hydrateCompletedMatches(mergedMatches);
+    const cricApiSchedule = await getCricApiScheduleFallback();
+    const hydratedMatches = await hydrateCompletedMatches(cricApiSchedule.matches, "cricapi");
+
+    if (hydratedMatches.length) {
+      return {
+        matches: sortMatchesByStartTime(hydratedMatches),
+        lastUpdated,
+        source: "cricapi",
+        series: cricApiSchedule.series,
+      };
+    }
 
     return {
-      matches: hydratedMatches,
-      lastUpdated: new Date().toISOString(),
-      source: currentMatches.length ? "cricapi" : scheduleSource,
-      series,
+      matches: [],
+      lastUpdated,
+      source: "unavailable",
+      series: normalizeOfficialSeries(officialCompetition) ?? cricApiSchedule.series,
     };
   },
   [`ipl-schedule-${IPL_SEASON_YEAR}-${IPL_CACHE_VERSION}`],
@@ -1031,22 +1188,21 @@ async function hydrateCompletedMatch(match: IplMatch): Promise<IplMatch> {
   };
 }
 
-async function hydrateCompletedMatches(matches: IplMatch[]) {
-  return Promise.all(
-    matches.map((match) => hydrateCompletedMatch(applyManualMatchOverride(match))),
-  );
+async function hydrateCompletedMatches(
+  matches: IplMatch[],
+  source: IplScheduleResponse["source"],
+) {
+  if (source !== "cricapi") {
+    return matches;
+  }
+
+  return Promise.all(matches.map((match) => hydrateCompletedMatch(match)));
 }
 
 export const getLatestCompletedCurrentIplMatch = unstable_cache(
   async () => {
-    const currentMatches = await getCurrentIplMatchesFromApi();
-    const latestCompletedMatch =
-      [...currentMatches]
-        .filter((match) => match.status === "completed")
-        .sort((a, b) => new Date(b.dateTimeGMT).getTime() - new Date(a.dateTimeGMT).getTime())[0] ||
-      null;
-
-    return latestCompletedMatch ? hydrateCompletedMatch(latestCompletedMatch) : null;
+    const schedule = await getIplSchedule();
+    return getLatestCompletedMatch(schedule.matches);
   },
   [`ipl-current-completed-${IPL_SEASON_YEAR}-${IPL_CACHE_VERSION}`],
   { revalidate: 60 }
@@ -1054,17 +1210,21 @@ export const getLatestCompletedCurrentIplMatch = unstable_cache(
 
 export const getIplLiveSnapshot = unstable_cache(
   async (): Promise<IplLiveResponse> => {
-    const [schedule, currentMatches] = await Promise.all([getIplSchedule(), getCurrentIplMatchesFromApi()]);
+    const schedule = await getIplSchedule();
     const nowKey = getIndiaDateKey(new Date());
 
-    const liveMatch = currentMatches.find((match) => match.status === "live");
+    const liveMatch = schedule.matches.find((match) => match.status === "live");
     if (liveMatch) {
       return {
         type: "live",
         match: liveMatch,
-        scorecard: await getScorecard(liveMatch.id),
-        message: "Live IPL match in progress.",
-        source: "cricapi-currentMatches",
+        scorecard: schedule.source === "cricapi" ? await getScorecard(liveMatch.id) : null,
+        message:
+          liveMatch.liveContext?.chaseText ||
+          liveMatch.liveContext?.commentary ||
+          liveMatch.result ||
+          "Live IPL match in progress.",
+        source: schedule.source,
         lastUpdated: new Date().toISOString(),
       };
     }
@@ -1077,7 +1237,9 @@ export const getIplLiveSnapshot = unstable_cache(
       return {
         type: "upcoming",
         match: todayScheduledMatch,
-        message: `Today's IPL fixture starts at ${formatIndiaDateTime(todayScheduledMatch.dateTimeGMT)} IST.`,
+        message:
+          todayScheduledMatch.result ||
+          `Today's IPL fixture starts at ${formatIndiaDateTime(todayScheduledMatch.dateTimeGMT)} IST.`,
         source: schedule.source,
         lastUpdated: new Date().toISOString(),
       };
@@ -1091,7 +1253,9 @@ export const getIplLiveSnapshot = unstable_cache(
       return {
         type: "upcoming",
         match: nextMatch,
-        message: `Next IPL fixture starts at ${formatIndiaDateTime(nextMatch.dateTimeGMT)} IST.`,
+        message:
+          nextMatch.result ||
+          `Next IPL fixture starts at ${formatIndiaDateTime(nextMatch.dateTimeGMT)} IST.`,
         source: schedule.source,
         lastUpdated: new Date().toISOString(),
       };
@@ -1124,10 +1288,14 @@ export const getIplLiveSnapshot = unstable_cache(
 
 function seriesWaitingMessage(series: IplSeries | null) {
   if (series?.startDate) {
-    return `The IPL ${IPL_SEASON_YEAR} season begins on ${series.startDate}.`;
+    return `${series.name} begins on ${series.startDate}.`;
   }
 
-  return `Waiting for IPL ${IPL_SEASON_YEAR} matches.`;
+  if (series?.name) {
+    return `Waiting for ${series.name} matches.`;
+  }
+
+  return "Waiting for IPL matches.";
 }
 
 export async function getMatchByDetailSlug(slug: string) {

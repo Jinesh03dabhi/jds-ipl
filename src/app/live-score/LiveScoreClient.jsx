@@ -1,7 +1,7 @@
 "use client";
 
 import LiveScoreHeader from "@/components/LiveScoreHeader";
-import { useState, useEffect, useMemo } from "react";
+import { useEffect, useEffectEvent, useMemo, useState } from "react";
 import LiveBattingSection from "@/components/LiveBattingSection";
 import LiveBowlingSection from "@/components/LiveBowlingSection";
 import MatchSituation from "@/components/MatchSituation";
@@ -14,18 +14,26 @@ const baseUrl = "https://jds-ipl.vercel.app";
 export default function LiveScorePage({ showHeading = true }) {
   const [data, setData] = useState(null);
 
-  async function fetchScore() {
+  const loadScore = useEffectEvent(async () => {
     try {
-      const res = await fetch("/api/live-score");
+      const res = await fetch("/api/live-score", {
+        cache: "no-store",
+      });
       const json = await res.json();
       setData(json);
-    } catch (err) {
+    } catch {
       setData({ type: "error" });
     }
-  }
+  });
 
   useEffect(() => {
-    fetchScore();
+    const timerId = window.setTimeout(() => {
+      void loadScore();
+    }, 0);
+
+    return () => {
+      window.clearTimeout(timerId);
+    };
   }, []);
 
   const matchState = getMatchState(data);
@@ -63,8 +71,11 @@ export default function LiveScorePage({ showHeading = true }) {
       intervalTime = 900000;
     }
 
-    const interval = setInterval(fetchScore, intervalTime);
-    return () => clearInterval(interval);
+    const interval = window.setInterval(() => {
+      void loadScore();
+    }, intervalTime);
+
+    return () => window.clearInterval(interval);
   }, [matchState, data]);
 
   const structuredData = useMemo(() => {
@@ -137,7 +148,7 @@ export default function LiveScorePage({ showHeading = true }) {
   if (matchState === "error") {
     return (
       <div style={{ marginTop: "80px" }} className="glass-card">
-        Live updates temporarily unavailable.
+        {data?.message || "Live updates temporarily unavailable."}
       </div>
     );
   }
@@ -182,7 +193,7 @@ export default function LiveScorePage({ showHeading = true }) {
           style={{ marginTop: "20px", textAlign: "center", padding: "30px", fontSize: "1.2rem" }}
           className="glass-card"
         >
-          Waiting for IPL matches
+          {data?.message || "Waiting for IPL matches"}
         </div>
       )}
 
