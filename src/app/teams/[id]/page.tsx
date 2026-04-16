@@ -267,7 +267,9 @@ export default async function TeamDetail({ params }: Props) {
       <section style={{ marginTop: "32px" }}>
         <h2 style={{ fontSize: "22px" }}>Explore More IPL 2026 Pages</h2>
         <div style={{ display: "flex", gap: "16px", flexWrap: "wrap" }}>
-          <Link href="/ipl-teams" className="btn-primary">All IPL teams</Link>
+          <Link href={`/teams/${team.id}/stats`} className="btn-primary">View Full Stats</Link>
+          <Link href={`/teams/${team.id}/squad`} className="glass-card" style={{ padding: "10px 18px", textDecoration: "none" }}>Team Squad & XI</Link>
+          <Link href="/ipl-teams" className="glass-card" style={{ padding: "10px 18px", textDecoration: "none" }}>All IPL teams</Link>
           <Link href="/players" className="glass-card" style={{ padding: "10px 18px", textDecoration: "none" }}>
             IPL player stats directory
           </Link>

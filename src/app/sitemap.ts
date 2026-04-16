@@ -1,5 +1,12 @@
 import { MetadataRoute } from "next";
 import { PLAYERS, TEAMS } from "@/lib/data";
+import {
+  getAllPlayers,
+  getAllSeoMatches,
+  getAllTeams,
+  getAllVenues,
+  getHeadToHeadPages,
+} from "@/lib/data-helpers";
 import { getIplSchedule, STADIUM_PROFILES } from "@/lib/ipl-data";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
@@ -16,6 +23,57 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   const teamUrls = TEAMS.map((team) => ({
     url: `${baseUrl}/teams/${team.id}`,
+    lastModified: now,
+    changeFrequency: "weekly" as const,
+    priority: 0.8,
+  }));
+
+  const seoPlayerUrls = getAllPlayers().map((player) => ({
+    url: `${baseUrl}/players/${player.slug}/stats`,
+    lastModified: now,
+    changeFrequency: "weekly" as const,
+    priority: 0.82,
+  }));
+
+  const seoTeamUrls = getAllTeams().flatMap((team) => [
+    {
+      url: `${baseUrl}/teams/${team.slug}/stats`,
+      lastModified: now,
+      changeFrequency: "weekly" as const,
+      priority: 0.84,
+    },
+    {
+      url: `${baseUrl}/teams/${team.slug}/squad`,
+      lastModified: now,
+      changeFrequency: "weekly" as const,
+      priority: 0.83,
+    },
+  ]);
+
+  const seoMatchUrls = getAllSeoMatches().flatMap((match) => [
+    {
+      url: `${baseUrl}/match/${match.slug}`,
+      lastModified: now,
+      changeFrequency: "weekly" as const,
+      priority: 0.84,
+    },
+    {
+      url: `${baseUrl}/match/${match.slug}/prediction`,
+      lastModified: now,
+      changeFrequency: "weekly" as const,
+      priority: 0.82,
+    },
+  ]);
+
+  const seoVenueUrls = getAllVenues().map((venue) => ({
+    url: `${baseUrl}/venue/${venue.slug}/stats`,
+    lastModified: now,
+    changeFrequency: "weekly" as const,
+    priority: 0.79,
+  }));
+
+  const headToHeadUrls = getHeadToHeadPages().map((page) => ({
+    url: `${baseUrl}/${page.slug}`,
     lastModified: now,
     changeFrequency: "weekly" as const,
     priority: 0.8,
@@ -186,5 +244,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...matchUrls,
     ...playerUrls,
     ...teamUrls,
+    ...seoPlayerUrls,
+    ...seoTeamUrls,
+    ...seoMatchUrls,
+    ...seoVenueUrls,
+    ...headToHeadUrls,
   ];
 }

@@ -259,7 +259,8 @@ export default async function PlayerProfile({ params }: Props) {
       <section style={{ marginTop: "32px" }}>
         <h2 style={{ fontSize: "22px" }}>More IPL 2026 Resources</h2>
         <div style={{ display: "flex", gap: "16px", flexWrap: "wrap" }}>
-          <Link href="/players" className="btn-primary">IPL player stats directory</Link>
+          <Link href={`/players/${player.id}/stats`} className="btn-primary">View Full Stats</Link>
+          <Link href="/players" className="glass-card" style={{ padding: "10px 18px", textDecoration: "none" }}>IPL player stats directory</Link>
           <Link href="/ipl-teams" className="glass-card" style={{ padding: "10px 18px", textDecoration: "none" }}>
             IPL teams and squads
           </Link>

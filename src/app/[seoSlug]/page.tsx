@@ -1,11 +1,13 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import HeadToHeadPage from "@/components/HeadToHeadPage";
 import JsonLd from "@/components/intent/JsonLd";
 import FaqSection, { buildFaqSchema, type FaqItem } from "@/components/intent/FaqSection";
 import InternalLinkGrid from "@/components/intent/InternalLinkGrid";
 import MatchContent from "@/components/intent/MatchContent";
 import styles from "@/components/intent/intent.module.css";
+import { getHeadToHeadPages } from "@/lib/data-helpers";
 import {
   formatIndiaDateTime,
   getIplSchedule,
@@ -14,6 +16,7 @@ import {
   getPredictionForMatch,
   getStadiumProfile,
 } from "@/lib/ipl-data";
+import { getHeadToHeadBySlug } from "@/lib/stats-engine";
 import { SITE_URL } from "@/lib/site";
 
 type PageProps = {
@@ -23,6 +26,12 @@ type PageProps = {
 };
 
 async function resolveSeoPage(slug: string) {
+  if (slug.endsWith("-head-to-head")) {
+    const data = getHeadToHeadBySlug(slug);
+    if (!data) return null;
+    return { type: "headToHead" as const, data };
+  }
+
   if (slug.endsWith("-prediction")) {
     const match = await getMatchByPredictionSlug(slug);
     if (!match) return null;
@@ -43,12 +52,45 @@ async function resolveSeoPage(slug: string) {
   return null;
 }
 
+export async function generateStaticParams() {
+  return getHeadToHeadPages().map((page) => ({
+    seoSlug: page.slug,
+  }));
+}
+
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { seoSlug } = await params;
   const resolved = await resolveSeoPage(seoSlug);
 
   if (!resolved) {
     return {};
+  }
+
+  if (resolved.type === "headToHead") {
+    const title = `${resolved.data.team1.name} vs ${resolved.data.team2.name} Head to Head | IPL Rivalry Stats`;
+    const description = `${resolved.data.team1.name} vs ${resolved.data.team2.name} head-to-head page with total wins, recent meetings and venue-wise record split.`;
+    return {
+      title,
+      description,
+      alternates: {
+        canonical: `${SITE_URL}/${seoSlug}`,
+      },
+      openGraph: {
+        title,
+        description,
+        url: `${SITE_URL}/${seoSlug}`,
+        type: "website",
+        siteName: "IPL Scorebook",
+        locale: "en_IN",
+        images: [`${SITE_URL}/opengraph-image`],
+      },
+      twitter: {
+        card: "summary_large_image",
+        title,
+        description,
+        images: [`${SITE_URL}/opengraph-image`],
+      },
+    };
   }
 
   if (resolved.type === "prediction") {
@@ -111,6 +153,10 @@ export default async function SeoSlugPage({ params }: PageProps) {
 
   if (!resolved) {
     notFound();
+  }
+
+  if (resolved.type === "headToHead") {
+    return <HeadToHeadPage data={resolved.data} />;
   }
 
   if (resolved.type === "prediction") {
